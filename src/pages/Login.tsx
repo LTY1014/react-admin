@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Form, Input, Button, message } from 'antd';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../store/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { login as loginAction } from '../store/slices/authSlice';
+import { login } from '../api/user';
+import type { LoginParams } from '../api/user';
+import { RootState } from '../store';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
-  const onFinish = (values: { username: string; password: string }) => {
-    // 这里应该调用实际的登录 API
-    if (values.username === 'admin' && values.password === 'admin') {
-      dispatch(login({
-        username: values.username,
-        roles: ['admin'],
-        token: 'dummy-token'
-      }));
-      navigate('/dashboard');
-    } else {
-      message.error('用户名或密码错误！');
+  useEffect(() => {
+    // 如果已经登录，重定向到首页或来源页面
+    if (isAuthenticated) {
+      const from = (location.state as any)?.from || '/dashboard';
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, location]);
+
+  const onFinish = async (values: LoginParams) => {
+    try {
+      const user = await login(values);
+      dispatch(loginAction({ user }));
+      message.success('登录成功');
+      const from = (location.state as any)?.from || '/dashboard';
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.error('Login failed:', error);
     }
   };
 
@@ -34,16 +45,20 @@ const Login: React.FC = () => {
         <Form
           name="login"
           onFinish={onFinish}
+          initialValues={{
+            userAccount: 'test',
+            userPassword: '123456'
+          }}
         >
           <Form.Item
-            name="username"
+            name="userAccount"
             rules={[{ required: true, message: '请输入用户名！' }]}
           >
             <Input placeholder="用户名" />
           </Form.Item>
 
           <Form.Item
-            name="password"
+            name="userPassword"
             rules={[{ required: true, message: '请输入密码！' }]}
           >
             <Input.Password placeholder="密码" />

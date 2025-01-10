@@ -15,8 +15,10 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children, requiredRoles = [] }) =
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRoles.length > 0 && !requiredRoles.some(role => user?.roles.includes(role))) {
-    return <Navigate to="/403" replace />;
+  if (requiredRoles.length > 0 && user?.userRole) {
+    if (!requiredRoles.includes(user.userRole)) {
+      return <Navigate to="/403" replace />;
+    }
   }
 
   return <>{children}</>;

@@ -6,6 +6,7 @@ import { store } from './store';
 import Layout from './layouts/MainLayout';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
+import AuthProvider from './components/AuthProvider';
 
 const AppContent = () => {
   const { primaryColor, isDarkMode } = useSelector((state: RootState) => state.theme);
@@ -20,7 +21,9 @@ const AppContent = () => {
       }}
     >
       <BrowserRouter>
-        <Layout />
+        <AuthProvider>
+          <Layout />
+        </AuthProvider>
       </BrowserRouter>
     </ConfigProvider>
   );
