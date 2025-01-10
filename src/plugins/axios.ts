@@ -3,7 +3,7 @@ import { message } from 'antd';
 
 // 创建 axios 实例
 const instance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8088/api', // 设置基础URL
+  baseURL: '/api',
   timeout: 10000,
   withCredentials: true,
   headers: {
@@ -17,7 +17,6 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
-    message.error('请求发送失败');
     return Promise.reject(error);
   }
 );
@@ -61,24 +60,11 @@ instance.interceptors.response.use(
   }
 );
 
-// 文件下载请求
-export const fileRequest = (url: string) => {
-  return instance({
-    method: 'GET',
-    url: `${url}`,
-    responseType: 'blob',
-  });
-};
 
-// 下载文件函数
-export const downloadFile = (data: Blob, fileName: string) => {
-  const url = window.URL.createObjectURL(new Blob([data]));
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', fileName);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+export interface ApiResponse<T> {
+  code: number;
+  data: T;
+  message: string;
+}
 
 export default instance; 

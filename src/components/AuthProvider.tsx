@@ -7,6 +7,11 @@ import { RootState } from '../store';
 
 const WHITE_LIST: string[] = ['/login', '/register', '/404', '/403', '/'];
 
+/**
+ * 组件:用于处理用户认证逻辑
+ * @param children
+ * @constructor
+ */
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,17 +21,14 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   useEffect(() => {
     const checkAuth = async () => {
       const currentPath = location.pathname;
-      
       // 如果在白名单中，直接返回
       if (WHITE_LIST.includes(currentPath)) {
         return;
       }
-
       // 如果已经认证，直接返回
       if (isAuthenticated) {
         return;
       }
-
       try {
         // 尝试获取当前用户信息
         const user = await getCurrentUser();
@@ -42,7 +44,6 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         }
       }
     };
-
     checkAuth();
   }, [dispatch, navigate, location.pathname, isAuthenticated]);
 

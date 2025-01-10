@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { setPrimaryColor, toggleDarkMode } from '../store/slices/themeSlice';
 
+/**
+ * 主题设置组件
+ * @constructor
+ */
 const ThemeSettings: React.FC = () => {
   const dispatch = useDispatch();
   const { primaryColor, isDarkMode } = useSelector((state: RootState) => state.theme);

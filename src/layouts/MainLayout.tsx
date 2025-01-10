@@ -135,6 +135,7 @@ const MainLayout: React.FC = () => {
     }
   };
 
+  // 过滤掉无权限的菜单
   const filterMenuItems = (items: MenuItem[]): MenuItem[] => {
     if (!user) return [];
     

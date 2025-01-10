@@ -10,6 +10,7 @@ import Login from '../pages/Login';
 import AuthGuard from '../components/AuthGuard';
 import Forbidden from '../pages/Forbidden';
 import NotFound from '../pages/NotFound';
+import Profile from "../pages/Profile";
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,12 @@ const AppRoutes = () => {
           <Dashboard />
         </AuthGuard>
       } />
+
+    <Route path="/profile" element={
+        <AuthGuard>
+            <Profile />
+        </AuthGuard>
+    } />
       
       {/* 用户管理路由 */}
       <Route path="/users" element={

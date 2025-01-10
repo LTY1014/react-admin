@@ -16,12 +16,6 @@ export interface UserResponse {
   updateTime: string;
 }
 
-export interface ApiResponse<T> {
-  code: number;
-  data: T;
-  message: string;
-}
-
 export const login = (data: LoginParams) => {
   return request.post<any, UserResponse>('/user/login', data);
 };
