@@ -11,23 +11,25 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     // 如果已经登录，重定向到首页或来源页面
-    if (isAuthenticated) {
-      const from = (location.state as any)?.from || '/dashboard';
+    if (user?.userRole) {
+      const from = location.state?.from || '/dashboard';
       navigate(from, { replace: true });
     }
-  }, [isAuthenticated, navigate, location]);
+  }, [user, navigate, location]);
 
   const onFinish = async (values: LoginParams) => {
     try {
-      const user = await login(values);
-      dispatch(loginAction({ user }));
-      message.success('登录成功');
-      const from = (location.state as any)?.from || '/dashboard';
-      navigate(from, { replace: true });
+      const response = await login(values);
+      if (response.code === 0) {
+        dispatch(loginAction({ user: response.data }));
+        message.success('登录成功');
+        const from = location.state?.from || '/dashboard';
+        navigate(from, { replace: true });
+      }
     } catch (error) {
       console.error('Login failed:', error);
     }

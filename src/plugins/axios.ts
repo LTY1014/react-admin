@@ -24,14 +24,14 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   (response) => {
-    const res = response.data;
-    
+    const code = response.data.code
+
     // 修改判断条件以匹配后端返回的 code
-    if (res.code === 0) {
-      return res.data;
+    if (code == 0) {
+      return response.data
     } else {
-      message.error(res.message || '请求失败');
-      return Promise.reject(new Error(res.message || '请求失败'));
+      // message.error(response.message || '请求失败');
+      return Promise.reject(new Error(response.data.message || '请求失败'));
     }
   },
   (error) => {

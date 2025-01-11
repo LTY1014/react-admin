@@ -11,7 +11,7 @@ const AppRoutes = () => {
       {routeList.map(route => (
         <Route
           key={route.key}
-          path={route.path}
+          path={route.path.replace('/', '')}
           element={
             route.requireAuth ? (
               <AuthGuard requiredRoles={route.requireRoles}>
@@ -23,7 +23,7 @@ const AppRoutes = () => {
           }
         />
       ))}
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route index element={<Navigate to="dashboard" replace />} />
       <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );

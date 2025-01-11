@@ -12,11 +12,10 @@ import {
     BellOutlined
 } from '@ant-design/icons';
 import {Layout, Menu, Button, theme, Dropdown, Space, Avatar, Badge, message} from 'antd';
-import {useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation, Outlet} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../store';
 import {logout} from '../store/slices/authSlice';
-import AppRoutes from '../router';
 import type {MenuProps} from 'antd';
 import {logout as apiLogout} from '../api/user';
 import {routes, filterRoutesByRole, RouteConfig} from '../router/routes';
@@ -194,7 +193,7 @@ const MainLayout: React.FC = () => {
                         minHeight: 280,
                     }}
                 >
-                    <AppRoutes/>
+                    <Outlet />
                 </Content>
             </Layout>
         </Layout>

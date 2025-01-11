@@ -1,4 +1,5 @@
 import request from '../plugins/axios';
+import type { ApiResponse } from '../plugins/axios';
 
 export interface LoginParams {
   userAccount: string;
@@ -16,14 +17,43 @@ export interface UserResponse {
   updateTime: string;
 }
 
+// 登录
 export const login = (data: LoginParams) => {
-  return request.post<any, UserResponse>('/user/login', data);
+  return request.post<any, ApiResponse<UserResponse>>('/user/login', data);
 };
 
+// 获取当前用户信息
 export const getCurrentUser = () => {
-  return request.get<any, UserResponse>('/user/current');
+  return request.get<any, ApiResponse<UserResponse>>('/user/current');
 };
 
+// 退出登录
 export const logout = () => {
-  return request.post<any, null>('/user/logout');
+  return request.post<any, ApiResponse<null>>('/user/logout');
+};
+
+// 更新用户信息
+export interface UpdateUserParams {
+  userName?: string;
+  avatarUrl?: string;
+  gender?: number;
+}
+
+export const updateUser = (data: UpdateUserParams) => {
+  return request.put<any, ApiResponse<UserResponse>>('/user/update', data);
+};
+
+// 修改密码
+export interface ChangePasswordParams {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export const changePassword = (data: ChangePasswordParams) => {
+  return request.post<any, ApiResponse<null>>('/user/password/change', data);
+};
+
+// 重置密码（管理员功能）
+export const resetUserPassword = (userId: number) => {
+  return request.post<any, ApiResponse<null>>(`/user/password/reset/${userId}`);
 }; 

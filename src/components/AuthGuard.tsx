@@ -12,13 +12,13 @@ interface AuthGuardProps {
 }
 
 const AuthGuard: React.FC<AuthGuardProps> = ({ children, requiredRoles = [] }) => {
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
 
-  if (!isAuthenticated) {
+  if (!user?.userRole) {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRoles?.length > 0 && user?.userRole) {
+  if (requiredRoles?.length > 0) {
     if (!requiredRoles?.includes(user.userRole)) {
       return <Navigate to="/403" replace />;
     }

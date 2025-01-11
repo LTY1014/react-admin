@@ -142,6 +142,8 @@ export const routes: RouteConfig[] = [
 
 // 获取所有需要注册的路由（扁平化处理）
 export const getRouteList = (routes: RouteConfig[]): RouteConfig[] => {
+  // 过滤白名单
+  routes = routes.filter(route => !route.hideInMenu);
   const result: RouteConfig[] = [];
   routes.forEach(route => {
     if (route.children) {
