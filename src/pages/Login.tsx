@@ -24,14 +24,12 @@ const Login: React.FC = () => {
   const onFinish = async (values: LoginParams) => {
     try {
       const response = await login(values);
-      if (response.code === 0) {
-        dispatch(loginAction({ user: response.data }));
-        message.success('登录成功');
-        const from = location.state?.from || '/dashboard';
-        navigate(from, { replace: true });
-      }
+      dispatch(loginAction({ user: response.data }));
+      message.success('登录成功');
+      const from = location.state?.from || '/dashboard';
+      navigate(from, { replace: true });
     } catch (error) {
-      console.error('Login failed:', error);
+      message.error('登录失败:'+ error.message)
     }
   };
 

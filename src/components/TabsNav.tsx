@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tabs, Breadcrumb, Space, theme } from 'antd';
 import type { TabsProps } from 'antd';
-import type { GlobalToken } from 'antd/es/theme/interface';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { routes, RouteConfig } from '../router/routes';
 import { HomeOutlined } from '@ant-design/icons';
@@ -9,19 +8,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
-interface NavContainerProps {
-  $bgColor: string;
-}
-
-interface StyledTabsProps {
-  $token: Partial<GlobalToken>;
-}
-
-interface CloseAllButtonProps {
-  $token: Partial<GlobalToken>;
-}
-
-const NavContainer = styled.div<NavContainerProps>`
+const NavContainer = styled.div<{ $bgColor: string }>`
   padding: 8px 16px;
   background: ${props => props.$bgColor};
   border-radius: 8px;
@@ -31,7 +18,7 @@ const NavContainer = styled.div<NavContainerProps>`
   margin-bottom: 16px;
 `;
 
-const StyledTabs = styled(Tabs)<StyledTabsProps>`
+const StyledTabs = styled(Tabs)<{ $token: any }>`
   flex: 1;
   margin-left: 24px;
   
@@ -69,7 +56,7 @@ const StyledTabs = styled(Tabs)<StyledTabsProps>`
   }
 `;
 
-const CloseAllButton = styled.a<CloseAllButtonProps>`
+const CloseAllButton = styled.a<{ $token: any }>`
   margin-left: 16px;
   color: ${props => props.$token.colorTextSecondary};
   

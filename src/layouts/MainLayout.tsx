@@ -112,6 +112,7 @@ const MainLayout: React.FC = () => {
                 await apiLogout();
                 dispatch(logout());
                 navigate('/login');
+                message.success('退出登录成功');
             } catch (error) {
                 console.error('Logout failed:', error);
             }

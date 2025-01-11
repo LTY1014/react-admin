@@ -106,7 +106,7 @@ export const routes: RouteConfig[] = [
     icon: SettingOutlined,
     isMenu: true,
     requireAuth: true,
-    requireRoles: ['admin'],
+    requireRoles: ['admin','user'],
   },
   {
     path: '/profile',
@@ -114,8 +114,8 @@ export const routes: RouteConfig[] = [
     component: Profile,
     name: '个人信息',
     icon: UserOutlined,
-    hideInMenu: true,
     requireAuth: true,
+    requireRoles: ['admin','user'],
   },
   {
     path: '/login',

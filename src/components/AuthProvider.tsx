@@ -21,7 +21,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
       
       // 如果在白名单中且已登录，重定向到仪表盘
       if (WHITE_LIST.includes(currentPath) && user?.userRole) {
-        navigate('/dashboard', { replace: true });
+        // navigate('/dashboard', { replace: true });
         setIsChecking(false);
         return;
       }

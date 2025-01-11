@@ -17,7 +17,7 @@ const Profile: React.FC = () => {
     <Space direction="vertical" style={{ width: '100%' }} size="large">
       <Card title="个人信息">
         <div style={{ textAlign: 'center', marginBottom: 24 }}>
-          <Avatar size={64} icon={<UserOutlined />} />
+          <Avatar size={64} icon={<UserOutlined />} src={user?.avatarUrl} />
           <Upload
             showUploadList={false}
             beforeUpload={(file) => {
@@ -36,30 +36,30 @@ const Profile: React.FC = () => {
           layout="vertical"
           onFinish={handleSubmit}
           initialValues={{
-            username: user?.username,
-            email: 'user@example.com',
-            phone: '13800138000',
+            userAccount: user?.userAccount,
+            userName: user?.userName,
+            userRole: user?.userRole,
           }}
         >
           <Form.Item
-            name="username"
+              name="userAccount"
+              label="用户账号"
+          >
+            <Input disabled={true} />
+          </Form.Item>
+          <Form.Item
+            name="userName"
             label="用户名"
             rules={[{ required: true, message: '请输入用户名' }]}
           >
             <Input />
           </Form.Item>
-
           <Form.Item
-            name="email"
-            label="邮箱"
-            rules={[
-              { required: true, message: '请输入邮箱' },
-              { type: 'email', message: '请输入有效的邮箱地址' }
-            ]}
+              name="userRole"
+              label="角色"
           >
-            <Input />
+            <Input disabled={true} />
           </Form.Item>
-
           <Form.Item
             name="phone"
             label="手机号"
