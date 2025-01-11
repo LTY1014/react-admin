@@ -19,6 +19,8 @@ import {logout} from '../store/slices/authSlice';
 import type {MenuProps} from 'antd';
 import {logout as apiLogout} from '../api/user';
 import {routes, filterRoutesByRole, RouteConfig} from '../router/routes';
+import TabsNav from '../components/TabsNav';
+import config from "../config";
 
 const {Header, Sider, Content} = Layout;
 
@@ -135,7 +137,7 @@ const MainLayout: React.FC = () => {
                         fontWeight: 600,
                         color: '#fff',
                     }}>
-                        {collapsed ? 'RA' : 'React Admin'}
+                        {collapsed ? config.appLogo : config.appTitle}
                     </h1>
                 </div>
                 <Menu
@@ -184,16 +186,20 @@ const MainLayout: React.FC = () => {
                         </Dropdown>
                     </Space>
                 </Header>
+                <TabsNav/>
                 <Content
                     style={{
-                        margin: '24px 16px',
-                        padding: 24,
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
+                        margin: '0 16px 24px',
                         minHeight: 280,
                     }}
                 >
-                    <Outlet />
+                    <div style={{
+                        padding: 24,
+                        background: colorBgContainer,
+                        borderRadius: borderRadiusLG,
+                    }}>
+                        <Outlet/>
+                    </div>
                 </Content>
             </Layout>
         </Layout>
