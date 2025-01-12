@@ -9,7 +9,7 @@ interface Config {
 }
 
 const config: Config = {
-  apiUrl: process.env.NODE_ENV === 'development' ? '/api' : 'http://your-production-api.com',
+  apiUrl: process.env.NODE_ENV === 'development' ? 'http://localhost:8088/api/doc.html' : 'http://your-production-api.com',
   uploadUrl: process.env.NODE_ENV === 'development' ? '/api/upload' : 'http://your-production-api.com/upload',
   appTitle: 'React Admin',
   appLogo: 'RA',

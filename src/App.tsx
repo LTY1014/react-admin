@@ -9,8 +9,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from './store';
 import AuthProvider from './components/AuthProvider';
 import Login from './pages/Login';
-import NotFound from './pages/NotFound';
-import Forbidden from './pages/Forbidden';
+import NotFound from './pages/error/NotFound';
+import Forbidden from './pages/error/Forbidden';
 import AppRoutes from './router';
 
 const AppContent = () => {

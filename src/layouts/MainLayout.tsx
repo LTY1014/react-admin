@@ -9,7 +9,8 @@ import {
     TeamOutlined,
     AppstoreOutlined,
     LogoutOutlined,
-    BellOutlined
+    BellOutlined,
+    ApiOutlined
 } from '@ant-design/icons';
 import {Layout, Menu, Button, theme, Dropdown, Space, Avatar, Badge, message} from 'antd';
 import {useNavigate, useLocation, Outlet} from 'react-router-dom';
@@ -44,7 +45,7 @@ const MainLayout: React.FC = () => {
     // 将路由配置转换为菜单项
     const convertRoutesToMenuItems = (routes: RouteConfig[]): ExtendedMenuItem[] => {
         return routes
-            .filter(route => route.isMenu && !route.hideInMenu)
+            .filter(route => route.isMenu)
             .map(route => {
                 const menuItem: ExtendedMenuItem = {
                     key: route.key,
@@ -141,14 +142,36 @@ const MainLayout: React.FC = () => {
                         {collapsed ? config.appLogo : config.appTitle}
                     </h1>
                 </div>
-                <Menu
-                    theme="dark"
-                    mode="inline"
-                    selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
-                    defaultOpenKeys={['user', 'product']}
-                    items={menuItems}
-                    onClick={handleMenuClick}
-                />
+                <div style={{display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)'}}>
+                    <Menu
+                        theme="dark"
+                        mode="inline"
+                        selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
+                        defaultOpenKeys={['user', 'product']}
+                        items={menuItems}
+                        onClick={handleMenuClick}
+                        style={{flex: 1}}
+                    />
+                    <div style={{
+                        padding: '16px',
+                        borderTop: '1px solid rgba(255,255,255,0.1)',
+                    }}>
+                        <a
+                            href={config.apiUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                                color: 'rgba(255,255,255,0.65)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                            }}
+                        >
+                            <ApiOutlined/>
+                            <span>{collapsed ? '' : 'API文档'}</span>
+                        </a>
+                    </div>
+                </div>
             </Sider>
             <Layout>
                 <Header style={{

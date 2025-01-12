@@ -7,15 +7,15 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 import Dashboard from '../pages/Dashboard';
-import UserList from '../pages/UserList';
-import RoleList from '../pages/RoleList';
-import ProductList from '../pages/ProductList';
-import ProductCategory from '../pages/ProductCategory';
-import Settings from '../pages/Settings';
-import Profile from '../pages/Profile';
+import UserList from '../pages/sys/UserList';
+import RoleList from '../pages/sys/RoleList';
+import ProductList from '../pages/app/ProductList';
+import ProductCategory from '../pages/app/ProductCategory';
+import Settings from '../pages/sys/Settings';
+import Profile from '../pages/sys/Profile';
 import Login from '../pages/Login';
-import NotFound from '../pages/NotFound';
-import Forbidden from '../pages/Forbidden';
+import NotFound from '../pages/error/NotFound';
+import Forbidden from '../pages/error/Forbidden';
 
 export interface RouteConfig {
   path: string;           // 路由路径
@@ -122,21 +122,18 @@ export const routes: RouteConfig[] = [
     key: 'login',
     component: Login,
     name: '登录',
-    hideInMenu: true,
   },
   {
     path: '/403',
     key: '403',
     component: Forbidden,
     name: '无权限',
-    hideInMenu: true,
   },
   {
     path: '/404',
     key: '404',
     component: NotFound,
     name: '未找到',
-    hideInMenu: true,
   },
 ];
 

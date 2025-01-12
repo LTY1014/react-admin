@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Form, Input, Button, Switch, Select, Space, message } from 'antd';
-import ThemeSettings from '../components/ThemeSettings';
+import ThemeSettings from '../../components/ThemeSettings';
 
 const Settings: React.FC = () => {
   const [form] = Form.useForm();

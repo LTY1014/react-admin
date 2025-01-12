@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Form, Input, Button, Upload, message, Avatar, Space } from 'antd';
 import { UserOutlined, UploadOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
 const Profile: React.FC = () => {
   const [form] = Form.useForm();
