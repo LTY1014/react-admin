@@ -89,7 +89,7 @@ const TabsNav: React.FC = () => {
     const findRoute = (routes: RouteConfig[], pathSegments: string[]): void => {
       for (const route of routes) {
         const routePath = route.path.replace('/', '');
-        if (routePath === pathSegments[0] || (route.children && route.children.some(child => child.path.includes(pathSegments[0])))) {
+        if (routePath === pathSegments[0] || (Array.isArray(route.children) && route.children.some(child => child.path.includes(pathSegments[0])))) {
           currentPath += `/${routePath}`;
           breadcrumbs.push({ title: route.name, path: currentPath });
           

@@ -16,6 +16,7 @@ import Profile from '../pages/sys/Profile';
 import Login from '../pages/Login';
 import NotFound from '../pages/error/NotFound';
 import Forbidden from '../pages/error/Forbidden';
+import BookList from "../pages/app/BookList";
 
 export interface RouteConfig {
   path: string;           // 路由路径
@@ -71,13 +72,22 @@ export const routes: RouteConfig[] = [
     ],
   },
   {
-    path: '/product',
-    key: 'product',
-    name: '商品管理',
+    path: '/app',
+    key: 'app',
+    name: '业务管理',
     icon: ShoppingOutlined,
     isMenu: true,
     requireAuth: true,
     children: [
+      {
+        path: '/bookList',
+        key: 'bookList',
+        component: BookList,
+        name: '模拟列表',
+        icon: AppstoreOutlined,
+        isMenu: true,
+        requireAuth: true,
+      },
       {
         path: '/product-list',
         key: 'product-list',
