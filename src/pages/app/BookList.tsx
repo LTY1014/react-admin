@@ -113,18 +113,18 @@ const BookList: React.FC = () => {
   const handleDelete = (id: number) => {
     Modal.confirm({
       title: '确认删除',
-      content: '确定要删除这本书吗？',
+      content: '确定要删除这条数据？',
       onOk: async () => {
         try {
           await deleteBook({id: id});
           message.success('删除成功');
           if (data.length === 1 && pagination.current > 1) {
-            fetchData({
+            await fetchData({
               current: pagination.current - 1,
               pageSize: pagination.pageSize
             });
           } else {
-            fetchData({
+            await fetchData({
               current: pagination.current,
               pageSize: pagination.pageSize
             });
@@ -147,7 +147,7 @@ const BookList: React.FC = () => {
         if (response.code === 0) {
           message.success('更新成功');
           setIsModalVisible(false);
-          fetchData({
+          await fetchData({
             current: pagination.current,
             pageSize: pagination.pageSize
           });

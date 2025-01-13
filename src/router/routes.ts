@@ -4,7 +4,7 @@ import {
   TeamOutlined,
   ShoppingOutlined,
   AppstoreOutlined,
-  SettingOutlined,
+  SettingOutlined, BugOutlined,
 } from '@ant-design/icons';
 import Dashboard from '../pages/Dashboard';
 import UserList from '../pages/sys/UserList';
@@ -17,6 +17,7 @@ import Login from '../pages/Login';
 import NotFound from '../pages/error/NotFound';
 import Forbidden from '../pages/error/Forbidden';
 import BookList from "../pages/app/BookList";
+import Test from "../pages/Test";
 
 export interface RouteConfig {
   path: string;           // 路由路径
@@ -38,6 +39,15 @@ export const routes: RouteConfig[] = [
     component: Dashboard,
     name: '仪表盘',
     icon: DashboardOutlined,
+    isMenu: true,
+    requireAuth: true,
+  },
+  {
+    path: '/test',
+    key: 'test',
+    component: Test,
+    name: '测试页',
+    icon: BugOutlined,
     isMenu: true,
     requireAuth: true,
   },
