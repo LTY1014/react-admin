@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
 import {Button, Card, Divider, message} from "antd";
 import excel from "../plugins/excel";
-import axios from "../plugins/axios";
+import Authority from "../components/Authority";
+import {ACCESS_ENUM} from "../access/checkAccess";
 
 const Test: React.FC = () => {
     const [count, setCount] = React.useState(0);
@@ -57,6 +58,9 @@ const Test: React.FC = () => {
                 <Button onClick={() => setCount(count + 1)}>add</Button>
             </Card>
             <Divider/>
+            <Authority permissions={[ACCESS_ENUM.ADMIN]}>
+                <Button type="link">管理员可见</Button>
+            </Authority>
             <Button onClick={() => handleCopy()}>复制内容</Button>
             <Button onClick={() => handleExcel()}>下载Excel</Button>
             <Button onClick={() => handleApi()}>测试</Button>
