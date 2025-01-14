@@ -4,7 +4,7 @@ import { RootState } from '../store';
 import checkAccess, {ACCESS_ENUM} from '../access/checkAccess';
 
 /**
- * 权限组件
+ * 认证提供组件
  * @param permissions - 需要的权限列表
  * @param children - 需要展示的组件
  */

@@ -1,78 +1,119 @@
-import React, { useEffect } from 'react';
-import { Card, Form, Input, Button, message } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { login as loginAction } from '../store/slices/authSlice';
-import { login } from '../api/user';
-import type { LoginParams } from '../api/user';
-import { RootState } from '../store';
+import React, {useEffect} from 'react';
+import {Button, Card, Form, Input, message} from 'antd';
+import {useDispatch, useSelector} from 'react-redux';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {login as loginAction} from '../store/slices/authSlice';
+import type {LoginParams} from '../api/user';
+import {login} from '../api/user';
+import {RootState} from '../store';
+import config from "../config";
 
 const Login: React.FC = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useSelector((state: RootState) => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const {user} = useSelector((state: RootState) => state.auth);
 
-  useEffect(() => {
-    // 如果已经登录，重定向到首页或来源页面
-    if (user?.userRole) {
-      const from = location.state?.from || '/dashboard';
-      navigate(from, { replace: true });
-    }
-  }, [user, navigate, location]);
+    // 默认账号和密码
+    const defaultValues = {
+        userAccount: 'test',
+        userPassword: '123456'
+    };
 
-  const onFinish = async (values: LoginParams) => {
-    try {
-      const response = await login(values);
-      dispatch(loginAction({ user: response.data }));
-      message.success('登录成功');
-      const from = location.state?.from || '/dashboard';
-      navigate(from, { replace: true });
-    } catch (error) {
-      message.error('登录失败:'+ error.message)
-    }
-  };
+    useEffect(() => {
+        if (user?.userRole) {
+            const from = location.state?.from || '/dashboard';
+            navigate(from, {replace: true});
+        }
+    }, [user, navigate, location]);
 
-  return (
-    <div style={{ 
-      height: '100vh', 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center',
-      background: '#f0f2f5'
-    }}>
-      <Card title="系统登录" style={{ width: 400 }}>
-        <Form
-          name="login"
-          onFinish={onFinish}
-          initialValues={{
-            userAccount: 'test',
-            userPassword: '123456'
-          }}
+    const onFinish = async (values: LoginParams) => {
+        try {
+            const response = await login(values);
+            dispatch(loginAction(response.data || {}));
+            message.success('登录成功');
+            const from = location.state?.from || '/dashboard';
+            navigate(from, {replace: true});
+        } catch (error) {
+            message.error('登录失败:' + error.message)
+        }
+    };
+
+    return (
+        <div
+            style={{
+                height: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundImage: 'url(https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
         >
-          <Form.Item
-            name="userAccount"
-            rules={[{ required: true, message: '请输入用户名！' }]}
-          >
-            <Input placeholder="用户名" />
-          </Form.Item>
+            <Card
+                title={config.appTitle}
+                style={{
+                    width: 400,
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                    borderRadius: '8px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                }}
+                headStyle={{
+                    textAlign: 'center',
+                    fontSize: '24px',
+                    borderBottom: '1px solid #f0f0f0',
+                    padding: '20px 0',
+                }}
+                bodyStyle={{
+                    padding: '24px',
+                }}
+            >
+                <Form
+                    name="login"
+                    initialValues={defaultValues}
+                    onFinish={onFinish}
+                    layout="vertical"
+                    size="large"
+                >
+                    <Form.Item
+                        name="userAccount"
+                        rules={[{required: true, message: '请输入用户名！'}]}
+                    >
+                        <Input
+                            placeholder="用户名"
+                            style={{borderRadius: '4px'}}
+                        />
+                    </Form.Item>
 
-          <Form.Item
-            name="userPassword"
-            rules={[{ required: true, message: '请输入密码！' }]}
-          >
-            <Input.Password placeholder="密码" />
-          </Form.Item>
+                    <Form.Item
+                        name="userPassword"
+                        rules={[{required: true, message: '请输入密码！'}]}
+                    >
+                        <Input.Password
+                            placeholder="密码"
+                            style={{borderRadius: '4px'}}
+                        />
+                    </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
-              登录
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
-    </div>
-  );
+                    <Form.Item>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            block
+                            style={{
+                                height: '40px',
+                                borderRadius: '4px',
+                                fontSize: '16px',
+                            }}
+                        >
+                            登录
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
+        </div>
+    );
 };
 
 export default Login; 

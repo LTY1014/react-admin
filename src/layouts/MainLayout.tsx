@@ -3,11 +3,7 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     UserOutlined,
-    DashboardOutlined,
-    ShoppingOutlined,
     SettingOutlined,
-    TeamOutlined,
-    AppstoreOutlined,
     LogoutOutlined,
     BellOutlined,
     ApiOutlined
@@ -29,6 +25,9 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 interface ExtendedMenuItem extends MenuItem {
     children?: MenuItem[];
+    icon?: React.ReactNode;
+    key: string;
+    label: string;
 }
 
 const MainLayout: React.FC = () => {
@@ -111,9 +110,9 @@ const MainLayout: React.FC = () => {
         if (key === 'logout') {
             try {
                 await apiLogout();
-                dispatch(logout());
+                dispatch(logout({}));
                 navigate('/login');
-                message.success('退出登录成功');
+                message.success('退出登录');
             } catch (error) {
                 console.error('Logout failed:', error);
             }

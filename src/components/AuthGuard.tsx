@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
 /**
- * @description: 验证用户是否登录，如果没有登录，则重定向到登录页面。
+ * @description: 路由权限控制组件
  */
 interface AuthGuardProps {
   children: React.ReactNode;
