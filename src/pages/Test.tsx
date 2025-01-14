@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {Button, Card, Divider, message} from "antd";
 import excel from "../plugins/excel";
 import Authority from "../components/Authority";
-import {ACCESS_ENUM} from "../access/checkAccess";
+import {ACCESS_ENUM} from "../utils/checkAccess";
 
 const Test: React.FC = () => {
     const [count, setCount] = React.useState(0);

@@ -26,8 +26,6 @@ export interface RouteConfig {
   name: string;          // 路由名称（菜单显示）
   icon?: React.ComponentType<any>;    // 菜单图标
   isMenu?: boolean;      // 是否显示在菜单中
-  hideInMenu?: boolean;  // 是否在菜单中隐藏
-  requireAuth?: boolean; // 是否需要登录
   requireRoles?: string[]; // 需要的角色权限
   children?: RouteConfig[]; // 子路由
 }
@@ -40,7 +38,6 @@ export const routes: RouteConfig[] = [
     name: '仪表盘',
     icon: DashboardOutlined,
     isMenu: true,
-    requireAuth: true,
   },
   {
     path: '/test',
@@ -49,7 +46,6 @@ export const routes: RouteConfig[] = [
     name: '测试页',
     icon: BugOutlined,
     isMenu: true,
-    requireAuth: true,
   },
   {
     path: '/user',
@@ -57,7 +53,6 @@ export const routes: RouteConfig[] = [
     name: '用户管理',
     icon: TeamOutlined,
     isMenu: true,
-    requireAuth: true,
     children: [
       {
         path: '/users',
@@ -66,7 +61,6 @@ export const routes: RouteConfig[] = [
         name: '用户列表',
         icon: UserOutlined,
         isMenu: true,
-        requireAuth: true,
         requireRoles: ['admin'],
       },
       {
@@ -76,7 +70,6 @@ export const routes: RouteConfig[] = [
         name: '角色管理',
         icon: UserOutlined,
         isMenu: true,
-        requireAuth: true,
         requireRoles: ['admin'],
       },
     ],
@@ -87,7 +80,6 @@ export const routes: RouteConfig[] = [
     name: '业务管理',
     icon: ShoppingOutlined,
     isMenu: true,
-    requireAuth: true,
     children: [
       {
         path: '/bookList',
@@ -96,7 +88,6 @@ export const routes: RouteConfig[] = [
         name: '模拟列表',
         icon: AppstoreOutlined,
         isMenu: true,
-        requireAuth: true,
       },
       {
         path: '/product-list',
@@ -105,7 +96,6 @@ export const routes: RouteConfig[] = [
         name: '商品列表',
         icon: AppstoreOutlined,
         isMenu: true,
-        requireAuth: true,
       },
       {
         path: '/product-category',
@@ -114,7 +104,6 @@ export const routes: RouteConfig[] = [
         name: '商品分类',
         icon: AppstoreOutlined,
         isMenu: true,
-        requireAuth: true,
       },
     ],
   },
@@ -125,7 +114,6 @@ export const routes: RouteConfig[] = [
     name: '系统设置',
     icon: SettingOutlined,
     isMenu: true,
-    requireAuth: true,
     requireRoles: ['admin','user'],
   },
   {
@@ -134,7 +122,6 @@ export const routes: RouteConfig[] = [
     component: Profile,
     name: '个人信息',
     icon: UserOutlined,
-    requireAuth: true,
     requireRoles: ['admin','user'],
   },
   {
@@ -159,8 +146,6 @@ export const routes: RouteConfig[] = [
 
 // 获取所有需要注册的路由（扁平化处理）
 export const getRouteList = (routes: RouteConfig[]): RouteConfig[] => {
-  // 过滤白名单
-  routes = routes.filter(route => !route.hideInMenu);
   const result: RouteConfig[] = [];
   routes.forEach(route => {
     if (route.children) {

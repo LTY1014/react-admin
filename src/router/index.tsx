@@ -13,7 +13,7 @@ const AppRoutes = () => {
           key={route.key}
           path={route.path.replace('/', '')}
           element={
-            route.requireAuth ? (
+            route.isMenu ? (
               <AuthGuard requiredRoles={route.requireRoles}>
                 <route.component />
               </AuthGuard>

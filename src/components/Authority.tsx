@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
-import checkAccess, {ACCESS_ENUM} from '../access/checkAccess';
+import checkAccess, {ACCESS_ENUM} from '../utils/checkAccess';
 
 /**
  * 认证提供组件
