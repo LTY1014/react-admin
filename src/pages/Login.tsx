@@ -40,17 +40,7 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div
-            style={{
-                height: '100vh',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundImage: 'url(https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
-        >
+        <div className="blank-layout">
             <Card
                 title={config.appTitle}
                 style={{

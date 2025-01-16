@@ -11,4 +11,15 @@ body {
   height: 32px;
   margin: 16px;
   background: rgba(255, 255, 255, 0.2);
-} 
+}
+
+/* 登录页面 */
+.blank-layout{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://gw.alipayobjects.com/zos/rmsportal/FfdJeJRQWjEeGTpqgBKj.png');
+  background-size: cover;
+  background-position: center;
+}

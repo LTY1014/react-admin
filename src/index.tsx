@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import App from './App';
 import './index.css';
+import './gloabl.less'
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

@@ -32,6 +32,10 @@ export const logout = () => {
   return request.post<any, ApiResponse<null>>('/user/logout');
 };
 
+export const getListUserByPage = (params) => {
+  return request.get<any, ApiResponse<UserResponse>>('/user/list/page', { params });
+};
+
 // 更新用户信息
 export interface UpdateUserParams {
   userName?: string;

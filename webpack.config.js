@@ -11,7 +11,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     port: 8100,
-    hot: true,
+    hot: isDevelopment,
     open: true,
     compress: true,
     client: {
@@ -55,6 +55,14 @@ module.exports = {
         ],
       },
       {
+        test: /\.less$/,
+        use: [
+          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader',
+        ],
+      },
+      {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
@@ -92,4 +100,4 @@ module.exports = {
   performance: {
     hints: isDevelopment ? false : 'warning',
   },
-}; 
+};

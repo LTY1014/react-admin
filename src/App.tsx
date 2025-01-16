@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import NotFound from './pages/error/NotFound';
 import Forbidden from './pages/error/Forbidden';
 import AppRoutes from './router';
+import zhCN from 'antd/es/locale/zh_CN';
 
 const AppContent = () => {
   const { primaryColor, isDarkMode } = useSelector((state: RootState) => state.theme);
@@ -24,6 +25,7 @@ const AppContent = () => {
         },
         algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
       }}
+      locale={zhCN}
     >
       <BrowserRouter>
         <AuthProvider>
