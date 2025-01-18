@@ -1,8 +1,9 @@
 import React from 'react';
-import { Card, Form, Input, Button, Upload, message, Avatar, Space } from 'antd';
+import {Card, Form, Input, Button, Upload, message, Avatar, Space, Modal} from 'antd';
 import { UserOutlined, UploadOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import {RootState} from '../../store';
+import {updatePassword} from "../../api/user";
 
 const Profile: React.FC = () => {
   const [form] = Form.useForm();
@@ -11,6 +12,23 @@ const Profile: React.FC = () => {
   const handleSubmit = (values: any) => {
     console.log('个人信息:', values);
     message.success('个人信息已更新');
+  };
+
+  const handleUpdatePassword = async () => {
+    try {
+      const res = await updatePassword({
+        oldPassword: form.getFieldValue('oldPassword'),
+        newPassword: form.getFieldValue('newPassword'),
+        confirmPassword: form.getFieldValue('confirmPassword'),
+      })
+      if (res.code === 0) {
+        message.success('修改密码成功');
+      } else {
+        message.error(res.message || '重置密码失败');
+      }
+    } catch (e) {
+      message.error('操作失败');
+    }
   };
 
   return (
@@ -104,8 +122,18 @@ const Profile: React.FC = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              保存修改
+            <Button type="primary" onClick={() => {
+              Modal.confirm({
+                title: '确定修改密码吗？',
+                content: '修改密码后，请牢记新密码。',
+                okText: '确定',
+                cancelText: '取消',
+                onOk: () => {
+                  handleUpdatePassword();
+                },
+              });
+            }}>
+              重置密码
             </Button>
           </Form.Item>
         </Form>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Card, Button, Space, Modal, Form, Input, message, Row, Col } from 'antd';
+import {Table, Card, Button, Space, Modal, Form, Input, message, Row, Col, Select, InputNumber} from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import {BookVO, BookResponse, getListBookByPage, addBook, updateBook, deleteBook} from "../../api/book";
+import {BookType} from "../../model/enum";
 
 const BookList: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -57,9 +58,14 @@ const BookList: React.FC = () => {
       key: 'bookName',
     },
     {
-      title: '作者',
-      dataIndex: 'author',
-      key: 'author',
+      title: '类型',
+      dataIndex: 'type',
+      key: 'type',
+    },
+    {
+      title: '价格',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
       title: '创建时间',
@@ -253,9 +259,9 @@ const BookList: React.FC = () => {
           </Row>
         </Form>
 
-        <Table 
-          columns={columns} 
-          dataSource={data} 
+        <Table
+          columns={columns}
+          dataSource={data}
           rowKey="id"
           pagination={pagination}
           loading={loading}
@@ -284,11 +290,29 @@ const BookList: React.FC = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            name="author"
-            label="作者"
-            rules={[{ required: true, message: '请输入作者' }]}
+            name="type"
+            label="类型"
+            rules={[{ required: true, message: '请选择类型' }]}
           >
-            <Input />
+            <Select placeholder="请选择书籍类型">
+              {BookType.map((book, index) => (
+                  <Select.Option key={index} value={book.value}>
+                    {book.label}
+                  </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+              name="price"
+              label="价格"
+              rules={[{ required: true, message: '请输入' }]}
+          >
+            <InputNumber
+                style={{ width: '100%' }}
+                min={0}
+                precision={2}
+                prefix="¥"
+            />
           </Form.Item>
         </Form>
       </Modal>

@@ -59,5 +59,18 @@ export const changePassword = (data: ChangePasswordParams) => {
 
 // 重置密码（管理员功能）
 export const resetUserPassword = (userId: number) => {
-  return request.post<any, ApiResponse<null>>(`/user/password/reset/${userId}`);
-}; 
+  return request.post<any, ApiResponse<null>>(`/user/resetPassword/${userId}`);
+};
+
+export const updatePassword = (data) => {
+  return request.post<any, ApiResponse<UserResponse>>('/user/updatePassword', data);
+};
+
+export const addUser = (data) => {
+  return request.post<any, ApiResponse<UserResponse>>('/user/add', data);
+};
+
+export const deleteUser = (data) => {
+  return request.post<any, ApiResponse<null>>('/user/delete', data);
+};
+
