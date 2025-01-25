@@ -35,10 +35,10 @@ module.exports = {
     clean: true,
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, 'src')
     },
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
   module: {
     rules: [

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Table, Space, Button, Card, Form, message, Tag, Row, Col, Input, Modal, Select} from 'antd';
 import {PlusOutlined, ReloadOutlined, SearchOutlined} from "@ant-design/icons";
 import {addUser, deleteUser, getListUserByPage, resetUserPassword, updateUser, UserResponse} from "../../api/user";
+import dayjs from "dayjs";
 
 interface DataType {
   key: string;
@@ -196,6 +197,14 @@ const UserList: React.FC = () => {
           default:
             return <span color="red">未知</span>;
         }
+      }
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      key: 'createTime',
+      render: (text: string) => {
+        return text ? dayjs(text).format('YYYY:MM:DD HH:mm:ss') : '--';
       }
     },
     {

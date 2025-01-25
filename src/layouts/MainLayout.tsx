@@ -97,8 +97,8 @@ const MainLayout: React.FC = () => {
         },
         {
             key: '2',
-            label: '新订单提醒：收到 3 个新订单',
-            onClick: () => message.info('查看订单详情'),
+            label: '系统通知：新功能实现',
+            onClick: () => message.info('查看通知详情'),
         },
     ];
 
