@@ -1,38 +1,38 @@
 import React from 'react';
-import {Card, Col, Row, Statistic, Table} from 'antd';
+import {Card, Col, Descriptions, List, Row, Statistic, Table} from 'antd';
 import {DollarOutlined, LineChartOutlined, ShoppingCartOutlined, UserOutlined} from '@ant-design/icons';
 
 const Dashboard: React.FC = () => {
-    const recentOrders = [
+    const data = [
         {
             key: '1',
-            technology: 'React',
-            version: 'v18.2.0'
+            label: 'React',
+            value: 'v18.2.0'
         },
         {
             key: '2',
-            technology: 'antd',
-            version: 'v5.14.1',
+            label: 'antd',
+            value: 'v5.14.1',
         },
         {
             key: '3',
-            technology: 'axios',
-            version: 'v1.6.7',
+            label: 'axios',
+            value: 'v1.6.7',
         },
         {
             key: '4',
-            technology: 'dayjs',
-            version: 'v1.11.13',
+            label: 'dayjs',
+            value: 'v1.11.13',
         },
         {
             key: '5',
-            technology: 'lodash',
-            version: 'v4.17.21',
+            label: 'lodash',
+            value: 'v4.17.21',
         },
         {
             key: '6',
-            technology: 'react-redux',
-            version: 'v9.1.0',
+            label: 'react-redux',
+            value: 'v9.1.0',
         },
     ];
 
@@ -93,11 +93,30 @@ const Dashboard: React.FC = () => {
             </Row>
 
             <Card title="技术栈" style={{marginTop: 16}}>
-                <Table
-                    columns={columns}
-                    dataSource={recentOrders}
-                    pagination={false}
+                <List
+                    grid={{
+                        gutter: 16,
+                        xs: 1,
+                        sm: 2,
+                        md: 4,
+                        lg: 4,
+                        xl: 6,
+                        xxl: 3,
+                    }}
+                    dataSource={data}
+                    renderItem={(item) => (
+                        <List.Item key={item.key}>
+                            <Card title={item.label}>{item.value}</Card>
+                        </List.Item>
+                    )}
                 />
+
+                <Descriptions title="技术栈" bordered items={
+                    data.map(item => ({
+                        label: item.label,
+                        children: item.value,
+                    }))
+                }/>
             </Card>
         </div>
     );
