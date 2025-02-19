@@ -1,9 +1,14 @@
 import React from 'react';
-import { Card, Form, Input, Button, Switch, Select, Space, message } from 'antd';
-import ThemeSettings from '../../components/ThemeSettings';
+import {Card, Form, Input, Button, Switch, Select, Space, message, ColorPicker} from 'antd';
+import {setPrimaryColor, toggleDarkMode} from "@/store/slices/themeSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/store";
 
 const Settings: React.FC = () => {
   const [form] = Form.useForm();
+
+  const dispatch = useDispatch();
+  const { primaryColor, isDarkMode } = useSelector((state: RootState) => state.theme);
 
   const handleSubmit = (values: any) => {
     console.log('系统设置:', values);
@@ -13,12 +18,9 @@ const Settings: React.FC = () => {
   return (
     <div>
       <Space direction="vertical" style={{ width: '100%' }} size="large">
-        <ThemeSettings />
-        
         <Card title="系统设置">
           <Form
             form={form}
-            layout="vertical"
             onFinish={handleSubmit}
             initialValues={{
               siteName: 'React Admin',
@@ -32,17 +34,23 @@ const Settings: React.FC = () => {
               label="站点名称"
               rules={[{ required: true, message: '请输入站点名称' }]}
             >
-              <Input />
+              <Input width="300px" />
             </Form.Item>
 
-            <Form.Item
-              name="allowRegistration"
-              label="允许注册"
-              valuePropName="checked"
-            >
-              <Switch />
+            <Form.Item>
+              <span style={{ marginRight: 8 }}>暗黑模式：</span>
+              <Switch
+                  checked={isDarkMode}
+                  onChange={() => dispatch(toggleDarkMode())}
+              />
             </Form.Item>
-
+            <Form.Item>
+              <span style={{ marginRight: 8 }}>主题色：</span>
+              <ColorPicker
+                  value={primaryColor}
+                  onChange={(color) => dispatch(setPrimaryColor(color.toHexString()))}
+              />
+            </Form.Item>
             <Form.Item
               name="emailNotification"
               label="邮件通知"
@@ -55,10 +63,7 @@ const Settings: React.FC = () => {
               name="language"
               label="系统语言"
             >
-              <Select>
-                <Select.Option value="zh_CN">简体中文</Select.Option>
-                <Select.Option value="en_US">English</Select.Option>
-              </Select>
+              <Select options={[{value: 'zh_CN', label: '简体中文',}, {value: 'en_US', label: 'English',}]}/>
             </Form.Item>
 
             <Form.Item>
