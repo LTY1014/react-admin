@@ -35,7 +35,7 @@ export const routes: RouteConfig[] = [
     path: '/dashboard',
     key: 'dashboard',
     component: Dashboard,
-    name: '仪表盘',
+    name: '主页',
     icon: DashboardOutlined,
     isMenu: true,
   },

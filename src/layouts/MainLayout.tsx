@@ -1,21 +1,22 @@
 import React, {useState} from 'react';
 import {
+    ApiOutlined,
+    BellOutlined,
+    ClearOutlined,
+    LogoutOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    UserOutlined,
     SettingOutlined,
-    LogoutOutlined,
-    BellOutlined,
-    ApiOutlined
+    UserOutlined
 } from '@ant-design/icons';
-import {Layout, Menu, Button, theme, Dropdown, Space, Avatar, Badge, message} from 'antd';
-import {useNavigate, useLocation, Outlet} from 'react-router-dom';
-import {useSelector, useDispatch} from 'react-redux';
+import type {MenuProps} from 'antd';
+import {Avatar, Badge, Button, Dropdown, Layout, Menu, message, Modal, Space, theme} from 'antd';
+import {Outlet, useLocation, useNavigate} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
 import {logout} from '../store/slices/authSlice';
-import type {MenuProps} from 'antd';
 import {logout as apiLogout} from '../api/user';
-import {routes, filterRoutesByRole, RouteConfig} from '../router/routes';
+import {filterRoutesByRole, RouteConfig, routes} from '../router/routes';
 import TabsNav from '../components/TabsNav';
 import config from "../config";
 
@@ -36,6 +37,7 @@ const MainLayout: React.FC = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const {user} = useSelector((state: RootState) => state.auth);
+    const [notices, setNotices] = useState<any[]>(2);
 
     const {
         token: {colorBgContainer, borderRadiusLG},
@@ -99,6 +101,16 @@ const MainLayout: React.FC = () => {
             key: '2',
             label: '系统通知：新功能实现',
             onClick: () => message.info('查看通知详情'),
+        },
+        {
+            type: 'divider',
+        },
+        {
+            key: 'clear-notifications',
+            label: '清空通知',
+            onClick: () => {
+                setNotices(0);
+            },
         },
     ];
 
@@ -192,8 +204,20 @@ const MainLayout: React.FC = () => {
                         }}
                     />
                     <Space size={16}>
+                        <Button type="text" icon={<ClearOutlined/>} onClick={() => {
+                            Modal.confirm({
+                                title: '清空缓存数据？',
+                                content: '清空缓存数据将删除所有缓存数据。',
+                                okText: '确定',
+                                cancelText: '取消',
+                                onOk: () => {
+                                    localStorage.clear()
+                                    message.success('清空缓存数据成功');
+                                },
+                            });
+                        }}/>
                         <Dropdown menu={{items: notificationItems}} placement="bottomRight">
-                            <Badge count={2} size="small">
+                            <Badge count={notices} size="small">
                                 <Button type="text" icon={<BellOutlined/>}/>
                             </Badge>
                         </Dropdown>
