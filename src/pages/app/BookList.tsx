@@ -46,8 +46,7 @@ const BookList: React.FC = () => {
 
   useEffect(() => {
     fetchData({
-      current: 1,
-      pageSize: 10
+      ...pagination
     });
   }, []);
 
@@ -183,8 +182,7 @@ const BookList: React.FC = () => {
     const values = await searchForm.validateFields();
     await fetchData({
       ...values,
-      current: 1,
-      pageSize: pagination.pageSize
+      ...pagination
     });
   };
 
@@ -202,6 +200,11 @@ const BookList: React.FC = () => {
     const values = searchForm.getFieldsValue();
     fetchData({
       ...values,
+      current: newPagination.current,
+      pageSize: newPagination.pageSize
+    });
+    setPagination({
+      ...pagination,
       current: newPagination.current,
       pageSize: newPagination.pageSize
     });

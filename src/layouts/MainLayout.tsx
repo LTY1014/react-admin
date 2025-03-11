@@ -192,6 +192,7 @@ const MainLayout: React.FC = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     boxShadow: '0 1px 4px rgba(0,21,41,.08)',
+                    maxHeight: 64,
                 }}>
                     <Button
                         type="text"
