@@ -44,7 +44,7 @@ export interface UpdateUserParams {
 }
 
 export const updateUser = (data: UpdateUserParams) => {
-  return request.put<any, ApiResponse<UserResponse>>('/user/update', data);
+  return request.post<any, ApiResponse<UserResponse>>('/user/update', data);
 };
 
 // 修改密码

@@ -5,6 +5,7 @@ import {
   ShoppingOutlined,
   AppstoreOutlined,
   SettingOutlined, BugOutlined,
+  UsergroupAddOutlined
 } from '@ant-design/icons';
 import Dashboard from '../pages/Dashboard';
 import UserList from '../pages/sys/UserList';
@@ -68,7 +69,7 @@ export const routes: RouteConfig[] = [
         key: 'roles',
         component: RoleList,
         name: '角色管理',
-        icon: UserOutlined,
+        icon: UsergroupAddOutlined,
         isMenu: true,
         requireRoles: ['admin'],
       },
