@@ -9,29 +9,30 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
 const NavContainer = styled.div<{ $bgColor: string }>`
-  padding: 8px 16px;
+  padding: 2px 16px;
   background: ${props => props.$bgColor};
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 `;
 
 const StyledTabs = styled(Tabs)<{ $token: any }>`
   flex: 1;
-  margin-left: 24px;
+  margin-left: 16px;
   
   .ant-tabs-nav {
     margin: 0;
   }
   
   .ant-tabs-tab {
-    border-radius: 6px 6px 0 0 !important;
+    border-radius: 4px 4px 0 0 !important;
     background: ${props => props.$token.colorBgContainer} !important;
     border: 1px solid ${props => props.$token.colorBorderSecondary} !important;
-    padding: 8px 16px !important;
+    padding: 2px 8px !important;
     transition: all 0.3s;
+    font-size: 13px;
     
     &:hover {
       color: ${props => props.$token.colorPrimary} !important;
@@ -57,8 +58,9 @@ const StyledTabs = styled(Tabs)<{ $token: any }>`
 `;
 
 const CloseAllButton = styled.a<{ $token: any }>`
-  margin-left: 16px;
+  margin-left: 12px;
   color: ${props => props.$token.colorTextSecondary};
+  font-size: 13px;
   
   &:hover {
     color: ${props => props.$token.colorPrimary};

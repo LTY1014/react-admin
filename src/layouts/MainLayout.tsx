@@ -192,7 +192,7 @@ const MainLayout: React.FC = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     boxShadow: '0 1px 4px rgba(0,21,41,.08)',
-                    maxHeight: 64,
+                    maxHeight: 40,
                 }}>
                     <Button
                         type="text"
@@ -200,11 +200,11 @@ const MainLayout: React.FC = () => {
                         onClick={() => setCollapsed(!collapsed)}
                         style={{
                             fontSize: '16px',
-                            width: 64,
-                            height: 64,
+                            width: 40,
+                            height: 40,
                         }}
                     />
-                    <Space size={16}>
+                    <Space size={12} style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
                         <Button type="text" icon={<ClearOutlined/>} onClick={() => {
                             Modal.confirm({
                                 title: '清空缓存数据？',
@@ -216,14 +216,14 @@ const MainLayout: React.FC = () => {
                                     message.success('清空缓存数据成功');
                                 },
                             });
-                        }}/>
+                        }} style={{ height: '100%', display: 'flex', alignItems: 'center' }}/>
                         <Dropdown menu={{items: notificationItems}} placement="bottomRight">
                             <Badge count={notices} size="small">
-                                <Button type="text" icon={<BellOutlined/>}/>
+                                <Button type="text" icon={<BellOutlined/>} style={{ height: '100%', display: 'flex', alignItems: 'center' }}/>
                             </Badge>
                         </Dropdown>
                         <Dropdown menu={{items: userMenuItems, onClick: handleUserMenuClick}} placement="bottomRight">
-                            <Space style={{cursor: 'pointer'}}>
+                            <Space style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center' }}>
                                 <Avatar
                                     style={{backgroundColor: '#1890ff'}}
                                     src={user?.avatarUrl}
