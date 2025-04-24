@@ -10,7 +10,7 @@ import {
     UserOutlined
 } from '@ant-design/icons';
 import type {MenuProps} from 'antd';
-import {Avatar, Badge, Button, Dropdown, Layout, Menu, message, Modal, Space, theme} from 'antd';
+import {Avatar, Badge, Button, Dropdown, FloatButton, Layout, Menu, message, Modal, Space, theme} from 'antd';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
@@ -163,25 +163,6 @@ const MainLayout: React.FC = () => {
                         onClick={handleMenuClick}
                         style={{flex: 1}}
                     />
-                    <div style={{
-                        padding: '16px',
-                        borderTop: '1px solid rgba(255,255,255,0.1)',
-                    }}>
-                        <a
-                            href={config.apiUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                                color: 'rgba(255,255,255,0.65)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                            }}
-                        >
-                            <ApiOutlined/>
-                            <span>{collapsed ? '' : 'API文档'}</span>
-                        </a>
-                    </div>
                 </div>
             </Sider>
             <Layout>
@@ -204,7 +185,7 @@ const MainLayout: React.FC = () => {
                             height: 40,
                         }}
                     />
-                    <Space size={12} style={{ height: '100%', display: 'flex', alignItems: 'center' }}>
+                    <Space size={12} style={{ height: '100%', display: 'flex', alignItems: 'center'}}>
                         <Button type="text" icon={<ClearOutlined/>} onClick={() => {
                             Modal.confirm({
                                 title: '清空缓存数据？',
@@ -250,6 +231,13 @@ const MainLayout: React.FC = () => {
                     </div>
                 </Content>
             </Layout>
+            <a
+                href={config.apiUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <FloatButton icon={<ApiOutlined/>}/>
+            </a>
         </Layout>
     );
 };
