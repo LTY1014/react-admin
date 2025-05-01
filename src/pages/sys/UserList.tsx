@@ -338,8 +338,8 @@ const UserList: React.FC = () => {
                 rules={[{ required: true, message: '请选择' }]}
             >
               <Select>
-                <Select.Option value="admin">管理员</Select.Option>
-                <Select.Option value="user">普通用户</Select.Option>
+                <Select.Option key="admin" value="admin">管理员</Select.Option>
+                <Select.Option key="user" value="user">普通用户</Select.Option>
               </Select>
             </Form.Item>
             <Form.Item
@@ -347,9 +347,9 @@ const UserList: React.FC = () => {
                 label="性别"
             >
               <Select>
-                <Select.Option value={0}>男</Select.Option>
-                <Select.Option value={1}>女</Select.Option>
-                <Select.Option value={2}>未知</Select.Option>
+                <Select.Option key="male" value={0}>男</Select.Option>
+                <Select.Option key="female" value={1}>女</Select.Option>
+                <Select.Option key="unknown" value={2}>未知</Select.Option>
               </Select>
             </Form.Item>
             <Form.Item

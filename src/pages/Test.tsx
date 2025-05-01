@@ -65,7 +65,8 @@ const Test: React.FC = () => {
                         <Select options={data.map((item, index) => {
                             return {
                                 value: index,
-                                label: item.name
+                                label: item.name,
+                                key: index
                             }
                         })}
                                 onChange={(value) => {
@@ -78,18 +79,20 @@ const Test: React.FC = () => {
                     </Form.Item>
                 </Form.Item>
                 <Form.Item label="年龄" name="age">
-                    <Select options={data.map(item => {
+                    <Select options={data.map((item, index) => {
                         return {
                             value: item.age,
-                            label: item.age
+                            label: item.age,
+                            key: index
                         }
                     })}/>
                 </Form.Item>
                 <Form.Item label="地址" name="address">
-                    <Select options={data.map(item => {
+                    <Select options={data.map((item, index) => {
                         return {
                             value: item.address,
-                            label: item.address
+                            label: item.address,
+                            key: index
                         }
                     })}/>
                 </Form.Item>

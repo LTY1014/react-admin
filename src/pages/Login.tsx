@@ -49,14 +49,16 @@ const Login: React.FC = () => {
                     borderRadius: '8px',
                     backgroundColor: 'rgba(255, 255, 255, 0.9)',
                 }}
-                headStyle={{
-                    textAlign: 'center',
-                    fontSize: '24px',
-                    borderBottom: '1px solid #f0f0f0',
-                    padding: '20px 0',
-                }}
-                bodyStyle={{
-                    padding: '24px',
+                styles={{
+                    header: {
+                        textAlign: 'center',
+                        fontSize: '24px',
+                        borderBottom: '1px solid #f0f0f0',
+                        padding: '20px 0',
+                    },
+                    body: {
+                        padding: '24px',
+                    }
                 }}
             >
                 <Form

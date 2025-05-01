@@ -192,9 +192,9 @@ const ProductList: React.FC = () => {
             rules={[{ required: true, message: '请选择分类' }]}
           >
             <Select>
-              <Select.Option value="电子产品">电子产品</Select.Option>
-              <Select.Option value="服装">服装</Select.Option>
-              <Select.Option value="食品">食品</Select.Option>
+              <Select.Option key="electronics" value="电子产品">电子产品</Select.Option>
+              <Select.Option key="clothing" value="服装">服装</Select.Option>
+              <Select.Option key="food" value="食品">食品</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item

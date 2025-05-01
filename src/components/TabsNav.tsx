@@ -181,16 +181,27 @@ const TabsNav: React.FC = () => {
 
   const breadcrumbs = getBreadcrumbs(location.pathname);
 
+  const breadcrumbItems = [
+    {
+      title: <HomeOutlined />,
+      href: '/dashboard',
+      key: 'home'
+    },
+    ...breadcrumbs.map((item) => ({
+      title: item.title,
+      key: item.path,
+      href: item.path
+    }))
+  ];
+
+  const tabItems = tabRoutes.map(tab => ({
+    key: tab.key,
+    label: tab.label
+  }));
+
   return (
     <NavContainer $bgColor={token.colorBgContainer}>
-      <Breadcrumb>
-        <Breadcrumb.Item href="/dashboard">
-          <HomeOutlined />
-        </Breadcrumb.Item>
-        {breadcrumbs.map((item, index) => (
-          <Breadcrumb.Item key={index}>{item.title}</Breadcrumb.Item>
-        ))}
-      </Breadcrumb>
+      <Breadcrumb items={breadcrumbItems} />
       
       <StyledTabs
         hideAdd
@@ -199,6 +210,7 @@ const TabsNav: React.FC = () => {
         type="editable-card"
         onEdit={handleTabEdit}
         $token={token}
+        items={tabItems}
         tabBarExtraContent={{
           right: (
             <CloseAllButton 
@@ -209,11 +221,7 @@ const TabsNav: React.FC = () => {
             </CloseAllButton>
           ),
         }}
-      >
-        {tabRoutes.map(tab => (
-          <TabPane tab={tab.label} key={tab.key} />
-        ))}
-      </StyledTabs>
+      />
     </NavContainer>
   );
 };

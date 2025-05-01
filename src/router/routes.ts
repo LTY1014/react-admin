@@ -19,6 +19,7 @@ import NotFound from '../pages/error/NotFound';
 import Forbidden from '../pages/error/Forbidden';
 import BookList from "../pages/app/BookList";
 import Test from "../pages/Test";
+import React from "react";
 
 export interface RouteConfig {
   path: string;           // 路由路径
@@ -78,7 +79,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/app',
     key: 'app',
-    name: '业务管理',
+    name: 'Example',
     icon: ShoppingOutlined,
     isMenu: true,
     children: [
