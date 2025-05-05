@@ -1,6 +1,6 @@
 import React from 'react';
-import {Card, Col, Descriptions, List, Row, Statistic, Table} from 'antd';
-import {DollarOutlined, LineChartOutlined, ShoppingCartOutlined, UserOutlined} from '@ant-design/icons';
+import {Card, Col, Descriptions, List, Row, Statistic} from 'antd';
+import {AimOutlined, ApiOutlined, FileDoneOutlined, TrophyOutlined} from '@ant-design/icons';
 
 const Dashboard: React.FC = () => {
     const data = [
@@ -55,38 +55,36 @@ const Dashboard: React.FC = () => {
                 <Col span={6}>
                     <Card>
                         <Statistic
-                            title="总用户数"
-                            value={112893}
-                            prefix={<UserOutlined/>}
+                            title="任务"
+                            value={1128}
+                            prefix={<AimOutlined/>}
                         />
                     </Card>
                 </Col>
                 <Col span={6}>
                     <Card>
                         <Statistic
-                            title="今日订单"
-                            value={93}
-                            prefix={<ShoppingCartOutlined/>}
+                            title="文档"
+                            value={76}
+                            prefix={<FileDoneOutlined/>}
                         />
                     </Card>
                 </Col>
                 <Col span={6}>
                     <Card>
                         <Statistic
-                            title="总收入"
-                            value={112893}
-                            prefix={<DollarOutlined/>}
-                            precision={2}
+                            title="项目"
+                            value={90}
+                            prefix={<TrophyOutlined/>}
                         />
                     </Card>
                 </Col>
                 <Col span={6}>
                     <Card>
                         <Statistic
-                            title="转化率"
-                            value={13.5}
-                            prefix={<LineChartOutlined/>}
-                            suffix="%"
+                            title="接口"
+                            value={968}
+                            prefix={<ApiOutlined/>}
                         />
                     </Card>
                 </Col>

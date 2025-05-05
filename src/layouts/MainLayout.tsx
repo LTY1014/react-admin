@@ -167,7 +167,7 @@ const MainLayout: React.FC = () => {
             </Sider>
             <Layout>
                 <Header style={{
-                    padding: '0 16px',
+                    padding: '24px 16px',
                     background: colorBgContainer,
                     display: 'flex',
                     justifyContent: 'space-between',
