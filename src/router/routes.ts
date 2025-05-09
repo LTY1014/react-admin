@@ -12,6 +12,7 @@ import UserList from '../pages/sys/UserList';
 import RoleList from '../pages/sys/RoleList';
 import ProductList from '../pages/app/ProductList';
 import ProductCategory from '../pages/app/ProductCategory';
+import ProductDetail from '../pages/app/ProductDetail';
 import Settings from '../pages/sys/Settings';
 import Profile from '../pages/sys/Profile';
 import Login from '../pages/Login';
@@ -98,6 +99,14 @@ export const routes: RouteConfig[] = [
         name: '商品列表',
         icon: AppstoreOutlined,
         isMenu: true,
+      },
+      {
+        path: '/product/:id',
+        key: 'product-list-detail',
+        component: ProductDetail,
+        name: '商品详情',
+        icon: AppstoreOutlined,
+        isMenu: false,
       },
       {
         path: '/product-category',

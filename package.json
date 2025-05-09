@@ -1,7 +1,8 @@
 {
-  "name": "admin-dashboard",
+  "name": "react-admin",
   "version": "1.0.0",
   "description": "React Admin Dashboard",
+  "author": "lty",
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack serve",

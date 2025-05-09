@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Card, Button, Space, Tag, Modal, Form, Input, InputNumber, Select } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {useNavigate} from "react-router-dom";
 
 interface ProductType {
   key: string;
@@ -15,6 +16,7 @@ const ProductList: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
+  const navigate = useNavigate();
 
   const initialData: ProductType[] = [
     {
@@ -80,6 +82,13 @@ const ProductList: React.FC = () => {
             onClick={() => handleEdit(record)}
           >
             编辑
+          </Button>
+          <Button
+              type="link"
+              icon={<EditOutlined />}
+              onClick={() => navigate(`/product/${record.key}`)}
+          >
+            查看
           </Button>
           <Button 
             type="link" 

@@ -11,7 +11,31 @@
 </a></p>
 **快速生成react 后台管理项目**
 
-react-admin是一个基于 React 18、Redux 和 Ant Design 构建的后台管理系统模板。它提供了完整的后台管理解决方案，包括用户认证、权限管理、数据可视化等功能。
+react-admin是一个基于 React、Redux 和 Ant Design 构建的后台管理系统模板。它提供了完整的后台管理解决方案，包括用户认证、权限管理、数据可视化等功能。
+
+
+
+[TOC]
+
+## 快速开始
+
+- 安装依赖
+
+```bash
+npm install
+```
+
+- 启动开发
+
+```bash
+npm run dev
+```
+
+- 构建生产
+
+```bash
+npm run build
+```
 
 
 
@@ -43,31 +67,10 @@ react-admin
 │   ├── pages          # 页面组件
 │   ├── redux          # Redux 相关
 │   ├── router         # 路由配置
-│   ├── services       # API 服务
 │   ├── utils          # 工具函数
 │   └── App.tsx        # 根组件
 ├── public             # 公共资源
 └── package.json       # 项目依赖
-```
-
-## 快速开始
-
-### 安装依赖
-
-```bash
-npm install
-```
-
-### 启动开发服务器
-
-```bash
-npm run dev
-```
-
-### 构建生产版本
-
-```bash
-npm run build
 ```
 
 ## 贡献指南
@@ -77,4 +80,3 @@ npm run build
 ## 许可证
 
 [MIT](LICENSE)
-
