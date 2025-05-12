@@ -3,9 +3,11 @@ import {Button, Card, Divider, Form, Input, message, Select} from "antd";
 import excel from "../plugins/excel";
 import Authority from "../components/Authority";
 import {ACCESS_ENUM} from "../utils/checkAccess";
+import {useNavigate} from "react-router-dom";
 
 const Test: React.FC = () => {
     const [form] = Form.useForm();
+    const navigate = useNavigate();
     const [data, setData] = React.useState([
         {
             name: '张三',
@@ -52,12 +54,13 @@ const Test: React.FC = () => {
 
     return (
         <div>
-            <Authority permissions={[ACCESS_ENUM.ADMIN]}>
-                <Button type="link">管理员可见</Button>
-            </Authority>
+            <Button onClick={() => navigate(-1)}>回退</Button>
             <Button onClick={() => handleCopy()}>复制内容</Button>
             <Button onClick={() => handleExcel()}>下载Excel</Button>
             <Button onClick={() => handleApi()}>测试</Button>
+            <Authority permissions={[ACCESS_ENUM.ADMIN]}>
+                <Button type="link">管理员可见</Button>
+            </Authority>
             <Divider/>
             <Form form={form}>
                 <Form.Item label="姓名" name="name">

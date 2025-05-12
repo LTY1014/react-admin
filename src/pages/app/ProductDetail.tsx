@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
-import {Card, Descriptions, DescriptionsProps, Form} from 'antd';
-import {useParams} from "react-router-dom";
+import {Button, Card, Descriptions, DescriptionsProps, Form} from 'antd';
+import {useNavigate, useParams} from "react-router-dom";
+import {LeftOutlined} from "@ant-design/icons";
 
 interface ProductType {
     key: string;
@@ -15,6 +16,7 @@ const ProductDetail: React.FC = () => {
     const [form] = Form.useForm();
     const {id} = useParams<{ id: string }>(); // 获取路由参数 id
     const [data, setData] = React.useState<ProductType | null>(null);
+    const navigate = useNavigate();
 
     const dataSource = [
         {
@@ -75,6 +77,13 @@ const ProductDetail: React.FC = () => {
         <div>
             <Card
                 title="商品详情"
+                extra={
+                    <Button type="primary" icon={<LeftOutlined/>} onClick={() => {
+                        navigate(-1)
+                    }}>
+                        回退
+                    </Button>
+                }
             >
                 <Descriptions bordered items={des}/>
             </Card>

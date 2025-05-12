@@ -14,7 +14,7 @@ interface DataType {
 const UserList: React.FC = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState<UserResponse[]>([]);
-  const [editingKey, setEditingKey] = useState<number | null>(null);
+  const [editingKey, setEditingKey] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -132,7 +132,7 @@ const UserList: React.FC = () => {
     }
   }
 
-  const handleResetPassword = async (userId: number) => {
+  const handleResetPassword = async (userId) => {
     try {
       const response = await resetUserPassword(userId);
       if (response.code === 0) {
@@ -145,7 +145,7 @@ const UserList: React.FC = () => {
     }
   }
 
-  const handleDelete = async (userId: number) => {
+  const handleDelete = async (userId) => {
     try {
       const response = await deleteUser({id: userId});
       if (response.code === 0) {
