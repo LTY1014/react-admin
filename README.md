@@ -39,6 +39,34 @@ npm run build
 
 
 
+新组件开发
+
+```
+import React, { useEffect } from 'react';
+
+// interface IndexProps {
+//     visible: boolean;
+//     setVisible: (bool: boolean) => void;
+//     fieldList: [];
+// }
+
+const Index: React.FC = () => {
+
+    useEffect(() => {
+    }, []);
+
+    return (
+        <div>
+            
+        </div>
+    );
+};
+
+export default Index;
+```
+
+
+
 ## 功能特性
 
 - 🚀 基于 React 18 + Redux + Ant Design 5.x
