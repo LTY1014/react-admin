@@ -117,32 +117,45 @@ const Dashboard: React.FC = () => {
         setLoading(true);
         try {
             // 获取用户数据
-            const userRes = await getListUserByPage({
-                current: 1,
-                pageSize: 10,
-            });
-            if (userRes.code === 0 && userRes.data) {
-                const users = userRes?.data?.records || [];
-                setUserStats({
-                    total: userRes?.data?.total || 0,
-                    adminCount: users.filter(user => user.userRole === 'admin').length,
-                    userCount: users.filter(user => user.userRole === 'user').length,
-                    activeUsers: Math.floor(Math.random() * 100), // 模拟活跃用户数
-                });
-                setRecentUsers(users);
-            }
+            // const userRes = await getListUserByPage({
+            //     current: 1,
+            //     pageSize: 10,
+            // });
+            // if (userRes.code === 0 && userRes.data) {
+            //     const users = userRes?.data?.records || [];
+            //     setUserStats({
+            //         total: userRes?.data?.total || 0,
+            //         adminCount: users.filter(user => user.userRole === 'admin').length,
+            //         userCount: users.filter(user => user.userRole === 'user').length,
+            //         activeUsers: Math.floor(Math.random() * 100), // 模拟活跃用户数
+            //     });
+            //     setRecentUsers(users);
+            // }
+            //
+            // // 获取图书数据
+            // const bookRes = await getListBookByPage({
+            //     current: 1,
+            //     pageSize: 1,
+            // });
+            // if (bookRes.code === 0 && bookRes.data?.total) {
+            //     setBookStats({
+            //         total: bookRes.data.total,
+            //         available: Math.floor(Math.random() * bookRes.data.total), // 模拟可用图书数
+            //     });
+            // }
 
-            // 获取图书数据
-            const bookRes = await getListBookByPage({
-                current: 1,
-                pageSize: 1,
+            // 模拟数据
+            setUserStats({
+                total: 10,
+                adminCount: 1,
+                userCount: 9,
+                activeUsers: Math.floor(Math.random() * 100),
+            })
+
+            setBookStats({
+                total: 10,
+                available: Math.floor(Math.random() * 10),
             });
-            if (bookRes.code === 0 && bookRes.data?.total) {
-                setBookStats({
-                    total: bookRes.data.total,
-                    available: Math.floor(Math.random() * bookRes.data.total), // 模拟可用图书数
-                });
-            }
         } catch (error) {
             console.error('获取数据失败:', error);
         } finally {
@@ -321,7 +334,7 @@ const Dashboard: React.FC = () => {
                                 </div>
                                 <div style={{display: 'flex', alignItems: 'center'}}>
                                     <Text strong style={{minWidth: '100px'}}><DatabaseOutlined/> 数据库：</Text>
-                                    <Text type="secondary">MySQL 8.0</Text>
+                                    <Text type="secondary">MySQL 5.7</Text>
                                 </div>
                                 <div style={{display: 'flex', alignItems: 'center'}}>
                                     <Text strong

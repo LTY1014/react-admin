@@ -50,6 +50,8 @@ const ProductList: React.FC = () => {
       dataIndex: 'price',
       key: 'price',
       render: (price: number) => `¥${price.toFixed(2)}`,
+      sorter: (a, b) => a.price - b.price,
+      defaultSortOrder: 'ascend',
     },
     {
       title: '库存',

@@ -20,6 +20,15 @@ const BookList: React.FC = () => {
 
   // 添加搜索表单
   const [searchForm] = Form.useForm();
+  const searchInput = React.useRef<InputRef>(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection: TableRowSelection<any> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
   
   // 获取列表数据
   const fetchData = async (params: { current: number; pageSize: number; bookName?: string; author?: string }) => {
@@ -44,6 +53,58 @@ const BookList: React.FC = () => {
     }
   };
 
+  const getColumnSearchProps = (dataIndex: any): TableColumnType<any> => ({
+    filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters, close}) => (
+        <div style={{padding: 8}} onKeyDown={(e) => e.stopPropagation()}>
+          <Input
+              ref={searchInput}
+              placeholder={`输入内容并按Enter键即可`}
+              value={selectedKeys[0]}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSelectedKeys(value ? [value] : []);
+                // 更新搜索表单对应的字段
+                searchForm.setFieldsValue({
+                  [dataIndex]: value,
+                });
+              }}
+              onPressEnter={() => handleSearch()}
+              style={{marginBottom: 8, display: 'block'}}
+          />
+          <Space>
+            <Button
+                type="primary"
+                onClick={() => handleSearch()}
+                icon={<SearchOutlined/>}
+                size="small"
+                style={{width: 90}}
+            >
+              搜索
+            </Button>
+            <Button
+                onClick={() => clearFilters && handleReset(clearFilters)}
+                size="small"
+                style={{width: 90}}
+            >
+              重置
+            </Button>
+          </Space>
+        </div>
+    ),
+    onFilter: (value, record) =>
+        record[dataIndex]
+            .toString()
+            .toLowerCase()
+            .includes((value as string).toLowerCase()),
+    filterDropdownProps: {
+      onOpenChange(open) {
+        if (open) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
+      },
+    },
+  });
+
   useEffect(() => {
     fetchData({
       ...pagination
@@ -55,6 +116,7 @@ const BookList: React.FC = () => {
       title: '书名',
       dataIndex: 'bookName',
       key: 'bookName',
+      ...getColumnSearchProps('bookName'),
     },
     {
       title: '类型',
@@ -269,6 +331,7 @@ const BookList: React.FC = () => {
           pagination={pagination}
           loading={loading}
           onChange={handleTableChange}
+          rowSelection={rowSelection}
         />
       </Card>
 

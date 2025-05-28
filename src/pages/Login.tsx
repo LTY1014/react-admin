@@ -45,7 +45,7 @@ const Login: React.FC = () => {
                 title={config.appTitle}
                 style={{
                     width: 400,
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
                     borderRadius: '8px',
                     backgroundColor: 'rgba(255, 255, 255, 0.9)',
                 }}
