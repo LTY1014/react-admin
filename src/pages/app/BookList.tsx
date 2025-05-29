@@ -244,7 +244,8 @@ const BookList: React.FC = () => {
     const values = await searchForm.validateFields();
     await fetchData({
       ...values,
-      ...pagination
+      current: pagination.current,
+      pageSize: pagination.pageSize
     });
   };
 

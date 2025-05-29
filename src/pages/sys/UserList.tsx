@@ -302,7 +302,7 @@ const UserList: React.FC = () => {
               </Col>
             </Row>
           </Form>
-          <Table columns={columns} dataSource={data} loading={loading} pagination={pagination} />
+          <Table rowKey="id" columns={columns} dataSource={data} loading={loading} pagination={pagination} />
         </Card>
 
         <Modal

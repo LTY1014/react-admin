@@ -30,6 +30,7 @@ import {
     FileDoneOutlined,
     GithubOutlined,
     GlobalOutlined,
+    HeatMapOutlined,
     RocketOutlined,
     SafetyCertificateOutlined,
     SmileOutlined,
@@ -38,11 +39,9 @@ import {
     TrophyOutlined,
     UserOutlined
 } from '@ant-design/icons';
-import {getListUserByPage} from "@/api/user";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store";
 import {useNavigate} from "react-router-dom";
-import {getListBookByPage} from "@/api/book";
 
 const {Title, Paragraph, Text} = Typography;
 
@@ -256,7 +255,7 @@ const Dashboard: React.FC = () => {
     }
 
     function FrontStack() {
-        return <Card title="前端技术栈" style={{marginTop: 16}}>
+        return <Card title="前端技术栈" style={{marginTop: 8}}>
             <List
                 grid={{
                     gutter: 16,
@@ -293,7 +292,7 @@ const Dashboard: React.FC = () => {
                 <Col flex="auto">
                     <Typography.Title level={4} style={{margin: 0}}>
                         <SmileOutlined style={{marginRight: 8}}/>
-                        欢迎回来，{user.userName}
+                        欢迎回来，{user?.userName || '访客'}
                     </Typography.Title>
                     <Typography.Text type="secondary">
                         今天是 {new Date().toLocaleDateString('zh-CN', {
@@ -306,7 +305,7 @@ const Dashboard: React.FC = () => {
                 </Col>
                 <Col>
                     <Space>
-                        <Tag color="blue">{user.userRole}</Tag>
+                        <Tag color="blue">{user?.userRole || '访客'}</Tag>
                         <Tag color="green">在线</Tag>
                     </Space>
                 </Col>
@@ -315,8 +314,8 @@ const Dashboard: React.FC = () => {
     }
 
     function ProjectStack() {
-        return <Card style={{marginBottom: 16}}>
-            <Row gutter={[24, 24]}>
+        return <Card style={{marginBottom: 8}} bodyStyle={{padding: '0px 24px 16px'}}>
+            <Row gutter={[16, 12]}>
                 <Col xs={24} md={12}>
                     <Typography>
                         <Title level={4}>
@@ -326,7 +325,7 @@ const Dashboard: React.FC = () => {
                             <Space direction="vertical" size="middle" style={{width: '100%'}}>
                                 <div style={{display: 'flex', alignItems: 'center'}}>
                                     <Text strong style={{minWidth: '100px'}}><CodeOutlined/> 前端技术：</Text>
-                                    <Text type="secondary">React 18 + TypeScript + Ant Design Pro</Text>
+                                    <Text type="secondary">React 18 + TypeScript + Ant Design</Text>
                                 </div>
                                 <div style={{display: 'flex', alignItems: 'center'}}>
                                     <Text strong style={{minWidth: '100px'}}><ApiOutlined/> 后端技术：</Text>
@@ -337,9 +336,12 @@ const Dashboard: React.FC = () => {
                                     <Text type="secondary">MySQL 5.7</Text>
                                 </div>
                                 <div style={{display: 'flex', alignItems: 'center'}}>
-                                    <Text strong
-                                          style={{minWidth: '100px'}}><SafetyCertificateOutlined/> 接口文档：</Text>
+                                    <Text strong style={{minWidth: '100px'}}><SafetyCertificateOutlined/> 接口文档：</Text>
                                     <Text type="secondary">Knife4j</Text>
+                                </div>
+                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                    <Text strong style={{minWidth: '100px'}}><HeatMapOutlined/> 打包体积：</Text>
+                                    <Text type="secondary">2M</Text>
                                 </div>
                             </Space>
                         </Paragraph>
@@ -427,7 +429,6 @@ const Dashboard: React.FC = () => {
                     />
                     <div style={{marginTop: 8}}>
                         <Text type="secondary">可用：{bookStats.available}</Text>
-                        <Text type="secondary">可用：{2}</Text>
                     </div>
                 </Card>
             </Col>
@@ -436,7 +437,6 @@ const Dashboard: React.FC = () => {
                     <Statistic
                         title="活跃用户"
                         value={userStats.activeUsers}
-                        value={9}
                         prefix={<ClockCircleOutlined/>}
                         valueStyle={{color: '#722ed1'}}
                     />
