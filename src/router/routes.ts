@@ -1,10 +1,15 @@
 import {
     AppstoreOutlined,
     BugOutlined,
+    ControlOutlined,
     DashboardOutlined,
+    IdcardOutlined,
+    LoginOutlined,
     SettingOutlined,
     ShoppingOutlined,
-    UserOutlined
+    StopOutlined,
+    TeamOutlined,
+    WarningOutlined
 } from '@ant-design/icons';
 import Dashboard from '../pages/Dashboard';
 import UserList from '../pages/sys/UserList';
@@ -93,7 +98,7 @@ export const routes: RouteConfig[] = [
                 key: 'users',
                 component: UserList,
                 name: '用户列表',
-                icon: UserOutlined,
+                icon: TeamOutlined,
                 isMenu: true,
                 requireRoles: ['admin'],
             },
@@ -102,7 +107,7 @@ export const routes: RouteConfig[] = [
                 key: 'settings',
                 component: Settings,
                 name: '系统设置',
-                icon: SettingOutlined,
+                icon: ControlOutlined,
                 isMenu: true,
                 requireRoles: ['admin', 'user'],
             },
@@ -113,7 +118,7 @@ export const routes: RouteConfig[] = [
         key: 'profile',
         component: Profile,
         name: '个人信息',
-        icon: UserOutlined,
+        icon: IdcardOutlined,
         requireRoles: ['admin', 'user'],
     },
     {
@@ -129,18 +134,21 @@ export const routes: RouteConfig[] = [
         key: 'login',
         component: Login,
         name: '登录',
+        icon: LoginOutlined
     },
     {
         path: '/403',
         key: '403',
         component: Forbidden,
         name: '无权限',
+        icon: StopOutlined
     },
     {
         path: '/404',
         key: '404',
         component: NotFound,
         name: '未找到',
+        icon: WarningOutlined
     },
 ];
 

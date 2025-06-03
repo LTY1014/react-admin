@@ -5,8 +5,8 @@ import {
     ClearOutlined,
     LogoutOutlined,
     MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    SettingOutlined,
+    MenuUnfoldOutlined, MoonOutlined,
+    SettingOutlined, SunOutlined,
     UserOutlined
 } from '@ant-design/icons';
 import type {MenuProps} from 'antd';
@@ -19,6 +19,7 @@ import {logout as apiLogout} from '../api/user';
 import {filterRoutesByRole, RouteConfig, routes} from '../router/routes';
 import TabsNav from '../components/TabsNav';
 import config from "../config";
+import {toggleDarkMode} from "@/store/slices/themeSlice";
 
 const {Header, Sider, Content} = Layout;
 
@@ -37,7 +38,8 @@ const MainLayout: React.FC = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const {user} = useSelector((state: RootState) => state.auth);
-    const [notices, setNotices] = useState<any[]>(2);
+    const [notices, setNotices] = useState<number>(2);
+    const {isDarkMode} = useSelector((state: RootState) => state.theme);
 
     const {
         token: {colorBgContainer, borderRadiusLG},
@@ -198,6 +200,12 @@ const MainLayout: React.FC = () => {
                                 },
                             });
                         }} style={{ height: '100%', display: 'flex', alignItems: 'center' }}/>
+                        <Button
+                            type="text"
+                            icon={isDarkMode ? <SunOutlined/> : <MoonOutlined/>}
+                            onClick={() => dispatch(toggleDarkMode({}))}
+                            style={{height: '100%', display: 'flex', alignItems: 'center'}}
+                        />
                         <Dropdown menu={{items: notificationItems}} placement="bottomRight">
                             <Badge count={notices} size="small">
                                 <Button type="text" icon={<BellOutlined/>} style={{ height: '100%', display: 'flex', alignItems: 'center' }}/>
