@@ -23,8 +23,11 @@ instance.interceptors.request.use(
 
 // 响应拦截器
 instance.interceptors.response.use(
-  (response) => {
-    const code = response.data.code
+    (response) => {
+      // 如果是文件下载，直接返回响应
+      if (response.config.responseType === 'blob') {
+        return response;
+      }
 
     // 修改判断条件以匹配后端返回的 code
     if (code == 0) {
@@ -66,5 +69,38 @@ export interface ApiResponse<T> {
   data: T;
   message: string;
 }
+
+/**
+ * 文件下载
+ * @param url
+ * @param body
+ * @example  download(`/code/generateSQLDocument`,values);
+ */
+export const download = async (url: string, body?: {}) => {
+  try {
+    const res = await instance.post(url, body, {responseType: 'blob'});
+    // console.log('res', res)
+    // json格式返回说明后端提示报错
+    if (res.data.type === 'application/json') {
+      return Promise.reject('文件下载失败');
+    }
+    const blob = new Blob([res.data]);
+    const fileName = decodeURIComponent(
+        res.headers['content-disposition']?.split(';').find(part =>
+            part.trim().startsWith('filename=')
+        )?.split('=')[1]?.replace(/"/g, '') || 'downloaded_file'
+    );
+    const fileUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', fileUrl);
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (err: any) {
+    console.error('下载失败', err)
+    return Promise.reject(err);
+  }
+};
 
 export default instance; 

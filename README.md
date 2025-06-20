@@ -241,6 +241,28 @@ export default Index;
 
 
 
+---
+
+
+
+选中行
+
+```
+      <Table
+          columns={columns}
+          dataSource={dataSource}
+          pagination={pagination}
+          rowKey="id"
+          onRow={(record) => ({
+              onClick: () => {
+                  console.log("当前行数据:", record);
+              }
+          })}
+      />
+```
+
+
+
 ## 贡献指南
 
 欢迎提交 Pull Request 或 Issue 来帮助改进项目。
