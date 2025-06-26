@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
 /**
- * @description: 路由权限控制组件
+ * 是路由级别的权限控制，防止未授权用户进入受保护页面。
  */
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -27,4 +27,4 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children, requiredRoles = [] }) =
   return <>{children}</>;
 };
 
-export default AuthGuard; 
+export default AuthGuard;

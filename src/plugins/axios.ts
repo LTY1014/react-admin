@@ -29,6 +29,7 @@ instance.interceptors.response.use(
         return response;
       }
 
+    const {code} = response.data;
     // 修改判断条件以匹配后端返回的 code
     if (code == 0) {
       return response.data

@@ -6,8 +6,13 @@ import { login, logout } from '../store/slices/authSlice';
 import { RootState } from '../store';
 import { message, Spin } from "antd";
 
-const WHITE_LIST: string[] = ['/login', '/register', '/404', '/403', '/'];
+const WHITE_LIST: string[] = ['/login', '/register', '/404', '/'];
 
+/**
+ * 是全局认证入口，负责登录状态的获取和初始化
+ * @param children
+ * @constructor
+ */
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();

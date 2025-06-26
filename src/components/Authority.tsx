@@ -4,7 +4,7 @@ import { RootState } from '../store';
 import checkAccess, {ACCESS_ENUM} from '../utils/checkAccess';
 
 /**
- * 认证提供组件
+ * 是组件级别的权限控制，用于细粒度地控制 UI 的展示
  * @param permissions - 需要的权限列表
  * @param children - 需要展示的组件
  */
