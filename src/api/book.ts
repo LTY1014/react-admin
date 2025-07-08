@@ -23,11 +23,11 @@ export interface BookVO {
 }
 
 export const getListBookByPage = (params: QueryParams) => {
-  return request.get<any, ApiResponse<BookResponse>>('/book/list/page', { params });
+  return request.post<any, ApiResponse<BookResponse>>('/book/list/page', { params });
 };
 
 export const getByBookId = (params) => {
-  return request.get<any, ApiResponse<BookResponse>>(`/book/get`, params);
+  return request.post<any, ApiResponse<BookResponse>>(`/book/get`, params);
 }
 
 export const addBook = (data: QueryParams) => {
