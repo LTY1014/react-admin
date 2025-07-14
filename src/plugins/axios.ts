@@ -75,9 +75,9 @@ export interface ApiResponse<T> {
  * 文件下载
  * @param url
  * @param body
- * @example  download(`/code/generateSQLDocument`,values);
+ * @example  download(`/code/generateSQLDocument`,values,'test.xlsx');
  */
-export const download = async (url: string, body?: {}) => {
+export const download = async (url: string, body?: {},filename?: string) => {
   try {
     const res = await instance.post(url, body, {responseType: 'blob'});
     // console.log('res', res)
@@ -86,11 +86,27 @@ export const download = async (url: string, body?: {}) => {
       return Promise.reject('文件下载失败');
     }
     const blob = new Blob([res.data]);
-    const fileName = decodeURIComponent(
-        res.headers['content-disposition']?.split(';').find(part =>
-            part.trim().startsWith('filename=')
-        )?.split('=')[1]?.replace(/"/g, '') || 'downloaded_file'
-    );
+    let fileName = 'downloaded_file'; // 默认值
+    if (filename) {
+      fileName = filename; // 优先使用传入的
+    } else {
+      // 尝试从 content-disposition 获取
+      const disposition = res.headers['content-disposition'];
+      if (disposition) {
+        const utf8FilenameRegex = /filename\*=UTF-8''([\w%\-\.]+)/i;
+        const asciiFilenameRegex = /filename="?([^"]+)"?/i;
+
+        const utf8Matches = disposition.match(utf8FilenameRegex);
+        if (utf8Matches && utf8Matches[1]) {
+          fileName = decodeURIComponent(utf8Matches[1]);
+        } else {
+          const asciiMatches = disposition.match(asciiFilenameRegex);
+          if (asciiMatches && asciiMatches[1]) {
+            fileName = asciiMatches[1];
+          }
+        }
+      }
+    }
     const fileUrl = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', fileUrl);
