@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Button, Card, Form, Input, message} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {login as loginAction} from '../store/slices/authSlice';
+import {loginAction} from '../store/slices/authSlice';
 import type {LoginParams} from '../api/user';
 import {login} from '../api/user';
 import {RootState} from '../store';
@@ -30,7 +30,7 @@ const Login: React.FC = () => {
     const onFinish = async (values: LoginParams) => {
         try {
             const response = await login(values);
-            dispatch(loginAction(response.data || {}));
+            dispatch(loginAction({user: response.data || null}));
             message.success('登录成功');
             const from = location.state?.from || '/dashboard';
             navigate(from, {replace: true});

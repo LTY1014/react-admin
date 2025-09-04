@@ -14,7 +14,7 @@ import {Avatar, Badge, Button, Dropdown, FloatButton, Layout, Menu, message, Mod
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
-import {logout} from '../store/slices/authSlice';
+import {logoutAction} from '../store/slices/authSlice';
 import {logout as apiLogout} from '../api/user';
 import {filterRoutesByRole, RouteConfig, routes} from '../router/routes';
 import TabsNav from '../components/TabsNav';
@@ -124,7 +124,7 @@ const MainLayout: React.FC = () => {
         if (key === 'logout') {
             try {
                 await apiLogout();
-                dispatch(logout({}));
+                dispatch(logoutAction({user: null}));
                 navigate('/login');
                 message.success('退出登录');
             } catch (error) {
@@ -187,7 +187,7 @@ const MainLayout: React.FC = () => {
                             height: 40,
                         }}
                     />
-                    <Space size={12} style={{ height: '100%', display: 'flex', alignItems: 'center'}}>
+                    <Space size={12} style={{height: '100%', display: 'flex', alignItems: 'center'}}>
                         <Button type="text" icon={<ClearOutlined/>} onClick={() => {
                             Modal.confirm({
                                 title: '清空缓存数据？',
@@ -199,7 +199,7 @@ const MainLayout: React.FC = () => {
                                     message.success('清空缓存数据成功');
                                 },
                             });
-                        }} style={{ height: '100%', display: 'flex', alignItems: 'center' }}/>
+                        }} style={{height: '100%', display: 'flex', alignItems: 'center'}}/>
                         <Button
                             type="text"
                             icon={isDarkMode ? <SunOutlined/> : <MoonOutlined/>}
@@ -208,16 +208,18 @@ const MainLayout: React.FC = () => {
                         />
                         <Dropdown menu={{items: notificationItems}} placement="bottomRight">
                             <Badge count={notices} size="small">
-                                <Button type="text" icon={<BellOutlined/>} style={{ height: '100%', display: 'flex', alignItems: 'center' }}/>
+                                <Button type="text" icon={<BellOutlined/>}
+                                        style={{height: '100%', display: 'flex', alignItems: 'center'}}/>
                             </Badge>
                         </Dropdown>
                         <Dropdown menu={{items: userMenuItems, onClick: handleUserMenuClick}} placement="bottomRight">
-                            <Space style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center' }}>
-                                <Avatar
-                                    style={{backgroundColor: '#1890ff'}}
-                                    src={user?.avatarUrl}
-                                    icon={!user?.avatarUrl && <UserOutlined/>}
-                                />
+                            <Space style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center'}}>
+                                {/*<Avatar*/}
+                                {/*    style={{backgroundColor: '#1890ff'}}*/}
+                                {/*    src={user?.avatarUrl}*/}
+                                {/*    icon={!user?.avatarUrl && <UserOutlined/>}*/}
+                                {/*/>*/}
+                                <Avatar>{user?.userName?.charAt(0)}</Avatar>
                                 <span>{user?.userName}</span>
                             </Space>
                         </Dropdown>

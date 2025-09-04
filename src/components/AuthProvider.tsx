@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getCurrentUser } from '../api/user';
-import { login, logout } from '../store/slices/authSlice';
+import { loginAction, logoutAction } from '../store/slices/authSlice';
 import { RootState } from '../store';
 import { message, Spin } from "antd";
 
@@ -42,7 +42,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         const response = await getCurrentUser();
 
         if (response.code === 0) {
-          dispatch(login({ user: response.data }));
+          dispatch(loginAction({ user: response.data }));
           if (currentPath === '/') {
             navigate('/dashboard', { replace: true });
           }
@@ -59,7 +59,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
     // 处理未认证的情况
     const handleUnauthenticated = (currentPath: string) => {
       if (!WHITE_LIST.includes(currentPath)) {
-        dispatch(logout({}));
+        dispatch(logoutAction({user: null}));
         navigate('/login', { replace: true, state: { from: currentPath } });
       }
     };

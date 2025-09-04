@@ -263,10 +263,73 @@ export default Index;
 
 
 
-## 贡献指南
+## 部署说明
+
+nginx.conf
+
+```
+
+server{
+    listen 8089;
+    server_name localhost;
+	root /home/www/react-admin/dist;
+    index  index.html;
+	
+	# 启用 gzip 压缩
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+    
+    # 静态资源缓存
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+    
+    # HTML 文件不缓存
+    location ~* \.html$ {
+        expires -1;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+
+    location / {
+      try_files $uri $uri/ /index.html;
+    }
+
+  	location /api/ {
+  	  	# 移除/api前缀，将剩余路径转发到后端
+        rewrite ^/api/(.*)$ /$1 break;
+        proxy_pass http://127.0.0.1:8100;
+        add_header 'Access-Control-Allow-origin' $http_origin;
+        add_header 'Access-Control-Allow-Credentials' 'true';
+        add_header Access-Control-Allow-Methods 'GET,POST,OPTIONS';
+        add_header Access-Control-Allow-Headers '*';
+        if ($request_method = 'OPTIONS'){
+          add_header 'Access-Control-Allow-Credentials' 'true';
+          add_header 'Access-Control-Allow-Origin' $http_origin;
+          add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, PUT, PATCH';
+          add_header 'Access-Control-Request-Private-Network' 'true';
+          add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
+          add_header 'Access-Control-Max-Age' 1728000;
+          add_header 'Content-Type' 'text/plain; charset=utf-8';
+          add_header 'Content-Length' 0;
+          return 204;
+        } 
+    }
+}
+```
+
+
+
+## 更新日志
+
+###  v1.0.0
+
+- 初始版本发布
 
 欢迎提交 Pull Request 或 Issue 来帮助改进项目。
 
-## 许可证
 
-[MIT](LICENSE)
+
+### 许可证
+
+[MIT](https://gitee.com/liang-tian-yu/vue3-init/blob/master/LICENSE)LICENSE)

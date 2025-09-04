@@ -10,7 +10,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 module.exports = {
   devServer: {
     historyApiFallback: true,
-    port: 8100,
+    port: 9999,
     hot: isDevelopment,
     open: true,
     compress: true,
@@ -20,10 +20,11 @@ module.exports = {
     proxy: {
       '/api': {
         // 要代理的地址
-        target: 'http://localhost:8088',
+        target: 'http://localhost:8100',
         // 配置了这个可以从 http 代理到 https
         // 依赖 origin 的功能可能需要这个，比如 cookie
         changeOrigin: true,
+        pathRewrite: {'^/api': ''}
       },
     },
   },
