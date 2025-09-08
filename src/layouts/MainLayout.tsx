@@ -5,17 +5,33 @@ import {
     ClearOutlined,
     LogoutOutlined,
     MenuFoldOutlined,
-    MenuUnfoldOutlined, MoonOutlined,
-    SettingOutlined, SunOutlined,
+    MenuUnfoldOutlined,
+    MoonOutlined,
+    SettingOutlined,
+    SunOutlined,
     UserOutlined
 } from '@ant-design/icons';
 import type {MenuProps} from 'antd';
-import {Avatar, Badge, Button, Dropdown, FloatButton, Layout, Menu, message, Modal, Space, theme} from 'antd';
+import {
+    Avatar,
+    Badge,
+    Button,
+    Dropdown,
+    FloatButton,
+    Form,
+    Input,
+    Layout,
+    Menu,
+    message,
+    Modal,
+    Space,
+    theme
+} from 'antd';
 import {Outlet, useLocation, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
 import {logoutAction} from '../store/slices/authSlice';
-import {logout as apiLogout} from '../api/user';
+import {logout, updatePassword} from '../api/user';
 import {filterRoutesByRole, RouteConfig, routes} from '../router/routes';
 import TabsNav from '../components/TabsNav';
 import config from "../config";
@@ -40,6 +56,8 @@ const MainLayout: React.FC = () => {
     const {user} = useSelector((state: RootState) => state.auth);
     const [notices, setNotices] = useState<number>(2);
     const {isDarkMode} = useSelector((state: RootState) => state.theme);
+    const [passwordForm] = Form.useForm();
+    const [passwordModalVisible, setPasswordModalVisible] = useState(false);
 
     const {
         token: {colorBgContainer, borderRadiusLG},
@@ -76,6 +94,11 @@ const MainLayout: React.FC = () => {
             key: 'profile',
             icon: <UserOutlined/>,
             label: '个人信息',
+        },
+        {
+            key: 'password',
+            icon: <UserOutlined/>,
+            label: '修改密码',
         },
         {
             key: 'settings',
@@ -120,18 +143,37 @@ const MainLayout: React.FC = () => {
         navigate(`/${key}`);
     };
 
+    const handleLogout = async () => {
+        try {
+            await logout();
+            dispatch(logoutAction({user: null}));
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
     const handleUserMenuClick = async ({key}: { key: string }) => {
         if (key === 'logout') {
-            try {
-                await apiLogout();
-                dispatch(logoutAction({user: null}));
-                navigate('/login');
-                message.success('退出登录');
-            } catch (error) {
-                console.error('Logout failed:', error);
-            }
+            await handleLogout()
+        }
+        if (key === 'password') {
+            setPasswordModalVisible(true);
         } else {
             navigate(`/${key}`);
+        }
+    };
+
+    const handleUpdatePassword = async () => {
+        try {
+            const res = await updatePassword(passwordForm.getFieldsValue())
+            if (res.code === 0) {
+                message.success('修改密码成功');
+                return true;
+            }
+        } catch (e) {
+            message.error(e.message);
+            return false;
         }
     };
 
@@ -248,6 +290,64 @@ const MainLayout: React.FC = () => {
             >
                 <FloatButton icon={<ApiOutlined/>}/>
             </a>
+
+            <Modal
+                title="修改密码"
+                open={passwordModalVisible}
+                onCancel={() => setPasswordModalVisible(false)}
+                footer={[
+                    <Button key="cancel" onClick={() => setPasswordModalVisible(false)}>
+                        取消
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={async () => {
+                        const result = await handleUpdatePassword()
+                        if (!result) {
+                            return
+                        }
+                        setPasswordModalVisible(false)
+                        await handleLogout()
+                    }}>
+                        确定
+                    </Button>,
+                ]}
+            >
+                <Form
+                    // onFinish={handleUpdatePassword}
+                    form={passwordForm}
+                    layout="vertical">
+                    <Form.Item
+                        name="oldPassword"
+                        label="原密码"
+                    >
+                        <Input.Password/>
+                    </Form.Item>
+
+                    <Form.Item
+                        name="newPassword"
+                        label="新密码"
+                    >
+                        <Input.Password/>
+                    </Form.Item>
+
+                    <Form.Item
+                        name="confirmPassword"
+                        label="确认密码"
+                        dependencies={['newPassword']}
+                        rules={[
+                            ({getFieldValue}) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('newPassword') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('两次输入的密码不一致'));
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input.Password/>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </Layout>
     );
 };

@@ -22,8 +22,8 @@ export interface BookVO {
   updateTime: Date,
 }
 
-export const getListBookByPage = (params: QueryParams) => {
-  return request.post<any, ApiResponse<BookResponse>>('/book/list/page', { params });
+export const getListBookByPage = (data: QueryParams) => {
+  return request.post<any, ApiResponse<BookResponse>>('/book/list/page', data);
 };
 
 export const getByBookId = (params) => {
