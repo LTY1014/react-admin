@@ -177,6 +177,108 @@ const MainLayout: React.FC = () => {
         }
     };
 
+    // 右侧内容
+    function RightContent() {
+        return <Space size={12} style={{height: '100%', display: 'flex', alignItems: 'center'}}>
+            <Button type="text" icon={<ClearOutlined/>} onClick={() => {
+                Modal.confirm({
+                    title: '清空缓存数据？',
+                    content: '清空缓存数据将删除所有缓存数据。',
+                    okText: '确定',
+                    cancelText: '取消',
+                    onOk: () => {
+                        localStorage.clear()
+                        message.success('清空缓存数据成功');
+                    },
+                });
+            }} style={{height: '100%', display: 'flex', alignItems: 'center'}}/>
+            <Button
+                type="text"
+                icon={isDarkMode ? <SunOutlined/> : <MoonOutlined/>}
+                onClick={() => dispatch(toggleDarkMode({}))}
+                style={{height: '100%', display: 'flex', alignItems: 'center'}}
+            />
+            <Dropdown menu={{items: notificationItems}} placement="bottomRight">
+                <Badge count={notices} size="small">
+                    <Button type="text" icon={<BellOutlined/>}
+                            style={{height: '100%', display: 'flex', alignItems: 'center'}}/>
+                </Badge>
+            </Dropdown>
+            <Dropdown menu={{items: userMenuItems, onClick: handleUserMenuClick}} placement="bottomRight">
+                <Space style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center'}}>
+                    {/*<Avatar*/}
+                    {/*    style={{backgroundColor: '#1890ff'}}*/}
+                    {/*    src={user?.avatarUrl}*/}
+                    {/*    icon={!user?.avatarUrl && <UserOutlined/>}*/}
+                    {/*/>*/}
+                    <Avatar>{user?.userName?.charAt(0)}</Avatar>
+                    <span>{user?.userName}</span>
+                </Space>
+            </Dropdown>
+        </Space>;
+    }
+
+    // 修改密码框
+    function PasswordModal() {
+        return <Modal
+            title="修改密码"
+            open={passwordModalVisible}
+            onCancel={() => setPasswordModalVisible(false)}
+            footer={[
+                <Button key="cancel" onClick={() => setPasswordModalVisible(false)}>
+                    取消
+                </Button>,
+                <Button key="submit" type="primary" onClick={async () => {
+                    const result = await handleUpdatePassword()
+                    if (!result) {
+                        return
+                    }
+                    setPasswordModalVisible(false)
+                    await handleLogout()
+                }}>
+                    确定
+                </Button>,
+            ]}
+        >
+            <Form
+                // onFinish={handleUpdatePassword}
+                form={passwordForm}
+                layout="vertical">
+                <Form.Item
+                    name="oldPassword"
+                    label="原密码"
+                >
+                    <Input.Password/>
+                </Form.Item>
+
+                <Form.Item
+                    name="newPassword"
+                    label="新密码"
+                >
+                    <Input.Password/>
+                </Form.Item>
+
+                <Form.Item
+                    name="confirmPassword"
+                    label="确认密码"
+                    dependencies={['newPassword']}
+                    rules={[
+                        ({getFieldValue}) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('newPassword') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('两次输入的密码不一致'));
+                            },
+                        }),
+                    ]}
+                >
+                    <Input.Password/>
+                </Form.Item>
+            </Form>
+        </Modal>;
+    }
+
     return (
         <Layout style={{minHeight: '100vh'}}>
             <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -202,7 +304,6 @@ const MainLayout: React.FC = () => {
                         theme="dark"
                         mode="inline"
                         selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
-                        defaultOpenKeys={['user', 'product']}
                         items={menuItems}
                         onClick={handleMenuClick}
                         style={{flex: 1}}
@@ -229,43 +330,7 @@ const MainLayout: React.FC = () => {
                             height: 40,
                         }}
                     />
-                    <Space size={12} style={{height: '100%', display: 'flex', alignItems: 'center'}}>
-                        <Button type="text" icon={<ClearOutlined/>} onClick={() => {
-                            Modal.confirm({
-                                title: '清空缓存数据？',
-                                content: '清空缓存数据将删除所有缓存数据。',
-                                okText: '确定',
-                                cancelText: '取消',
-                                onOk: () => {
-                                    localStorage.clear()
-                                    message.success('清空缓存数据成功');
-                                },
-                            });
-                        }} style={{height: '100%', display: 'flex', alignItems: 'center'}}/>
-                        <Button
-                            type="text"
-                            icon={isDarkMode ? <SunOutlined/> : <MoonOutlined/>}
-                            onClick={() => dispatch(toggleDarkMode({}))}
-                            style={{height: '100%', display: 'flex', alignItems: 'center'}}
-                        />
-                        <Dropdown menu={{items: notificationItems}} placement="bottomRight">
-                            <Badge count={notices} size="small">
-                                <Button type="text" icon={<BellOutlined/>}
-                                        style={{height: '100%', display: 'flex', alignItems: 'center'}}/>
-                            </Badge>
-                        </Dropdown>
-                        <Dropdown menu={{items: userMenuItems, onClick: handleUserMenuClick}} placement="bottomRight">
-                            <Space style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center'}}>
-                                {/*<Avatar*/}
-                                {/*    style={{backgroundColor: '#1890ff'}}*/}
-                                {/*    src={user?.avatarUrl}*/}
-                                {/*    icon={!user?.avatarUrl && <UserOutlined/>}*/}
-                                {/*/>*/}
-                                <Avatar>{user?.userName?.charAt(0)}</Avatar>
-                                <span>{user?.userName}</span>
-                            </Space>
-                        </Dropdown>
-                    </Space>
+                    {RightContent()}
                 </Header>
                 <TabsNav/>
                 <Content
@@ -283,6 +348,7 @@ const MainLayout: React.FC = () => {
                     </div>
                 </Content>
             </Layout>
+
             <a
                 href={config.apiUrl}
                 target="_blank"
@@ -291,63 +357,7 @@ const MainLayout: React.FC = () => {
                 <FloatButton icon={<ApiOutlined/>}/>
             </a>
 
-            <Modal
-                title="修改密码"
-                open={passwordModalVisible}
-                onCancel={() => setPasswordModalVisible(false)}
-                footer={[
-                    <Button key="cancel" onClick={() => setPasswordModalVisible(false)}>
-                        取消
-                    </Button>,
-                    <Button key="submit" type="primary" onClick={async () => {
-                        const result = await handleUpdatePassword()
-                        if (!result) {
-                            return
-                        }
-                        setPasswordModalVisible(false)
-                        await handleLogout()
-                    }}>
-                        确定
-                    </Button>,
-                ]}
-            >
-                <Form
-                    // onFinish={handleUpdatePassword}
-                    form={passwordForm}
-                    layout="vertical">
-                    <Form.Item
-                        name="oldPassword"
-                        label="原密码"
-                    >
-                        <Input.Password/>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="newPassword"
-                        label="新密码"
-                    >
-                        <Input.Password/>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="confirmPassword"
-                        label="确认密码"
-                        dependencies={['newPassword']}
-                        rules={[
-                            ({getFieldValue}) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('newPassword') === value) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('两次输入的密码不一致'));
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input.Password/>
-                    </Form.Item>
-                </Form>
-            </Modal>
+            {PasswordModal()}
         </Layout>
     );
 };
