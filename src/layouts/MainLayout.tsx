@@ -3,6 +3,7 @@ import {
     ApiOutlined,
     BellOutlined,
     ClearOutlined,
+    FullscreenOutlined,
     LogoutOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
@@ -177,6 +178,25 @@ const MainLayout: React.FC = () => {
         }
     };
 
+    // 添加全屏切换函数
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().then(() => {
+                // setIsFullscreen(true);
+            }).catch((err) => {
+                console.error(`无法进入全屏模式: ${err.message}`);
+            });
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen().then(() => {
+                    // setIsFullscreen(false);
+                }).catch((err) => {
+                    console.error(`无法退出全屏模式: ${err.message}`);
+                });
+            }
+        }
+    };
+
     // 右侧内容
     function RightContent() {
         return <Space size={12} style={{height: '100%', display: 'flex', alignItems: 'center'}}>
@@ -196,6 +216,12 @@ const MainLayout: React.FC = () => {
                 type="text"
                 icon={isDarkMode ? <SunOutlined/> : <MoonOutlined/>}
                 onClick={() => dispatch(toggleDarkMode({}))}
+                style={{height: '100%', display: 'flex', alignItems: 'center'}}
+            />
+            <Button
+                type="text"
+                icon={<FullscreenOutlined />}
+                onClick={toggleFullscreen}
                 style={{height: '100%', display: 'flex', alignItems: 'center'}}
             />
             <Dropdown menu={{items: notificationItems}} placement="bottomRight">

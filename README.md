@@ -263,6 +263,53 @@ export default Index;
 
 
 
+### Card
+
+- 设置padding
+
+```
+<Card title="公告" styles={{body: {padding: '12px'}}}>
+```
+
+
+
+统计卡片
+
+```
+    const outputData = {
+        completed: 60,
+        target: 100
+    }
+
+    return (
+        <div>
+            <Row gutter={16}>
+                <Col span={6}>
+                    <Card className="stat-card">
+                        <Statistic
+                            title="今日产出"
+                            value={outputData.completed}
+                            suffix={`/ ${outputData.target}`}
+                            valueStyle={{ color: '#1890ff' }}
+                            prefix={<LineChartOutlined />}
+                        />
+                        <Progress
+                            percent={(outputData.completed / outputData.target) * 100}
+                            showInfo={false}
+                            strokeColor="#1890ff"
+                        />
+                        <div className="stat-footer">目标完成率: {((outputData.completed / outputData.target) * 100).toFixed(1)}%</div>
+                    </Card>
+                </Col>
+            </Row>
+        </div>
+    )
+```
+
+
+
+
+
 ## 部署说明
 
 nginx.conf

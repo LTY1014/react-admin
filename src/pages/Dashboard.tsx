@@ -112,6 +112,37 @@ const Dashboard: React.FC = () => {
         disk: 30,
     });
 
+    const announcements = [
+        {
+            label: '公告',
+            title: 'react-admin 5.0.0 正式版发布',
+            date: '2023-09-01',
+        },
+        {
+            label: '更新',
+            title: 'react-admin 5.0.0 升级指南',
+            date: '2023-09-01',
+        },
+    ]
+
+    const quickAccess = [
+        {
+            title: '用户管理',
+            icon: <UserOutlined/>,
+            onClick: () => navigate('/users'),
+        },
+        {
+            title: '业务管理',
+            icon: <AppstoreOutlined/>,
+            onClick: () => navigate('/bookList'),
+        },
+        {
+            title: '系统设置',
+            icon: <ToolOutlined/>,
+            onClick: () => navigate('/settings'),
+        }
+    ]
+
     const fetchData = async () => {
         setLoading(true);
         try {
@@ -214,7 +245,7 @@ const Dashboard: React.FC = () => {
 
     //region 组件开始
     function StatsCard() {
-        return <Row gutter={[16, 16]}>
+        return <Row gutter={[16, 16]} style={{width: '100%'}}>
             <Col span={6}>
                 <Card>
                     <Statistic
@@ -519,10 +550,63 @@ const Dashboard: React.FC = () => {
 
     return (
         <div>
-            {Welcome()}
-            {ProjectStack()}
-            {StatsCard()}
             <Row gutter={[16, 16]}>
+                <Col span={16}>
+                    {Welcome()}
+                    {ProjectStack()}
+                </Col>
+                <Col span={8}>
+                    {/* 快速访问、最近访问、公告 */}
+                    <Card
+                        title="快速访问"
+                        extra={<a onClick={() => {
+                        }}>查看更多</a>}
+                    >
+                        <List
+                            grid={{gutter: 16, xs: 1, sm: 1, md: 3, lg: 3, xl: 3, xxl: 3,}}
+                            dataSource={quickAccess}
+                            renderItem={item => (
+                                <List.Item>
+                                    <Card
+                                        onClick={item.onClick}
+                                        style={{cursor: 'pointer', height: '100%'}}
+                                    >
+                                        <Space direction="vertical" align="center" style={{width: '100%'}}>
+                                            <div style={{fontSize: '24px'}}>
+                                                {item.icon}
+                                            </div>
+                                            <div>{item.title}</div>
+                                        </Space>
+                                    </Card>
+                                </List.Item>
+                            )}
+                        />
+                    </Card>
+                    <Card title="公告" styles={{body: {padding: '12px'}}}>
+                        <List
+                            grid={{gutter: 16, xs: 1, sm: 1, md: 1, lg: 1, xl: 1, xxl: 1,}}
+                            dataSource={announcements}
+                            renderItem={item => (
+                                <List.Item>
+                                    <div style={{display: 'flex', alignItems: 'center', width: '100%'}}>
+                                        <Tag color={item.label === '公告' ? 'red' : 'blue'}>
+                                            {item.label}
+                                        </Tag>
+                                        <Text ellipsis style={{flex: 1, margin: '0 8px'}}>
+                                            {item.title}
+                                        </Text>
+                                        <Text type="secondary" style={{marginLeft: 'auto'}}>
+                                            {item.date}
+                                        </Text>
+                                    </div>
+                                </List.Item>
+                            )}
+                        />
+                    </Card>
+                </Col>
+            </Row>
+            <Row gutter={[16, 16]}>
+                {StatsCard()}
                 {/* 统计卡片 */}
                 {StatsCompare()}
                 {/* 系统状态 */}
