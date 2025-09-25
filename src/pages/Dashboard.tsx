@@ -1,19 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-    Alert,
-    Avatar,
-    Card,
-    Col,
-    Descriptions,
-    List,
-    Progress,
-    Row,
-    Space,
-    Statistic,
-    Table,
-    Tag,
-    Typography
-} from 'antd';
+import {Alert, Avatar, Card, Col, Descriptions, List, Progress, Row, Space, Statistic, Tag, Typography} from 'antd';
 import {
     AimOutlined,
     ApiOutlined,
@@ -21,7 +7,6 @@ import {
     ArrowUpOutlined,
     BookOutlined,
     BranchesOutlined,
-    CheckCircleOutlined,
     ClockCircleOutlined,
     CloudServerOutlined,
     CodeOutlined,
@@ -46,6 +31,38 @@ import {useNavigate} from "react-router-dom";
 const {Title, Paragraph, Text} = Typography;
 
 const Dashboard: React.FC = () => {
+
+    const quickAccess = [
+        {
+            title: '用户管理',
+            icon: <UserOutlined/>,
+            onClick: () => navigate('/users'),
+        },
+        {
+            title: '业务管理',
+            icon: <AppstoreOutlined/>,
+            onClick: () => navigate('/bookList'),
+        },
+        {
+            title: '系统设置',
+            icon: <ToolOutlined/>,
+            onClick: () => navigate('/settings'),
+        }
+    ]
+
+    const announcements = [
+        {
+            label: '公告',
+            title: 'react-admin 5.0.0 正式版发布',
+            date: '2023-09-01',
+        },
+        {
+            label: '更新',
+            title: 'react-admin 5.0.0 升级指南',
+            date: '2023-09-01',
+        },
+    ]
+
     const user = useSelector((state: RootState) => state.auth.user);
     const navigate = useNavigate();
     const data = [
@@ -80,19 +97,7 @@ const Dashboard: React.FC = () => {
             value: 'v9.1.0',
         },
     ];
-
-    const columns = [
-        {
-            title: 'react-admin',
-            dataIndex: 'technology',
-            key: 'technology',
-        },
-        {
-            title: '版本',
-            dataIndex: 'version',
-            key: 'version',
-        }
-    ];
+    const [loading, setLoading] = useState(false);
 
     const [userStats, setUserStats] = useState({
         total: 0,
@@ -100,80 +105,19 @@ const Dashboard: React.FC = () => {
         userCount: 0,
         activeUsers: 0,
     });
-    const [bookStats, setBookStats] = useState({
+    const [appStats, setAppStats] = useState({
         total: 0,
         available: 0,
     });
-    const [recentUsers, setRecentUsers] = useState([]);
-    const [loading, setLoading] = useState(false);
     const [systemStatus, setSystemStatus] = useState({
         cpu: 45,
         memory: 60,
         disk: 30,
     });
 
-    const announcements = [
-        {
-            label: '公告',
-            title: 'react-admin 5.0.0 正式版发布',
-            date: '2023-09-01',
-        },
-        {
-            label: '更新',
-            title: 'react-admin 5.0.0 升级指南',
-            date: '2023-09-01',
-        },
-    ]
-
-    const quickAccess = [
-        {
-            title: '用户管理',
-            icon: <UserOutlined/>,
-            onClick: () => navigate('/users'),
-        },
-        {
-            title: '业务管理',
-            icon: <AppstoreOutlined/>,
-            onClick: () => navigate('/bookList'),
-        },
-        {
-            title: '系统设置',
-            icon: <ToolOutlined/>,
-            onClick: () => navigate('/settings'),
-        }
-    ]
-
     const fetchData = async () => {
         setLoading(true);
         try {
-            // 获取用户数据
-            // const userRes = await getListUserByPage({
-            //     current: 1,
-            //     pageSize: 10,
-            // });
-            // if (userRes.code === 0 && userRes.data) {
-            //     const users = userRes?.data?.records || [];
-            //     setUserStats({
-            //         total: userRes?.data?.total || 0,
-            //         adminCount: users.filter(user => user.userRole === 'admin').length,
-            //         userCount: users.filter(user => user.userRole === 'user').length,
-            //         activeUsers: Math.floor(Math.random() * 100), // 模拟活跃用户数
-            //     });
-            //     setRecentUsers(users);
-            // }
-            //
-            // // 获取图书数据
-            // const bookRes = await getListBookByPage({
-            //     current: 1,
-            //     pageSize: 1,
-            // });
-            // if (bookRes.code === 0 && bookRes.data?.total) {
-            //     setBookStats({
-            //         total: bookRes.data.total,
-            //         available: Math.floor(Math.random() * bookRes.data.total), // 模拟可用图书数
-            //     });
-            // }
-
             // 模拟数据
             setUserStats({
                 total: 10,
@@ -182,7 +126,7 @@ const Dashboard: React.FC = () => {
                 activeUsers: Math.floor(Math.random() * 100),
             })
 
-            setBookStats({
+            setAppStats({
                 total: 10,
                 available: Math.floor(Math.random() * 10),
             });
@@ -192,43 +136,6 @@ const Dashboard: React.FC = () => {
             setLoading(false);
         }
     };
-
-    const userColumns = [
-        {
-            title: '用户名',
-            dataIndex: 'userName',
-            key: 'userName',
-        },
-        {
-            title: '账号',
-            dataIndex: 'userAccount',
-            key: 'userAccount',
-        },
-        {
-            title: '角色',
-            dataIndex: 'userRole',
-            key: 'userRole',
-            render: (role: string) => (
-                <Tag color={role === 'admin' ? 'success' : 'warning'}>
-                    {role === 'admin' ? '管理员' : '用户'}
-                </Tag>
-            ),
-        },
-        {
-            title: '创建时间',
-            dataIndex: 'createTime',
-            key: 'createTime',
-        },
-        {
-            title: '状态',
-            key: 'status',
-            render: () => (
-                <Tag icon={<CheckCircleOutlined/>} color="success">
-                    活跃
-                </Tag>
-            ),
-        },
-    ];
 
     useEffect(() => {
         fetchData();
@@ -454,12 +361,12 @@ const Dashboard: React.FC = () => {
                 <Card>
                     <Statistic
                         title="业务数量"
-                        value={bookStats.total}
+                        value={appStats.total}
                         prefix={<BookOutlined/>}
                         valueStyle={{color: '#cf1322'}}
                     />
                     <div style={{marginTop: 8}}>
-                        <Text type="secondary">可用：{bookStats.available}</Text>
+                        <Text type="secondary">可用：{appStats.available}</Text>
                     </div>
                 </Card>
             </Col>
@@ -521,27 +428,6 @@ const Dashboard: React.FC = () => {
                         </div>
                     </Col>
                 </Row>
-            </Card>
-        </Col>;
-    }
-
-    /**
-     * 最近用户列表
-     * @constructor
-     */
-    function StatsTable() {
-        return <Col span={24}>
-            <Card
-                title="最近用户"
-                loading={loading}
-                extra={<a onClick={() => navigate('/users')}>查看更多</a>}
-            >
-                <Table
-                    columns={userColumns}
-                    dataSource={recentUsers}
-                    rowKey="id"
-                    pagination={false}
-                />
             </Card>
         </Col>;
     }
@@ -611,8 +497,6 @@ const Dashboard: React.FC = () => {
                 {StatsCompare()}
                 {/* 系统状态 */}
                 {SystemState()}
-                {/* 最近用户列表 */}
-                {StatsTable()}
             </Row>
             {FrontStack()}
         </div>
