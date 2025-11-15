@@ -33,7 +33,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../store';
 import {logoutAction} from '../store/slices/authSlice';
 import {logout, updatePassword} from '../api/user';
-import {filterRoutesByRole, RouteConfig, routes} from '../router/routes';
+import {appRouter, filterRoutesByRole, RouteConfig, routes} from '../router/routes';
 import TabsNav from '../components/TabsNav';
 import config from "../config";
 import {toggleDarkMode} from "@/store/slices/themeSlice";
@@ -42,7 +42,7 @@ const {Header, Sider, Content} = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-interface ExtendedMenuItem extends MenuItem {
+interface ExtendedMenuItem{
     children?: MenuItem[];
     icon?: React.ReactNode;
     key: string;
@@ -59,6 +59,7 @@ const MainLayout: React.FC = () => {
     const {isDarkMode} = useSelector((state: RootState) => state.theme);
     const [passwordForm] = Form.useForm();
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+    const [isFullscreen, setIsFullscreen] = useState(false);
 
     const {
         token: {colorBgContainer, borderRadiusLG},
@@ -67,12 +68,12 @@ const MainLayout: React.FC = () => {
     // 将路由配置转换为菜单项
     const convertRoutesToMenuItems = (routes: RouteConfig[]): ExtendedMenuItem[] => {
         return routes
-            .filter(route => route.isMenu)
+            .filter(route => !route.meta?.hideInMenu)
             .map(route => {
                 const menuItem: ExtendedMenuItem = {
                     key: route.key,
-                    icon: route.icon ? React.createElement(route.icon) : null,
-                    label: route.name,
+                    icon: route.meta?.icon ? React.createElement(route.meta.icon) : null,
+                    label: route.meta?.title || route.key,
                 };
 
                 if (route.children) {
@@ -87,24 +88,19 @@ const MainLayout: React.FC = () => {
     };
 
     // 根据用户角色过滤并转换菜单
-    const filteredRoutes = filterRoutesByRole(routes, user?.userRole);
+    const filteredRoutes = filterRoutesByRole(appRouter, user?.userRole);
     const menuItems = convertRoutesToMenuItems(filteredRoutes);
 
-    const userMenuItems: MenuProps['items'] = [
+    const userMenuItems = [
         {
             key: 'profile',
             icon: <UserOutlined/>,
             label: '个人信息',
         },
         {
-            key: 'password',
-            icon: <UserOutlined/>,
-            label: '修改密码',
-        },
-        {
             key: 'settings',
             icon: <SettingOutlined/>,
-            label: '账户设置',
+            label: '系统设置',
         },
         {
             type: 'divider',
@@ -117,7 +113,7 @@ const MainLayout: React.FC = () => {
         },
     ];
 
-    const notificationItems: MenuProps['items'] = [
+    const notificationItems = [
         {
             key: '1',
             label: '系统通知：系统将于今晚维护',
@@ -147,7 +143,7 @@ const MainLayout: React.FC = () => {
     const handleLogout = async () => {
         try {
             await logout();
-            dispatch(logoutAction({user: null}));
+            dispatch(logoutAction());
             navigate('/login');
         } catch (error) {
             console.error('Logout failed:', error);
@@ -172,7 +168,7 @@ const MainLayout: React.FC = () => {
                 message.success('修改密码成功');
                 return true;
             }
-        } catch (e) {
+        } catch (e: any) {
             message.error(e.message);
             return false;
         }
@@ -182,14 +178,14 @@ const MainLayout: React.FC = () => {
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().then(() => {
-                // setIsFullscreen(true);
+                setIsFullscreen(true);
             }).catch((err) => {
                 console.error(`无法进入全屏模式: ${err.message}`);
             });
         } else {
             if (document.exitFullscreen) {
                 document.exitFullscreen().then(() => {
-                    // setIsFullscreen(false);
+                    setIsFullscreen(false);
                 }).catch((err) => {
                     console.error(`无法退出全屏模式: ${err.message}`);
                 });
@@ -215,7 +211,7 @@ const MainLayout: React.FC = () => {
             <Button
                 type="text"
                 icon={isDarkMode ? <SunOutlined/> : <MoonOutlined/>}
-                onClick={() => dispatch(toggleDarkMode({}))}
+                onClick={() => dispatch(toggleDarkMode())}
                 style={{height: '100%', display: 'flex', alignItems: 'center'}}
             />
             <Button
@@ -307,7 +303,7 @@ const MainLayout: React.FC = () => {
 
     return (
         <Layout style={{minHeight: '100vh'}}>
-            <Sider trigger={null} collapsible collapsed={collapsed}>
+            <Sider trigger={null} collapsible collapsed={collapsed} style={{display: isFullscreen ? 'none' : 'block'}}>
                 <div style={{
                     height: 64,
                     display: 'flex',

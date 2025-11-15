@@ -1,10 +1,10 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AuthGuard from '../components/AuthGuard';
-import { routes, getRouteList } from './routes';
+import {getRouteList, appRouter} from './routes';
 
 const AppRoutes = () => {
-  const routeList = getRouteList(routes);
+  const routeList = getRouteList(appRouter);
 
   return (
     <Routes>
@@ -13,8 +13,8 @@ const AppRoutes = () => {
           key={route.key}
           path={route.path.replace('/', '')}
           element={
-            route.isMenu ? (
-              <AuthGuard requiredRoles={route.requireRoles}>
+            !route.meta?.hideInMenu ? (
+              <AuthGuard requiredRoles={route.meta?.requireRoles}>
                 <route.component />
               </AuthGuard>
             ) : (

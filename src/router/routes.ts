@@ -25,64 +25,56 @@ import BookList from "../pages/app/BookList";
 import Test from "../pages/Test";
 import React from "react";
 
+export interface RouteMeta {
+    title: string; // 路由名称（菜单显示）
+    icon?: React.ComponentType<any>; // 菜单图标
+    hideInMenu?: boolean; // 是否显示在菜单中
+    requireRoles?: string[];  // 需要的角色权限
+}
+
 export interface RouteConfig {
-    path: string;           // 路由路径
-    key: string;           // 路由唯一标识
-    component: React.ComponentType<any>; // 路由组件
-    name: string;          // 路由名称（菜单显示）
-    icon?: React.ComponentType<any>;    // 菜单图标
-    isMenu?: boolean;      // 是否显示在菜单中
-    requireRoles?: string[]; // 需要的角色权限
+    path: string; // 路由路径
+    key: string; // 路由唯一标识
+    component?: React.ComponentType<any>; // 路由组件
+    meta?: RouteMeta;
     children?: RouteConfig[]; // 子路由
 }
 
-export const routes: RouteConfig[] = [
+export const appRouter = [
     {
         path: '/dashboard',
         key: 'dashboard',
         component: Dashboard,
-        name: '主页',
-        icon: DashboardOutlined,
-        isMenu: true,
+        meta: {title: '主页', icon: DashboardOutlined}
     },
     {
         path: '/app',
         key: 'app',
-        name: 'Example',
-        icon: ShoppingOutlined,
-        isMenu: true,
+        meta: {title: '应用', icon: ShoppingOutlined},
         children: [
             {
                 path: '/bookList',
                 key: 'bookList',
                 component: BookList,
-                name: '模拟列表',
-                icon: AppstoreOutlined,
-                isMenu: true,
+                meta: {title: '模拟列表', icon: AppstoreOutlined},
             },
             {
                 path: '/product-list',
                 key: 'product-list',
                 component: ProductList,
-                name: '商品列表',
-                icon: AppstoreOutlined,
-                isMenu: true,
+                meta: {title: '商品列表', icon: AppstoreOutlined}
             },
             {
                 path: '/product/:id',
                 key: 'product-list-detail',
                 component: ProductDetail,
-                name: '商品详情',
-                icon: AppstoreOutlined,
-                isMenu: false,
+                meta: {title: '商品详情', icon: AppstoreOutlined,hideInMenu: true},
             },
             {
                 path: '/product-category',
                 key: 'product-category',
                 component: ProductCategory,
-                name: '商品分类',
-                icon: AppstoreOutlined,
-                isMenu: true,
+                meta: {title: '商品分类', icon: AppstoreOutlined},
             },
         ],
     },
@@ -90,26 +82,19 @@ export const routes: RouteConfig[] = [
         path: '/sys',
         key: 'sys',
         name: '系统管理',
-        icon: SettingOutlined,
-        isMenu: true,
+        meta: {title: '系统管理', icon: SettingOutlined},
         children: [
             {
                 path: '/users',
                 key: 'users',
                 component: UserList,
-                name: '用户列表',
-                icon: TeamOutlined,
-                isMenu: true,
-                requireRoles: ['admin'],
+                meta: {title: '用户管理', icon: TeamOutlined, requireRoles: ['admin']},
             },
             {
                 path: '/settings',
                 key: 'settings',
                 component: Settings,
-                name: '系统设置',
-                icon: ControlOutlined,
-                isMenu: true,
-                requireRoles: ['admin', 'user'],
+                meta: {title: '系统设置', icon: ControlOutlined, requireRoles: ['admin', 'user']},
             },
         ],
     },
@@ -117,48 +102,50 @@ export const routes: RouteConfig[] = [
         path: '/profile',
         key: 'profile',
         component: Profile,
-        name: '个人信息',
-        icon: IdcardOutlined,
-        requireRoles: ['admin', 'user'],
+        meta: {title: '个人信息', icon: IdcardOutlined, hideInMenu: true, requireRoles: ['admin', 'user']},
     },
     {
         path: '/test',
         key: 'test',
         component: Test,
-        name: '测试页',
-        icon: BugOutlined,
-        isMenu: true,
+        meta: {title: '测试页', icon: BugOutlined, requireRoles: ['admin', 'user']},
+    },
+];
+
+export const routes = [
+    {
+        path: '/',
+        key: 'app',
+        redirect: '/dashboard',
+        children: appRouter
     },
     {
         path: '/login',
         key: 'login',
         component: Login,
-        name: '登录',
-        icon: LoginOutlined
+        meta: {title: '登录', icon: LoginOutlined, hideInMenu: true,},
     },
     {
         path: '/403',
         key: '403',
         component: Forbidden,
-        name: '无权限',
-        icon: StopOutlined
+        meta: {title: '无权限', icon: StopOutlined, hideInMenu: true,},
     },
     {
         path: '/404',
         key: '404',
         component: NotFound,
-        name: '未找到',
-        icon: WarningOutlined
+        meta: {title: '未找到', icon: WarningOutlined, hideInMenu: true,},
     },
 ];
 
 // 获取所有需要注册的路由（扁平化处理）
-export const getRouteList = (routes: RouteConfig[]): RouteConfig[] => {
+export const getRouteList = (routes) => {
     const result: RouteConfig[] = [];
     routes.forEach(route => {
-        if (route.children) {
+        if (route.children && route.children.length > 0) {
             result.push(...getRouteList(route.children));
-        } else {
+        } else if (route.component || route.redirect) {
             result.push(route);
         }
     });
@@ -169,8 +156,11 @@ export const getRouteList = (routes: RouteConfig[]): RouteConfig[] => {
 export const filterRoutesByRole = (routes: RouteConfig[], userRole?: string): RouteConfig[] => {
     return routes
         .map(route => {
-            if (route.requireRoles && !route.requireRoles.includes(userRole || '')) {
-                return null;
+            const requiredRoles = route.meta?.requireRoles;
+            if (requiredRoles && requiredRoles.length > 0) {
+                if (!userRole || !requiredRoles.includes(userRole)) {
+                    return null;
+                }
             }
 
             if (route.children) {
@@ -184,4 +174,4 @@ export const filterRoutesByRole = (routes: RouteConfig[], userRole?: string): Ro
             return route;
         })
         .filter(Boolean) as RouteConfig[];
-}; 
+};

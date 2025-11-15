@@ -94,12 +94,12 @@ const TabsNav: React.FC = () => {
         const routePath = route.path.replace('/', '');
         if (routePath === pathSegments[0] || (Array.isArray(route.children) && route.children.some(child => child.path.includes(pathSegments[0])))) {
           currentPath += `/${routePath}`;
-          breadcrumbs.push({ title: route.name, path: currentPath });
+          breadcrumbs.push({ title: route.meta?.title || route.key, path: currentPath });
           
           if (route.children && pathSegments.length > 1) {
             const childRoute = route.children.find(child => child.path.includes(pathSegments[1]));
             if (childRoute) {
-              breadcrumbs.push({ title: childRoute.name, path: `/${pathSegments.join('/')}` });
+              breadcrumbs.push({ title: childRoute.meta?.title || childRoute.key, path: `/${pathSegments.join('/')}` });
             }
           }
           break;
@@ -139,7 +139,7 @@ const TabsNav: React.FC = () => {
     if (route && !tabRoutes.find(tab => tab.path === pathname)) {
       setTabRoutes([...tabRoutes, {
         key: pathname,
-        label: route.name,
+        label: route.meta?.title || route.key,
         path: pathname,
       }]);
     }
