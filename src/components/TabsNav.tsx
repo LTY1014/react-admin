@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs, Breadcrumb, Space, theme } from 'antd';
 import type { TabsProps } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { routes, RouteConfig } from '../router/routes';
+import { RouteConfig, appRouter } from '../router/routes';
 import { HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
@@ -84,58 +84,88 @@ const TabsNav: React.FC = () => {
   const { token } = theme.useToken();
   const { isDarkMode } = useSelector((state: RootState) => state.theme);
 
+  // 检查路径是否匹配（支持动态路由）
+  const isPathMatch = (routePath: string, pathname: string): boolean => {
+    // 精确匹配
+    if (routePath === pathname) {
+      return true;
+    }
+    
+    // 动态路由匹配（如 /product/:id 匹配 /product/123）
+    if (routePath.includes(':')) {
+      const routeParts = routePath.split('/');
+      const pathParts = pathname.split('/');
+      
+      if (routeParts.length !== pathParts.length) {
+        return false;
+      }
+      
+      return routeParts.every((part, index) => {
+        if (part.startsWith(':')) {
+          return true; // 动态参数，匹配任何值
+        }
+        return part === pathParts[index];
+      });
+    }
+    
+    return false;
+  };
+
+  // 递归查找路由及其父路由
+  const findRouteWithParents = (
+    routes: RouteConfig[], 
+    pathname: string, 
+    parents: RouteConfig[] = []
+  ): { route: RouteConfig | null; parents: RouteConfig[] } => {
+    for (const route of routes) {
+      // 检查当前路由是否匹配
+      if (isPathMatch(route.path, pathname)) {
+        return { route, parents };
+      }
+      
+      // 如果有子路由，递归查找
+      if (route.children && route.children.length > 0) {
+        const result = findRouteWithParents(route.children, pathname, [...parents, route]);
+        if (result.route) {
+          return result;
+        }
+      }
+    }
+    
+    return { route: null, parents: [] };
+  };
+
   // 获取当前路由的面包屑
   const getBreadcrumbs = (pathname: string): { title: string; path: string }[] => {
     const breadcrumbs: { title: string; path: string }[] = [];
-    let currentPath = '';
-
-    const findRoute = (routes: RouteConfig[], pathSegments: string[]): void => {
-      for (const route of routes) {
-        const routePath = route.path.replace('/', '');
-        if (routePath === pathSegments[0] || (Array.isArray(route.children) && route.children.some(child => child.path.includes(pathSegments[0])))) {
-          currentPath += `/${routePath}`;
-          breadcrumbs.push({ title: route.meta?.title || route.key, path: currentPath });
-          
-          if (route.children && pathSegments.length > 1) {
-            const childRoute = route.children.find(child => child.path.includes(pathSegments[1]));
-            if (childRoute) {
-              breadcrumbs.push({ title: childRoute.meta?.title || childRoute.key, path: `/${pathSegments.join('/')}` });
-            }
-          }
-          break;
-        }
-      }
-    };
-
-    const pathSegments = pathname.split('/').filter(Boolean);
-    if (pathSegments.length > 0) {
-      findRoute(routes, pathSegments);
+    
+    const { route, parents } = findRouteWithParents(appRouter, pathname);
+    
+    if (!route) {
+      return breadcrumbs;
     }
-
+    
+    // 添加所有父路由到面包屑
+    // parents.forEach(parent => {
+    //   breadcrumbs.push({
+    //     title: parent.meta?.title || parent.key,
+    //     path: parent.path
+    //   });
+    // });
+    
+    // 添加当前路由到面包屑
+    breadcrumbs.push({
+      title: route.meta?.title || route.key,
+      path: pathname
+    });
+    
     return breadcrumbs;
   };
 
   // 添加新标签
   const addTab = (pathname: string) => {
-    const findRouteByPath = (routes: RouteConfig[]): RouteConfig | null => {
-      for (const route of routes) {
-        if (route.path.replace('/', '') === pathname.split('/')[1]) {
-          if (route.children) {
-            const childPath = pathname.split('/')[2];
-            const childRoute = route.children.find(child => child.path.includes(childPath));
-            return childRoute || route;
-          }
-          return route;
-        }
-        if (route.children) {
-          const found = findRouteByPath(route.children);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
-
-    const route = findRouteByPath(routes);
+    const { route } = findRouteWithParents(appRouter, pathname);
+    
     if (route && !tabRoutes.find(tab => tab.path === pathname)) {
       setTabRoutes([...tabRoutes, {
         key: pathname,
