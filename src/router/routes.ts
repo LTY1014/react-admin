@@ -35,7 +35,7 @@ export interface RouteMeta {
 export interface RouteConfig {
     path: string; // 路由路径
     key: string; // 路由唯一标识
-    component?: React.ComponentType<any>; // 路由组件
+    component?: any; // 路由组件
     meta?: RouteMeta;
     children?: RouteConfig[]; // 子路由
 }

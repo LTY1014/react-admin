@@ -15,6 +15,17 @@ react-admin是一个基于 React、Redux 和 Ant Design 构建的后台管理系
 
 
 
+技术栈
+
+- React 18.2
+- Redux 9.1.0
+- Ant Design 5.3.0
+- React Router
+- Axios
+- TypeScript
+
+
+
 [TOC]
 
 ## 快速开始
@@ -48,15 +59,6 @@ npm run build
 - 🔐 完整的用户认证和权限管理
 - 📊 丰富的数据可视化组件
 - 🔧 完善的开发工具链
-
-## 技术栈
-
-- React 18.2
-- Redux 9.1.0
-- Ant Design 5.3.0
-- React Router
-- Axios
-- TypeScript
 
 
 
@@ -374,9 +376,3 @@ server{
 - 初始版本发布 (打包体积约2M)
 
 欢迎提交 Pull Request 或 Issue 来帮助改进项目。
-
-
-
-### 许可证
-
-[MIT](https://gitee.com/liang-tian-yu/vue3-init/blob/master/LICENSE)LICENSE)

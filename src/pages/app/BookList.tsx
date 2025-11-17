@@ -20,12 +20,12 @@ const BookList: React.FC = () => {
 
   // 添加搜索表单
   const [searchForm] = Form.useForm();
-  const searchInput = React.useRef<InputRef>(null);
+  const searchInput = React.useRef(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
-  const rowSelection: TableRowSelection<any> = {
+  const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
@@ -53,7 +53,7 @@ const BookList: React.FC = () => {
     }
   };
 
-  const getColumnSearchProps = (dataIndex: any): TableColumnType<any> => ({
+  const getColumnSearchProps = (dataIndex: any) => ({
     filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters, close}) => (
         <div style={{padding: 8}} onKeyDown={(e) => e.stopPropagation()}>
           <Input
@@ -107,7 +107,8 @@ const BookList: React.FC = () => {
 
   useEffect(() => {
     fetchData({
-      ...pagination
+      current: 1,
+      pageSize: 10
     });
   }, []);
 
@@ -143,6 +144,7 @@ const BookList: React.FC = () => {
     {
       title: '操作',
       key: 'action',
+      fixed: 'right',
       render: (_: any, record: BookVO) => (
         <Space size="middle">
           <Button 
@@ -329,6 +331,7 @@ const BookList: React.FC = () => {
           columns={columns}
           dataSource={data}
           rowKey="id"
+          size={'small'}
           pagination={pagination}
           loading={loading}
           onChange={handleTableChange}
