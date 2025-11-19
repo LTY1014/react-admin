@@ -18,16 +18,13 @@ import ProductCategory from '../pages/app/ProductCategory';
 import ProductDetail from '../pages/app/ProductDetail';
 import Settings from '../pages/sys/Settings';
 import Profile from '../pages/sys/Profile';
-import Login from '../pages/Login';
-import NotFound from '../pages/error/NotFound';
-import Forbidden from '../pages/error/Forbidden';
 import BookList from "../pages/app/BookList";
 import Test from "../pages/Test";
-import React from "react";
+import React, {lazy} from "react";
 
 export interface RouteMeta {
     title: string; // 路由名称（菜单显示）
-    icon?: React.ComponentType<any>; // 菜单图标
+    icon?: any; // 菜单图标
     hideInMenu?: boolean; // 是否显示在菜单中
     requireRoles?: string[];  // 需要的角色权限
 }
@@ -35,7 +32,7 @@ export interface RouteMeta {
 export interface RouteConfig {
     path: string; // 路由路径
     key: string; // 路由唯一标识
-    component?: any; // 路由组件
+    component?: React.ComponentType<any>; // 路由组件
     meta?: RouteMeta;
     children?: RouteConfig[]; // 子路由
 }
@@ -122,19 +119,19 @@ export const routes = [
     {
         path: '/login',
         key: 'login',
-        component: Login,
+        component: lazy(() => import('../pages/Login')),
         meta: {title: '登录', icon: LoginOutlined, hideInMenu: true,},
     },
     {
         path: '/403',
         key: '403',
-        component: Forbidden,
+        component: lazy(() => import('../pages/error/Forbidden')),
         meta: {title: '无权限', icon: StopOutlined, hideInMenu: true,},
     },
     {
         path: '/404',
         key: '404',
-        component: NotFound,
+        component: lazy(() => import('../pages/error/NotFound')),
         meta: {title: '未找到', icon: WarningOutlined, hideInMenu: true,},
     },
 ];

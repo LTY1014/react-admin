@@ -110,6 +110,18 @@ export default Index;
 
 
 
+### 路由
+
+懒加载
+
+```
+component: lazy(() => import('../pages/Login')),
+```
+
+
+
+
+
 ### Table
 
 **table排序**
@@ -306,6 +318,211 @@ export default Index;
             </Row>
         </div>
     )
+```
+
+
+
+
+
+### 弹窗表格
+
+```
+import React, {useEffect, useState} from "react";
+import {Button, Modal, Table} from "antd";
+import {getListUserByPage} from "@/api/user";
+
+/**
+ * ModalTable 弹窗表格选中
+ * @param props open: 是否打开弹窗, onCancel: 取消回调, onConfirm: 确认回调
+ * @constructor
+ */
+const ModalTable: React.FC = (props) => {
+    const {open, onCancel,onConfirm} = props;
+    const [dataSource, setDataSource] = React.useState([]);
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 10,
+        total: 0,
+        showSizeChanger: true,
+        showTotal: (total: number) => `共 ${total} 条`,
+        pageSizeOptions: ['10', '20', '50', '100', '1000']
+    });
+
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+        setSelectedRowKeys(newSelectedRowKeys);
+    };
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: onSelectChange,
+    };
+
+    const fetchData = async (params:{current: number, pageSize: number}) => {
+        try {
+            const {data} = await getListUserByPage({
+                current: params.current,
+                pageSize: params.pageSize
+            });
+            setDataSource(data.records);
+            setPagination({
+                ...pagination,
+                total: data.total
+            });
+        } catch (e) {
+        }
+    };
+
+    const handleTableChange = (newPagination: any) => {
+        // TODO 添加查询参数
+        // const values = searchForm.getFieldsValue();
+        fetchData({
+            // ...values,
+            current: newPagination.current,
+            pageSize: newPagination.pageSize
+        });
+        setPagination(prevState =>  {
+            return {
+                ...prevState,
+                current: newPagination.current,
+                pageSize: newPagination.pageSize
+            }
+        });
+    };
+
+    // 表格列
+    const columns = [
+        {
+            title: '用户名',
+            dataIndex: 'userName',
+            key: 'userName',
+        },
+        {
+            title: '账号',
+            dataIndex: 'userAccount',
+            key: 'userAccount',
+        },
+        {
+            title: '手机号',
+            dataIndex: 'phone',
+            key: 'phone',
+        },
+        {
+            title: '邮箱',
+            dataIndex: 'email',
+            key: 'email',
+        },
+    ]
+
+    useEffect(() => {
+        if (open) {
+            fetchData({
+                current: 1,
+                pageSize: 10
+            });
+        }
+    }, [open]);
+
+    return (
+        <div>
+            <Modal
+                title="查询"
+                open={open}
+                width={1000}
+                onCancel={onCancel}
+                footer={[
+                    <Button key="cancel" onClick={()=>{
+                        onCancel()
+                        setSelectedRowKeys([])
+                    }}>
+                        取消
+                    </Button>,
+                    <Button key="submit" type="primary" onClick={async () => {
+                        // 点击确认时调用 onConfirm 回调，并传递选中的数据
+                        if (onConfirm) {
+                            // 根据 selectedRowKeys 找到对应的行数据
+                            const selectedRows = dataSource.filter(item =>
+                                selectedRowKeys.includes(item.id)
+                            );
+                            onConfirm(selectedRows, selectedRowKeys);
+                        }
+                        onCancel();
+                        setSelectedRowKeys([]);
+                    }}>
+                        确定
+                    </Button>,
+                ]}
+            >
+                <Table
+                    columns={columns}
+                    dataSource={dataSource}
+                    rowKey="id"
+                    size={'small'}
+                    pagination={pagination}
+                    onChange={handleTableChange}
+                    rowSelection={rowSelection}
+                />
+            </Modal>
+        </div>
+    )
+}
+
+export default ModalTable;
+```
+
+
+
+测试
+
+```
+import React from "react";
+import {Button, message} from "antd";
+import ModalTable from "@/components/ModalTable";
+
+const Test: React.FC = () => {
+    const [modalOpen, setModalOpen] = React.useState(false)
+    const [form] = Form.useForm();
+
+    // 处理 ModalTable 确认回调
+    const handleModalConfirm = (selectedRows: any[], selectedRowKeys: React.Key[]) => {
+        console.log('选中的行数据:', selectedRows);
+        console.log('选中的行key:', selectedRowKeys);
+        message.success(`已选择 ${selectedRows.length} 条数据`);
+        // 在这里处理选中的数据
+        form.setFieldsValue({
+            userId: selectedRowKeys,
+            userName: selectedRows.map(item => item.userName),
+        })
+    }
+
+    return (
+        <div>
+            <Button onClick={() => {
+                setModalOpen(true)
+            }}>测试</Button>
+            <Form form={form}>
+                <Form.Item
+                    name="userId"
+                    hidden={true}
+                >
+                </Form.Item>
+                <Form.Item
+                    name="userName"
+                    rules={[{required: true, message: '请输入用户名！'}]}
+                >
+                    <Input placeholder="请输入用户名" disabled={true}/>
+                </Form.Item>
+            </Form>
+            
+            <ModalTable
+                open={modalOpen}
+                onCancel={() => setModalOpen(false)}
+                onConfirm={handleModalConfirm}/>
+        </div>
+    )
+}
+
+
+export default Test;
 ```
 
 

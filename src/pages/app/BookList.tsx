@@ -37,11 +37,13 @@ const BookList: React.FC = () => {
       const response = await getListBookByPage(params);
       if (response.code === 0) {
         setData(response.data.records);
-        setPagination({
-          ...pagination,
-          current: params.current,
-          pageSize: params.pageSize,
-          total: response.data.total
+        setPagination(prevState => {
+          return {
+            ...prevState,
+            current: params.current,
+            pageSize: params.pageSize,
+            total: response.data.total
+          };
         });
       } else {
         message.error(response.message || '获取数据失败');
@@ -265,11 +267,6 @@ const BookList: React.FC = () => {
     const values = searchForm.getFieldsValue();
     fetchData({
       ...values,
-      current: newPagination.current,
-      pageSize: newPagination.pageSize
-    });
-    setPagination({
-      ...pagination,
       current: newPagination.current,
       pageSize: newPagination.pageSize
     });
