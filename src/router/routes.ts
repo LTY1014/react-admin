@@ -4,6 +4,7 @@ import {
     ControlOutlined,
     DashboardOutlined,
     IdcardOutlined,
+    IssuesCloseOutlined,
     LoginOutlined,
     SettingOutlined,
     ShoppingOutlined,
@@ -106,6 +107,12 @@ export const appRouter = [
         key: 'test',
         component: Test,
         meta: {title: '测试页', icon: BugOutlined, requireRoles: ['admin', 'user']},
+    },
+    {
+        path: '/about',
+        key: 'about',
+        component: lazy(() => import('../pages/About')),
+        meta: {title: '系统说明', icon: IssuesCloseOutlined, requireRoles: ['admin']},
     },
 ];
 

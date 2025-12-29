@@ -75,3 +75,34 @@ body {
   //background-position: center;
   background: linear-gradient(90deg, rgb(223, 236, 254) 0%, rgb(174, 182, 253) 50%, rgb(209, 216, 241) 80%);
 }
+
+/* 移除横向Menu底部默认边框 */
+.ant-menu-no-underline {
+  border-bottom: none !important;
+}
+
+// 2. 彻底移除所有状态的下划线（提升选择器优先级）
+.ant-menu-horizontal.ant-menu-no-underline {
+  // 选中项下划线
+  > .ant-menu-item::after,
+  > .ant-menu-submenu::after,
+  > .ant-menu-item-selected::after,
+  > .ant-menu-submenu-selected::after {
+    border-bottom: none !important;
+    display: none !important; // 直接隐藏伪元素，杜绝显示
+  }
+
+  // 悬浮/激活状态下划线
+  > .ant-menu-item:hover::after,
+  > .ant-menu-item-active::after,
+  > .ant-menu-submenu:hover::after,
+  > .ant-menu-submenu-active::after {
+    border-bottom: none !important;
+    display: none !important;
+  }
+
+  // antd v5 新增的选中态样式兼容
+  > .ant-menu-item.ant-menu-item-selected {
+    border-bottom: none !important;
+  }
+}

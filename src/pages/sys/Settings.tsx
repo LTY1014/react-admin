@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, Form, Input, Button, Switch, Select, Space, message, ColorPicker} from 'antd';
-import {setPrimaryColor, toggleDarkMode} from "@/store/slices/themeSlice";
+import {setMenuMode, setPrimaryColor, toggleDarkMode} from "@/store/slices/themeSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store";
 
@@ -8,7 +8,7 @@ const Settings: React.FC = () => {
   const [form] = Form.useForm();
 
   const dispatch = useDispatch();
-  const { primaryColor, isDarkMode } = useSelector((state: RootState) => state.theme);
+  const { primaryColor, isDarkMode, menuMode } = useSelector((state: RootState) => state.theme);
 
   const handleSubmit = (values: any) => {
     console.log('系统设置:', values);
@@ -27,6 +27,7 @@ const Settings: React.FC = () => {
               allowRegistration: true,
               emailNotification: true,
               language: 'zh_CN',
+              menuMode: menuMode
             }}
           >
             <Form.Item
@@ -64,6 +65,14 @@ const Settings: React.FC = () => {
               label="系统语言"
             >
               <Select options={[{value: 'zh_CN', label: '简体中文',}, {value: 'en_US', label: 'English',}]}/>
+            </Form.Item>
+
+            <Form.Item
+                name="menuMode"
+                label="菜单栏设置"
+            >
+              <Select options={[{value: 'sider', label: '侧边菜单栏',}, {value: 'top', label: '顶部菜单栏'}]}
+                onChange={(value) => dispatch(setMenuMode(value))}/>
             </Form.Item>
 
             <Form.Item>

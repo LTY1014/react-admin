@@ -55,8 +55,8 @@ const MainLayout: React.FC = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const {user} = useSelector((state: RootState) => state.auth);
+    const {isDarkMode,menuMode} = useSelector((state: RootState) => state.theme);
     const [notices, setNotices] = useState<number>(2);
-    const {isDarkMode} = useSelector((state: RootState) => state.theme);
     const [passwordForm] = Form.useForm();
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -301,37 +301,70 @@ const MainLayout: React.FC = () => {
         </Modal>;
     }
 
+    function getSiderMenu() {
+        return <Sider trigger={null}>
+            <div style={{
+                height: 64,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#fff',
+            }}>
+                <h1 style={{
+                    margin: 0,
+                    fontSize: collapsed ? 16 : 20,
+                    transition: 'all 0.3s',
+                    fontWeight: 600,
+                }}>
+                    {collapsed ? config.appLogo : config.appTitle}
+                </h1>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)'}}>
+                <Menu
+                    theme="dark"
+                    mode="inline"
+                    selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
+                    items={menuItems}
+                    onClick={handleMenuClick}
+                    style={{flex: 1}}
+                />
+            </div>
+        </Sider>;
+    }
+
+
+    function getTopMenu() {
+        return <div style={{display: 'flex', alignItems: 'center', width: '50%'}}>
+            <div style={{
+                height: 48,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: 24,
+            }}>
+                <h1 style={{
+                    margin: 0,
+                    fontSize: 20,
+                    fontWeight: 600,
+                    color: '#278aff',
+                }}>
+                    {config.appTitle}
+                </h1>
+            </div>
+            <Menu
+                mode="horizontal"
+                selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
+                items={menuItems}
+                onClick={handleMenuClick}
+                style={{flex: 1, borderBottom: 'none', height: '58px',}}
+                className="ant-menu-no-underline"
+            />
+        </div>
+    }
+
     return (
         <Layout style={{minHeight: '100vh'}}>
-            <Sider trigger={null} collapsible collapsed={collapsed} style={{display: isFullscreen ? 'none' : 'block'}}>
-                <div style={{
-                    height: 64,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#fff',
-                }}>
-                    <h1 style={{
-                        margin: 0,
-                        fontSize: collapsed ? 16 : 20,
-                        transition: 'all 0.3s',
-                        fontWeight: 600,
-                        color: '#fff',
-                    }}>
-                        {collapsed ? config.appLogo : config.appTitle}
-                    </h1>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)'}}>
-                    <Menu
-                        theme="dark"
-                        mode="inline"
-                        selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
-                        items={menuItems}
-                        onClick={handleMenuClick}
-                        style={{flex: 1}}
-                    />
-                </div>
-            </Sider>
+            {menuMode == 'sider' && getSiderMenu()}
             <Layout>
                 <Header style={{
                     padding: '24px 16px',
@@ -340,18 +373,9 @@ const MainLayout: React.FC = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     boxShadow: '0 1px 4px rgba(0,21,41,.08)',
-                    maxHeight: 40,
+                    maxHeight: 48,
                 }}>
-                    <Button
-                        type="text"
-                        icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
-                        onClick={() => setCollapsed(!collapsed)}
-                        style={{
-                            fontSize: '16px',
-                            width: 40,
-                            height: 40,
-                        }}
-                    />
+                    {menuMode == 'sider' ? <div></div> : getTopMenu()}
                     {RightContent()}
                 </Header>
                 <TabsNav/>
