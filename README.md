@@ -50,6 +50,10 @@ npm run build
 
 
 
+themeSlice.ts 通过设置menuMode设置菜单栏
+
+global.less设置背景色
+
 
 
 ## 功能特性
