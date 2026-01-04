@@ -50,7 +50,6 @@ interface ExtendedMenuItem{
 }
 
 const MainLayout: React.FC = () => {
-    const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const dispatch = useDispatch();
@@ -60,6 +59,41 @@ const MainLayout: React.FC = () => {
     const [passwordForm] = Form.useForm();
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
+
+    // 添加状态变量用于控制Tab吸顶效果
+    const [navbarHeight, setNavbarHeight] = useState(0);  // 导航栏高度，用于吸顶定位
+    const [isSticky, setIsSticky] = useState(false);      // 标识Tab是否处于吸顶状态
+    const [stickyScrollTop, setStickyScrollTop] = useState(0); // 吸顶临界值，页面滚动到此位置时触发吸顶
+
+    // 创建ref引用，指向辅助线元素，用于计算吸顶临界值
+    const helperLineRef = React.useRef(null);
+
+    // 使用useEffect监听页面滚动，实现Tab吸顶效果
+    React.useEffect(() => {
+        const helperLineEl = helperLineRef.current;
+        if (!helperLineEl) {
+            return;
+        }
+
+        // 1. 获取吸顶临界值：页面加载后，直接读取offsetTop
+        setStickyScrollTop(helperLineEl.offsetTop);
+
+        // 2. 监听辅助线可见性，判断吸顶状态
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                // 当辅助线与视窗不再交叉时，意味着Tab需要吸顶
+                setIsSticky(!entry.isIntersecting);
+            },
+            // root: null 表示观察与视窗的交叉
+            // threshold: 0 表示元素刚进入或刚离开视窗时触发
+            { root: null as HTMLElement, threshold: 0 }
+        );
+
+        observer.observe(helperLineEl);
+
+        // 组件卸载时断开观察器连接，防止内存泄漏
+        return () => observer.disconnect();
+    }, [navbarHeight]);
 
     const {
         token: {colorBgContainer, borderRadiusLG},
@@ -193,6 +227,7 @@ const MainLayout: React.FC = () => {
         }
     };
 
+    //region 组件start
     // 右侧内容
     function RightContent() {
         return <Space size={12} style={{height: '100%', display: 'flex', alignItems: 'center'}}>
@@ -312,11 +347,11 @@ const MainLayout: React.FC = () => {
             }}>
                 <h1 style={{
                     margin: 0,
-                    fontSize: collapsed ? 16 : 20,
+                    fontSize: 20,
                     transition: 'all 0.3s',
                     fontWeight: 600,
                 }}>
-                    {collapsed ? config.appLogo : config.appTitle}
+                    {config.appTitle}
                 </h1>
             </div>
             <div style={{display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)'}}>
@@ -361,6 +396,7 @@ const MainLayout: React.FC = () => {
             />
         </div>
     }
+    //endregion 组件end
 
     return (
         <Layout style={{minHeight: '100vh'}}>
@@ -378,7 +414,22 @@ const MainLayout: React.FC = () => {
                     {menuMode == 'sider' ? <div></div> : getTopMenu()}
                     {RightContent()}
                 </Header>
-                <TabsNav/>
+                {/* 辅助线：绝对定位到 Tab 上方 navbarHeight 的位置 */}
+                <div
+                    ref={helperLineRef}
+                    style={{ position: 'absolute', top: -`${navbarHeight}px`, height: '1px' }}
+                />
+                {/* Tab 组件 */}
+                <div
+                    style={{
+                        position: isSticky ? 'fixed' : 'static',
+                        top: isSticky ? `${navbarHeight}px` : 'auto',
+                        width: '100%',
+                        zIndex: 10,
+                    }}
+                >
+                    <TabsNav/>
+                </div>
                 <Content
                     style={{
                         margin: '0 16px 24px',
