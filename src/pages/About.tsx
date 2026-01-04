@@ -88,11 +88,6 @@ const Dashboard: React.FC = () => {
         },
         {
             key: '5',
-            label: 'lodash',
-            value: 'v4.17.21',
-        },
-        {
-            key: '6',
             label: 'react-redux',
             value: 'v9.1.0',
         },

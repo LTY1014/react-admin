@@ -35,7 +35,7 @@ const Login: React.FC = () => {
             const from = location.state?.from || '/dashboard';
             navigate(from, {replace: true});
         } catch (error: any) {
-            message.error('登录失败:' + error.message)
+            message.error('登录失败:' + error)
         }
     };
 
