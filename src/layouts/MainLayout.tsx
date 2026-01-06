@@ -187,8 +187,7 @@ const MainLayout: React.FC = () => {
     const handleUserMenuClick = async ({key}: { key: string }) => {
         if (key === 'logout') {
             await handleLogout()
-        }
-        if (key === 'password') {
+        } else if (key === 'password') {
             setPasswordModalVisible(true);
         } else {
             navigate(`/${key}`);
