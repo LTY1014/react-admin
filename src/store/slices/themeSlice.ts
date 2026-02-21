@@ -9,7 +9,7 @@ interface ThemeState {
 const initialState: ThemeState = {
   primaryColor: '#1890ff',
   isDarkMode: localStorage.getItem('isDarkMode') === 'true',
-  menuMode: localStorage.getItem('menuMode') as 'sider' || 'sider'
+  menuMode: localStorage.getItem('menuMode') as 'sider' || 'sider' // 可以改成 'top'
 };
 
 const themeSlice = createSlice({

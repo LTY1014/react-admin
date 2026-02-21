@@ -366,7 +366,7 @@ const Dashboard: React.FC = () => {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            background: stat.color,
+                            // background: stat.color,
                         }}
                     >
                         <div style={{textAlign: 'center', marginBottom: '24px'}}>

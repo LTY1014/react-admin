@@ -59,6 +59,7 @@ const MainLayout: React.FC = () => {
     const [passwordForm] = Form.useForm();
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
 
     // 添加状态变量用于控制Tab吸顶效果
     const [navbarHeight, setNavbarHeight] = useState(0);  // 导航栏高度，用于吸顶定位
@@ -96,7 +97,7 @@ const MainLayout: React.FC = () => {
     }, [navbarHeight]);
 
     const {
-        token: {colorBgContainer, borderRadiusLG},
+        token: {colorBgContainer, borderRadiusLG, primaryColor},
     } = theme.useToken();
 
     // 将路由配置转换为菜单项
@@ -380,7 +381,7 @@ const MainLayout: React.FC = () => {
                     margin: 0,
                     fontSize: 20,
                     fontWeight: 600,
-                    color: '#278aff',
+                    color: primaryColor
                 }}>
                     {config.appTitle}
                 </h1>
@@ -399,7 +400,7 @@ const MainLayout: React.FC = () => {
 
     return (
         <Layout style={{minHeight: '100vh'}}>
-            {menuMode == 'sider' && getSiderMenu()}
+            {menuMode == 'sider' && collapsed == false && getSiderMenu()}
             <Layout>
                 <Header style={{
                     padding: '24px 16px',
@@ -410,6 +411,16 @@ const MainLayout: React.FC = () => {
                     boxShadow: '0 1px 4px rgba(0,21,41,.08)',
                     maxHeight: 48,
                 }}>
+                    {menuMode == 'sider' && <div>
+                        <Button
+                            type="text"
+                            icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                            onClick={() => setCollapsed(!collapsed)}
+                            style={{width: 'auto'}}
+                        >
+                            {/*{collapsed ? '展开菜单' : '收起菜单'}*/}
+                        </Button>
+                    </div>}
                     {menuMode == 'sider' ? <div></div> : getTopMenu()}
                     {RightContent()}
                 </Header>
