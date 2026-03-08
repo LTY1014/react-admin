@@ -391,8 +391,8 @@ const MainLayout: React.FC = () => {
                 selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
                 items={menuItems}
                 onClick={handleMenuClick}
-                style={{flex: 1, borderBottom: 'none', height: '58px',}}
-                className="ant-menu-no-underline"
+                style={{flex: 1, borderBottom: 'none', height: '48px'}}
+                className="ant-menu-no-underline top-header-menu"
             />
         </div>
     }

@@ -106,3 +106,19 @@ body {
     border-bottom: none !important;
   }
 }
+
+/* 说明：假设顶部菜单高度为 48px（与 tsx 中 topMenuHeight 一致） */
+.top-header-menu.ant-menu-horizontal {
+  margin-top: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+/* 顶部水平菜单：每个 li（含子菜单标题）与父元素等高 */
+.top-header-menu.ant-menu-horizontal > .ant-menu-item,
+.top-header-menu.ant-menu-horizontal > .ant-menu-submenu > .ant-menu-submenu-title {
+  height: 24px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+}
