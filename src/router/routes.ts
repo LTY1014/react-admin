@@ -1,15 +1,14 @@
 import {
-    AppstoreOutlined,
+    AppstoreOutlined, BookOutlined,
     BugOutlined,
     ControlOutlined,
     DashboardOutlined,
-    IdcardOutlined,
-    IssuesCloseOutlined,
+    IdcardOutlined, InfoCircleOutlined,
     LoginOutlined,
     SettingOutlined,
     ShoppingOutlined,
-    StopOutlined,
-    TeamOutlined,
+    StopOutlined, TagsOutlined,
+    UserOutlined,
     WarningOutlined
 } from '@ant-design/icons';
 import Dashboard from '../pages/Dashboard';
@@ -54,13 +53,13 @@ export const appRouter = [
                 path: '/bookList',
                 key: 'bookList',
                 component: BookList,
-                meta: {title: '模拟列表', icon: AppstoreOutlined},
+                meta: {title: '模拟列表', icon: BookOutlined},
             },
             {
                 path: '/product-list',
                 key: 'product-list',
                 component: ProductList,
-                meta: {title: '商品列表', icon: AppstoreOutlined}
+                meta: {title: '商品列表', icon: ShoppingOutlined}
             },
             {
                 path: '/product/:id',
@@ -72,7 +71,7 @@ export const appRouter = [
                 path: '/product-category',
                 key: 'product-category',
                 component: ProductCategory,
-                meta: {title: '商品分类', icon: AppstoreOutlined},
+                meta: {title: '商品分类', icon: TagsOutlined},
             },
         ],
     },
@@ -86,7 +85,7 @@ export const appRouter = [
                 path: '/users',
                 key: 'users',
                 component: UserList,
-                meta: {title: '用户管理', icon: TeamOutlined, requireRoles: ['admin']},
+                meta: {title: '用户管理', icon: UserOutlined, requireRoles: ['admin']},
             },
             {
                 path: '/settings',
@@ -112,7 +111,7 @@ export const appRouter = [
         path: '/about',
         key: 'about',
         component: lazy(() => import('../pages/About')),
-        meta: {title: '系统说明', icon: IssuesCloseOutlined, requireRoles: ['admin']},
+        meta: {title: '系统说明', icon: InfoCircleOutlined, requireRoles: ['admin']},
     },
 ];
 

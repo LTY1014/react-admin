@@ -24,4 +24,4 @@ yarn.lock
 *.njsproj
 *.sln
 *.sw?
-.claude
+.claude/
