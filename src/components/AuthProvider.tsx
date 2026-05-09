@@ -6,7 +6,7 @@ import { loginAction, logoutAction } from '../store/slices/authSlice';
 import { RootState } from '../store';
 import { message, Spin } from "antd";
 
-const WHITE_LIST: string[] = ['/login', '/register', '/404', '/'];
+const WHITE_LIST: string[] = ['/login', '/register', '/404','/403'];
 
 /**
  * 是全局认证入口，负责登录状态的获取和初始化
@@ -23,10 +23,17 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   useEffect(() => {
     const checkAuth = async () => {
       const currentPath = location.pathname;
+      // 如果有redirect，跳转到redirect，否则跳转到默认路径
+      const redirectPath = location.state?.from && typeof location.state.from === 'string'
+          ? location.state.from
+          : '/';
       if (WHITE_LIST.includes(currentPath)) {
-        // 如果在白名单中且已登录，重定向到仪表盘
+        // 如果在白名单中，检查是否需要重定向
         if (user?.userRole) {
-          navigate('/dashboard', { replace: true });
+          // 只有访问登录页或注册页时才重定向到仪表盘
+          if (currentPath === '/login' || currentPath === '/register') {
+            navigate(redirectPath, { replace: true });
+          }
         }
         setIsChecking(false);
         return;

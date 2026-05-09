@@ -187,7 +187,7 @@ const BookList: React.FC = () => {
       content: '确定要删除这条数据？',
       onOk: async () => {
         try {
-          await deleteBook({id: id});
+          await deleteBook({ids: Array.of(id)});
           message.success('删除成功');
           if (data.length === 1 && pagination.current > 1) {
             await fetchData({

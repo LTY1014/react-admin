@@ -1,6 +1,8 @@
 import request from '../plugins/axios';
 import type { ApiResponse } from '../plugins/axios';
 
+const BASE_URL = '/book'
+
 export interface QueryParams {
   current: number;
   pageSize: number;
@@ -23,22 +25,22 @@ export interface BookVO {
 }
 
 export const getListBookByPage = (data: QueryParams) => {
-  return request.post<any, ApiResponse<BookResponse>>('/book/list/page', data);
+  return request.post<any, ApiResponse<BookResponse>>(`${BASE_URL}/list/page`, data);
 };
 
 export const getByBookId = (params) => {
-  return request.post<any, ApiResponse<BookResponse>>(`/book/get`, params);
+  return request.post<any, ApiResponse<BookResponse>>(`${BASE_URL}/get`, params);
 }
 
 export const addBook = (data: QueryParams) => {
-  return request.post<any, ApiResponse<BookResponse>>(`/book/add`, data);
+  return request.post<any, ApiResponse<BookResponse>>(`${BASE_URL}/add`, data);
 };
 export const updateBook = (data: QueryParams) => {
-  return request.post<any, ApiResponse<BookResponse>>(`/book/update`, data);
+  return request.post<any, ApiResponse<BookResponse>>(`${BASE_URL}/update`, data);
 };
 
 export const deleteBook = (data) => {
-  return request.post<any, ApiResponse<void>>(`/book/delete`, data);
+  return request.post<any, ApiResponse<void>>(`${BASE_URL}/delete`, data);
 };
 
 

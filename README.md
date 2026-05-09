@@ -56,6 +56,24 @@ global.less设置背景色
 
 
 
+---
+
+登录放行处理
+
+1. App.tsx 注释组件<AuthProvider>
+2. 组件AuthGuard免判断
+
+```
+  // TODO 直接先登录
+  // if (!user?.userRole) {
+  //   return <Navigate to="/login" replace />;
+  // }
+```
+
+
+
+
+
 ## 功能特性
 
 - 🚀 基于 React 18 + Redux + Ant Design 5.x
