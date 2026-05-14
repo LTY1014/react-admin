@@ -40,15 +40,6 @@ import {toggleDarkMode} from "@/store/slices/themeSlice";
 
 const {Header, Sider, Content} = Layout;
 
-type MenuItem = Required<MenuProps>['items'][number];
-
-interface ExtendedMenuItem{
-    children?: MenuItem[];
-    icon?: React.ReactNode;
-    key: string;
-    label: string;
-}
-
 const MainLayout: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -101,11 +92,11 @@ const MainLayout: React.FC = () => {
     } = theme.useToken();
 
     // 将路由配置转换为菜单项
-    const convertRoutesToMenuItems = (routes: RouteConfig[]): ExtendedMenuItem[] => {
+    const convertRoutesToMenuItems = (routes: RouteConfig[]): any[] => {
         return routes
             .filter(route => !route.meta?.hideInMenu)
             .map(route => {
-                const menuItem: ExtendedMenuItem = {
+                const menuItem: any = {
                     key: route.key,
                     icon: route.meta?.icon ? React.createElement(route.meta.icon) : null,
                     label: route.meta?.title || route.key,
@@ -229,7 +220,7 @@ const MainLayout: React.FC = () => {
 
     //region 组件start
     // 右侧内容
-    function RightContent() {
+    function renderRightContent() {
         return <Space size={12} style={{height: '100%', display: 'flex', alignItems: 'center'}}>
             <Button type="text" icon={<ClearOutlined/>} onClick={() => {
                 Modal.confirm({
@@ -238,7 +229,7 @@ const MainLayout: React.FC = () => {
                     okText: '确定',
                     cancelText: '取消',
                     onOk: () => {
-                        localStorage.clear()
+                        localStorage.clear();
                         message.success('清空缓存数据成功');
                     },
                 });
@@ -263,12 +254,12 @@ const MainLayout: React.FC = () => {
             </Dropdown>
             <Dropdown menu={{items: userMenuItems, onClick: handleUserMenuClick}} placement="bottomRight">
                 <Space style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center'}}>
-                    {/*<Avatar*/}
-                    {/*    style={{backgroundColor: '#1890ff'}}*/}
-                    {/*    src={user?.avatarUrl}*/}
-                    {/*    icon={!user?.avatarUrl && <UserOutlined/>}*/}
-                    {/*/>*/}
-                    <Avatar>{user?.userName?.charAt(0)}</Avatar>
+                    <Avatar
+                        src={user?.avatarUrl}
+                        icon={!user?.avatarUrl && !user?.userName && <UserOutlined />}
+                    >
+                        {!user?.avatarUrl && user?.userName?.charAt(0)}
+                    </Avatar>
                     <span>{user?.userName}</span>
                 </Space>
             </Dropdown>
@@ -336,7 +327,7 @@ const MainLayout: React.FC = () => {
         </Modal>;
     }
 
-    function getSiderMenu() {
+    function renderSiderMenu() {
         return <Sider trigger={null}>
             <div style={{
                 height: 64,
@@ -368,7 +359,7 @@ const MainLayout: React.FC = () => {
     }
 
 
-    function getTopMenu() {
+    function renderTopMenu() {
         return <div style={{display: 'flex', alignItems: 'center', width: '50%'}}>
             <div style={{
                 height: 48,
@@ -398,9 +389,34 @@ const MainLayout: React.FC = () => {
     }
     //endregion 组件end
 
+    // 渲染菜单
+    const renderMenu = () => {
+        if (menuMode === 'sider' && !collapsed) {
+            return renderSiderMenu();
+        }
+        return null;
+    };
+
+    // 渲染头部左侧内容
+    const renderHeaderLeft = () => {
+        if (menuMode === 'sider') {
+            return (
+                <div>
+                    <Button
+                        type="text"
+                        icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                        onClick={() => setCollapsed(!collapsed)}
+                        style={{width: 'auto'}}
+                    />
+                </div>
+            );
+        }
+        return renderTopMenu();
+    };
+
     return (
         <Layout style={{minHeight: '100vh'}}>
-            {menuMode == 'sider' && collapsed == false && getSiderMenu()}
+            {renderMenu()}
             <Layout>
                 <Header style={{
                     padding: '24px 16px',
@@ -411,18 +427,8 @@ const MainLayout: React.FC = () => {
                     boxShadow: '0 1px 4px rgba(0,21,41,.08)',
                     maxHeight: 48,
                 }}>
-                    {menuMode == 'sider' && <div>
-                        <Button
-                            type="text"
-                            icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
-                            onClick={() => setCollapsed(!collapsed)}
-                            style={{width: 'auto'}}
-                        >
-                            {/*{collapsed ? '展开菜单' : '收起菜单'}*/}
-                        </Button>
-                    </div>}
-                    {menuMode == 'sider' ? <div></div> : getTopMenu()}
-                    {RightContent()}
+                    {renderHeaderLeft()}
+                    {renderRightContent()}
                 </Header>
                 {/* 辅助线：绝对定位到 Tab 上方 navbarHeight 的位置 */}
                 <div
