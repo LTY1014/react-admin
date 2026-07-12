@@ -19,14 +19,113 @@ react-admin是一个基于 React、Redux 和 Ant Design 构建的后台管理系
 
 - React 18.2
 - Redux 9.1.0
+- React Router 6
 - Ant Design 5.3.0
-- React Router
 - Axios
 - TypeScript
+- Webpack 5
+- Less
 
 
 
 [TOC]
+
+
+
+## 功能特性
+
+- 🚀 基于 React 18 + Redux + Ant Design 5.x
+- 📦 开箱即用的后台管理系统模板
+- 🔐 完整的用户认证和权限管理
+- 📊 丰富的数据可视化组件
+- 🔧 完善的开发工具链
+
+
+
+### 已实现能力
+
+- 登录态初始化与路由守卫
+- 角色权限控制（路由级 + 组件级）
+- 主布局（侧边菜单 / 顶部菜单切换）
+- 多标签导航与面包屑
+- 主题能力（暗黑模式、主色切换）
+- 用户管理（分页、搜索、增删改、重置密码）
+- 图书管理（分页、筛选、增删改）
+- Excel 导出工具
+
+### 示例/演示能力
+
+- 商品列表
+- 商品详情
+- 商品分类
+- 仪表盘部分统计数据
+- 测试页
+
+
+
+## 目录结构
+
+```
+react-admin
+├─ public/
+│  └─ index.html
+├─ src/
+│  ├─ api/                # 接口定义
+│  ├─ components/         # 通用组件（鉴权、标签导航等）
+│  ├─ config/             # 全局配置
+│  ├─ layouts/            # 布局
+│  ├─ model/              # 枚举与模型
+│  ├─ pages/              # 页面
+│  │  ├─ app/             # 业务页面
+│  │  ├─ error/           # 异常页
+│  │  └─ sys/             # 系统管理页
+│  ├─ plugins/            # 插件
+│  ├─ router/             # 路由
+│  ├─ store/              # Redux store 与 slices
+│  ├─ utils/              # 工具函数
+│  ├─ App.tsx
+│  └─ index.tsx
+├─ webpack.config.js
+└─ package.json
+```
+
+
+
+## 权限与认证说明
+
+### 登录放行处理
+
+1. App.tsx 注释组件<AuthProvider>
+2. 组件AuthGuard免判断
+
+```
+  // TODO 直接先登录
+  // if (!user?.userRole) {
+  //   return <Navigate to="/login" replace />;
+  // }
+```
+
+
+
+### 认证流程
+
+1. 应用启动后由 AuthProvider 调用当前用户接口初始化登录态
+2. 非白名单页面未登录时重定向到登录页
+3. 登录成功后写入 Redux，全局可用
+
+### 权限控制
+
+- 路由级权限：通过路由 meta.requireRoles 配置
+- 组件级权限：通过 Authority 组件按角色控制可见性
+
+关键文件：
+
+- src/components/AuthProvider.tsx
+- src/components/AuthGuard.tsx
+- src/components/Authority.tsx
+- src/utils/checkAccess.ts
+
+
 
 ## 快速开始
 
@@ -50,85 +149,15 @@ npm run build
 
 
 
+## 开发指南
+
+
+
+### 菜单样式
+
 themeSlice.ts 通过设置menuMode设置菜单栏
 
 global.less设置背景色
-
-
-
----
-
-登录放行处理
-
-1. App.tsx 注释组件<AuthProvider>
-2. 组件AuthGuard免判断
-
-```
-  // TODO 直接先登录
-  // if (!user?.userRole) {
-  //   return <Navigate to="/login" replace />;
-  // }
-```
-
-
-
-
-
-## 功能特性
-
-- 🚀 基于 React 18 + Redux + Ant Design 5.x
-- 📦 开箱即用的后台管理系统模板
-- 🔐 完整的用户认证和权限管理
-- 📊 丰富的数据可视化组件
-- 🔧 完善的开发工具链
-
-
-
-## 目录结构
-
-```
-react-admin
-├── src
-│   ├── assets          # 静态资源
-│   ├── components      # 公共组件
-│   ├── pages          # 页面组件
-│   ├── redux          # Redux 相关
-│   ├── router         # 路由配置
-│   ├── utils          # 工具函数
-│   └── App.tsx        # 根组件
-├── public             # 公共资源
-└── package.json       # 项目依赖
-```
-
-
-
-## 开发指南
-
-新组件开发
-
-```
-import React, { useEffect } from 'react';
-
-// interface IndexProps {
-//     visible: boolean;
-//     setVisible: (bool: boolean) => void;
-//     fieldList: [];
-// }
-
-const Index: React.FC = () => {
-
-    useEffect(() => {
-    }, []);
-
-    return (
-        <div>
-            
-        </div>
-    );
-};
-
-export default Index;
-```
 
 
 
@@ -139,8 +168,6 @@ export default Index;
 ```
 component: lazy(() => import('../pages/Login')),
 ```
-
-
 
 
 

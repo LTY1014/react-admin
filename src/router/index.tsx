@@ -14,17 +14,11 @@ const AppRoutes = () => {
                     key={route.key}
                     path={route.path}
                     element={
-                        !route.meta?.hideInMenu ? (
-                            <AuthGuard requiredRoles={route.meta?.requireRoles}>
-                                <Suspense fallback={<Spin/>}>
-                                    <route.component/>
-                                </Suspense>
-                            </AuthGuard>
-                        ) : (
+                        <AuthGuard requiredRoles={route.meta?.requireRoles}>
                             <Suspense fallback={<Spin/>}>
                                 <route.component/>
                             </Suspense>
-                        )
+                        </AuthGuard>
                     }
                 />
             ))}

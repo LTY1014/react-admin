@@ -1,25 +1,20 @@
 import {
-    AppstoreOutlined, BookOutlined,
+    AppstoreOutlined,
+    BookOutlined,
     BugOutlined,
     ControlOutlined,
     DashboardOutlined,
-    IdcardOutlined, InfoCircleOutlined,
+    IdcardOutlined,
+    InfoCircleOutlined,
     LoginOutlined,
     SettingOutlined,
     ShoppingOutlined,
-    StopOutlined, TagsOutlined,
+    StopOutlined,
     UserOutlined,
     WarningOutlined
 } from '@ant-design/icons';
 import Dashboard from '../pages/Dashboard';
-import UserList from '../pages/sys/UserList';
-import ProductList from '../pages/app/ProductList';
-import ProductCategory from '../pages/app/ProductCategory';
-import ProductDetail from '../pages/app/ProductDetail';
 import Settings from '../pages/sys/Settings';
-import Profile from '../pages/sys/Profile';
-import BookList from "../pages/app/BookList";
-import Test from "../pages/Test";
 import React, {lazy} from "react";
 
 export interface RouteMeta {
@@ -52,26 +47,20 @@ export const appRouter = [
             {
                 path: '/bookList',
                 key: 'bookList',
-                component: BookList,
+                component: lazy(() => import('../pages/app/BookList')),
                 meta: {title: '模拟列表', icon: BookOutlined},
             },
             {
                 path: '/product-list',
                 key: 'product-list',
-                component: ProductList,
+                component: lazy(() => import('../pages/app/ProductList')),
                 meta: {title: '商品列表', icon: ShoppingOutlined}
             },
             {
                 path: '/product/:id',
                 key: 'product-list-detail',
-                component: ProductDetail,
+                component: lazy(() => import('../pages/app/ProductDetail')),
                 meta: {title: '商品详情', icon: AppstoreOutlined,hideInMenu: true},
-            },
-            {
-                path: '/product-category',
-                key: 'product-category',
-                component: ProductCategory,
-                meta: {title: '商品分类', icon: TagsOutlined},
             },
         ],
     },
@@ -84,7 +73,7 @@ export const appRouter = [
             {
                 path: '/users',
                 key: 'users',
-                component: UserList,
+                component: lazy(() => import('../pages/sys/UserList')),
                 meta: {title: '用户管理', icon: UserOutlined, requireRoles: ['admin']},
             },
             {
@@ -93,18 +82,24 @@ export const appRouter = [
                 component: Settings,
                 meta: {title: '系统设置', icon: ControlOutlined, requireRoles: ['admin', 'user']},
             },
+            {
+                path: '/log',
+                key: 'log',
+                component: lazy(() => import('../pages/sys/LogList')),
+                meta: {title: '系统日志', icon: LoginOutlined, requireRoles: ['admin']},
+            },
         ],
     },
     {
         path: '/profile',
         key: 'profile',
-        component: Profile,
+        component: lazy(() => import('../pages/sys/Profile')),
         meta: {title: '个人信息', icon: IdcardOutlined, hideInMenu: true, requireRoles: ['admin', 'user']},
     },
     {
         path: '/test',
         key: 'test',
-        component: Test,
+        component: lazy(() => import('../pages/Test')),
         meta: {title: '测试页', icon: BugOutlined, requireRoles: ['admin', 'user']},
     },
     {
