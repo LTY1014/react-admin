@@ -587,10 +587,10 @@ nginx.conf
 server{
     listen 8089;
     server_name localhost;
-	root /home/www/react-admin/dist;
+    root /home/www/react-admin/dist;
     index  index.html;
 	
-	# 启用 gzip 压缩
+    # 启用 gzip 压缩
     gzip on;
     gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
     
@@ -611,7 +611,7 @@ server{
     }
 
   	location /api/ {
-  	  	# 移除/api前缀，将剩余路径转发到后端
+  	  # 移除/api前缀，将剩余路径转发到后端
         rewrite ^/api/(.*)$ /$1 break;
         proxy_pass http://127.0.0.1:8100;
         add_header 'Access-Control-Allow-origin' $http_origin;

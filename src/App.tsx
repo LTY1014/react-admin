@@ -1,12 +1,10 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { ConfigProvider, theme } from 'antd';
-import { store } from './store';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {ConfigProvider, theme} from 'antd';
 import MainLayout from './layouts/MainLayout';
 import BlankLayout from './layouts/BlankLayout';
-import { useSelector } from 'react-redux';
-import { RootState } from './store';
+import {useSelector} from 'react-redux';
+import {RootState} from './store';
 import AuthProvider from './components/AuthProvider';
 import Login from './pages/Login';
 import NotFound from './pages/error/NotFound';
@@ -15,45 +13,43 @@ import AppRoutes from './router';
 import zhCN from 'antd/es/locale/zh_CN';
 
 const AppContent = () => {
-  const { primaryColor, isDarkMode } = useSelector((state: RootState) => state.theme);
+    const {primaryColor, isDarkMode} = useSelector((state: RootState) => state.theme);
 
-  return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: primaryColor,
-        },
-        algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
-      }}
-      locale={zhCN}
-    >
-      <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            {/* 空白布局路由 */}
-            <Route element={<BlankLayout />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/403" element={<Forbidden />} />
-              <Route path="/404" element={<NotFound />} />
-            </Route>
-            
-            {/* 主布局路由 */}
-            <Route element={<MainLayout />}>
-              <Route path="/*" element={<AppRoutes />} />
-            </Route>
-          </Routes>
-        </AuthProvider>
-      </BrowserRouter>
-    </ConfigProvider>
-  );
+    return (
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: primaryColor,
+                },
+                algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm,
+            }}
+            locale={zhCN}
+        >
+            <BrowserRouter>
+                <AuthProvider>
+                    <Routes>
+                        {/* 空白布局路由 */}
+                        <Route element={<BlankLayout/>}>
+                            <Route path="/login" element={<Login/>}/>
+                            <Route path="/403" element={<Forbidden/>}/>
+                            <Route path="/404" element={<NotFound/>}/>
+                        </Route>
+
+                        {/* 主布局路由 */}
+                        <Route element={<MainLayout/>}>
+                            <Route path="/*" element={<AppRoutes/>}/>
+                        </Route>
+                    </Routes>
+                </AuthProvider>
+            </BrowserRouter>
+        </ConfigProvider>
+    );
 };
 
 function App() {
-  return (
-    <Provider store={store}>
-      <AppContent />
-    </Provider>
-  );
+    return (
+        <AppContent/>
+    );
 }
 
 export default App; 

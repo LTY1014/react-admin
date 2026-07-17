@@ -1,9 +1,11 @@
 import axios, {AxiosInstance} from 'axios';
 import { message } from 'antd';
 
+const baseURL = process.env.API_URL || '/api';
+
 // 创建 axios 实例
 const instance: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: baseURL,
   timeout: 10000,
   withCredentials: true,
   headers: {
@@ -72,52 +74,26 @@ export interface ApiResponse<T> {
 }
 
 /**
- * 文件下载
- * @param url
- * @param body
- * @example  download(`/code/generateSQLDocument`,values,'test.xlsx');
+ * Blob 文件下载通用方法
+ * @param {BlobPart[]} blobData 二进制数据，一般 res.data
+ * @param {string} [customFileName] 自定义文件名.xlsx (注意：文件名必须带扩展名)
  */
-export const download = async (url: string, body?: {},filename?: string) => {
-  try {
-    const res = await instance.post(url, body, {responseType: 'blob'});
-    // console.log('res', res)
-    // json格式返回说明后端提示报错
-    if (res.data.type === 'application/json') {
-      return Promise.reject('文件下载失败');
-    }
-    const blob = new Blob([res.data]);
-    let fileName = 'downloaded_file'; // 默认值
-    if (filename) {
-      fileName = filename; // 优先使用传入的
-    } else {
-      // 尝试从 content-disposition 获取
-      const disposition = res.headers['content-disposition'];
-      if (disposition) {
-        const utf8FilenameRegex = /filename\*=UTF-8''([\w%\-\.]+)/i;
-        const asciiFilenameRegex = /filename="?([^"]+)"?/i;
-
-        const utf8Matches = disposition.match(utf8FilenameRegex);
-        if (utf8Matches && utf8Matches[1]) {
-          fileName = decodeURIComponent(utf8Matches[1]);
-        } else {
-          const asciiMatches = disposition.match(asciiFilenameRegex);
-          if (asciiMatches && asciiMatches[1]) {
-            fileName = asciiMatches[1];
-          }
-        }
-      }
-    }
-    const fileUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', fileUrl);
-    link.setAttribute('download', fileName);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } catch (err: any) {
-    console.error('下载失败', err)
-    return Promise.reject(err);
+export function downloadBlobFile(blobData, customFileName) {
+  const blob = new Blob([blobData]);
+  let fileName = 'downloaded.txt';
+  // 外部传入自定义文件名
+  if (customFileName) {
+    fileName = customFileName.trim();
   }
-};
+  const fileUrl = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = fileUrl;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  // 释放blob内存，非常重要！
+  URL.revokeObjectURL(fileUrl);
+}
 
 export default instance; 
