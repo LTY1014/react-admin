@@ -7,6 +7,7 @@ import { HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import config from '../config';
 
 const NavContainer = styled.div<{ $bgColor: string }>`
   padding: 2px 16px;
@@ -199,7 +200,7 @@ const TabsNav: React.FC = () => {
   // 关闭所有标签
   const handleCloseAll = () => {
     setTabRoutes([]);
-    navigate('/dashboard');
+    navigate(config.homePath);
   };
 
   // 监听路由变化
@@ -215,7 +216,7 @@ const TabsNav: React.FC = () => {
   const breadcrumbItems = [
     {
       title: <HomeOutlined />,
-      href: '/dashboard',
+      href: config.homePath,
       key: 'home'
     },
     ...breadcrumbs.map((item) => ({

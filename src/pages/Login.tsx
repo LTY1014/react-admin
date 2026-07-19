@@ -22,7 +22,7 @@ const Login: React.FC = () => {
 
     useEffect(() => {
         if (user?.userRole) {
-            const from = location.state?.from || '/dashboard';
+            const from = location.state?.from || config.homePath;
             navigate(from, {replace: true});
         }
     }, [user, navigate, location]);
@@ -32,7 +32,7 @@ const Login: React.FC = () => {
             const response = await login(values);
             dispatch(loginAction({user: response.data || null}));
             message.success('登录成功');
-            const from = location.state?.from || '/dashboard';
+            const from = location.state?.from || config.homePath;
             navigate(from, {replace: true});
         } catch (error: any) {
             message.error('登录失败:' + error)

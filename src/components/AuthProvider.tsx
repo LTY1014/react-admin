@@ -5,6 +5,7 @@ import { getCurrentUser } from '../api/user';
 import { loginAction, logoutAction } from '../store/slices/authSlice';
 import { RootState } from '../store';
 import { message, Spin } from "antd";
+import config from '../config';
 
 const WHITE_LIST: string[] = ['/login', '/register', '/404','/403'];
 
@@ -23,10 +24,10 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   useEffect(() => {
     const checkAuth = async () => {
       const currentPath = location.pathname;
-      // 如果有redirect，跳转到redirect，否则跳转到默认路径
+      // 如果有redirect，跳转到redirect，否则跳转到默认首页
       const redirectPath = location.state?.from && typeof location.state.from === 'string'
           ? location.state.from
-          : '/';
+          : config.homePath;
       if (WHITE_LIST.includes(currentPath)) {
         // 如果在白名单中，检查是否需要重定向
         if (user?.userRole) {
@@ -51,7 +52,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         if (response.code === 0) {
           dispatch(loginAction({ user: response.data }));
           if (currentPath === '/') {
-            navigate('/dashboard', { replace: true });
+            navigate(config.homePath, { replace: true });
           }
         } else {
           handleUnauthenticated(currentPath);

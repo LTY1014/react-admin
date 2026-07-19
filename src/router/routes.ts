@@ -16,6 +16,7 @@ import {
 import Dashboard from '../pages/Dashboard';
 import Settings from '../pages/sys/Settings';
 import React, {lazy} from "react";
+import config from '../config';
 
 export interface RouteMeta {
     title: string; // 路由名称（菜单显示）
@@ -114,7 +115,7 @@ export const routes = [
     {
         path: '/',
         key: 'app',
-        redirect: '/dashboard',
+        redirect: config.homePath,
         children: appRouter
     },
     {

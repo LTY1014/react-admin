@@ -6,6 +6,8 @@ interface Config {
   uploadUrl: string;
   appTitle: string;
   appLogo: string;
+  /** 登录成功、首页按钮、关闭全部标签等场景的默认跳转路径，改这一处即可全局生效 */
+  homePath: string;
 }
 
 const config: Config = {
@@ -13,6 +15,7 @@ const config: Config = {
   uploadUrl: process.env.NODE_ENV === 'development' ? '/api/upload' : 'http://your-production-api.com/upload',
   appTitle: 'React Admin',
   appLogo: 'RA',
+  homePath: '/dashboard',
 };
 
 export default config; 

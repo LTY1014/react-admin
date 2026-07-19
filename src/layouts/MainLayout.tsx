@@ -349,7 +349,7 @@ const MainLayout: React.FC = () => {
                 <Menu
                     theme="dark"
                     mode="inline"
-                    selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
+                    selectedKeys={[location.pathname.split('/')[1] || config.homePath.replace(/^\//, '')]}
                     items={menuItems}
                     onClick={handleMenuClick}
                     style={{flex: 1}}
@@ -379,7 +379,7 @@ const MainLayout: React.FC = () => {
             </div>
             <Menu
                 mode="horizontal"
-                selectedKeys={[location.pathname.split('/')[1] || 'dashboard']}
+                selectedKeys={[location.pathname.split('/')[1] || config.homePath.replace(/^\//, '')]}
                 items={menuItems}
                 onClick={handleMenuClick}
                 style={{flex: 1, borderBottom: 'none', height: '48px'}}
