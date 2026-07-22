@@ -36,8 +36,8 @@ instance.interceptors.response.use(
     if (code == 0) {
       return response.data
     } else {
-      // console.log(response.data)
-      return Promise.reject(response.data.message || '请求失败');
+      console.error(response.data)
+      return Promise.reject(response.data || '请求失败');
     }
   },
   (error) => {

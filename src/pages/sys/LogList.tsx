@@ -176,7 +176,7 @@ const LogList: React.FC = () => {
                 total: response.data.total
             });
         } catch (error) {
-            message.error(error || '获取数据失败');
+            message.error( '获取数据失败');
         } finally {
             setLoading(false);
         }
@@ -360,11 +360,12 @@ const LogList: React.FC = () => {
                                 name="type"
                                 label="类型"
                             >
-                                <Select placeholder="请选择">
-                                    <Option value="">全部</Option>
-                                    <Option value="默认日志">默认日志</Option>
-                                    <Option value="其他日志">其他日志</Option>
-                                </Select>
+                                <Select placeholder="请选择"
+                                        options={[
+                                            {value: '', label: '全部'},
+                                            {value: '默认日志', label: '默认日志'},
+                                            {value: '其他日志', label: '其他日志'}]}
+                                />
                             </Form.Item>
                         </Col>
                         <Col span={12} style={{textAlign: 'right'}}>

@@ -141,8 +141,8 @@ const Profile: React.FC = () => {
                                         <Select
                                             size={controlSize}
                                             options={[
-                                                {value: 0, label: '女'},
-                                                {value: 1, label: '男'}
+                                                {value: 0, label: '男'},
+                                                {value: 1, label: '女'}
                                             ]}
                                             placeholder="请选择"
                                         />

@@ -583,9 +583,8 @@ export default Test;
 nginx.conf
 
 ```
-
 server{
-    listen 8089;
+    listen 8090;
     server_name localhost;
     root /home/www/react-admin/dist;
     index  index.html;

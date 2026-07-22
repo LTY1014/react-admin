@@ -47,8 +47,6 @@ const MainLayout: React.FC = () => {
     const {user} = useSelector((state: RootState) => state.auth);
     const {isDarkMode,menuMode} = useSelector((state: RootState) => state.theme);
     const [notices, setNotices] = useState<number>(2);
-    const [passwordForm] = Form.useForm();
-    const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
 
@@ -129,7 +127,7 @@ const MainLayout: React.FC = () => {
             label: '系统设置',
         },
         {
-            type: 'divider',
+            type: 'divider' as const,
         },
         {
             key: 'logout',
@@ -151,7 +149,7 @@ const MainLayout: React.FC = () => {
             onClick: () => message.info('查看通知详情'),
         },
         {
-            type: 'divider',
+            type: 'divider' as const,
         },
         {
             key: 'clear-notifications',
@@ -179,23 +177,8 @@ const MainLayout: React.FC = () => {
     const handleUserMenuClick = async ({key}: { key: string }) => {
         if (key === 'logout') {
             await handleLogout()
-        } else if (key === 'password') {
-            setPasswordModalVisible(true);
         } else {
             navigate(`/${key}`);
-        }
-    };
-
-    const handleUpdatePassword = async () => {
-        try {
-            const res = await updatePassword(passwordForm.getFieldsValue())
-            if (res.code === 0) {
-                message.success('修改密码成功');
-                return true;
-            }
-        } catch (e: any) {
-            message.error(e.message);
-            return false;
         }
     };
 
@@ -264,67 +247,6 @@ const MainLayout: React.FC = () => {
                 </Space>
             </Dropdown>
         </Space>;
-    }
-
-    // 修改密码框
-    function PasswordModal() {
-        return <Modal
-            title="修改密码"
-            open={passwordModalVisible}
-            onCancel={() => setPasswordModalVisible(false)}
-            footer={[
-                <Button key="cancel" onClick={() => setPasswordModalVisible(false)}>
-                    取消
-                </Button>,
-                <Button key="submit" type="primary" onClick={async () => {
-                    const result = await handleUpdatePassword()
-                    if (!result) {
-                        return
-                    }
-                    setPasswordModalVisible(false)
-                    await handleLogout()
-                }}>
-                    确定
-                </Button>,
-            ]}
-        >
-            <Form
-                // onFinish={handleUpdatePassword}
-                form={passwordForm}
-                layout="vertical">
-                <Form.Item
-                    name="oldPassword"
-                    label="原密码"
-                >
-                    <Input.Password/>
-                </Form.Item>
-
-                <Form.Item
-                    name="newPassword"
-                    label="新密码"
-                >
-                    <Input.Password/>
-                </Form.Item>
-
-                <Form.Item
-                    name="confirmPassword"
-                    label="确认密码"
-                    dependencies={['newPassword']}
-                    rules={[
-                        ({getFieldValue}) => ({
-                            validator(_, value) {
-                                if (!value || getFieldValue('newPassword') === value) {
-                                    return Promise.resolve();
-                                }
-                                return Promise.reject(new Error('两次输入的密码不一致'));
-                            },
-                        }),
-                    ]}
-                >
-                    <Input.Password/>
-                </Form.Item>
-            </Form>
-        </Modal>;
     }
 
     function renderSiderMenu() {
@@ -469,8 +391,6 @@ const MainLayout: React.FC = () => {
             >
                 <FloatButton icon={<ApiOutlined/>}/>
             </a>
-
-            {PasswordModal()}
         </Layout>
     );
 };

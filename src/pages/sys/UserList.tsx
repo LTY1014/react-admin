@@ -26,6 +26,14 @@ const UserList: React.FC = () => {
     showSizeChanger: true,
     showTotal: (total: number) => `共 ${total} 条`
   });
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
 
   useEffect(() => {
     fetchData({
@@ -302,7 +310,15 @@ const UserList: React.FC = () => {
               </Col>
             </Row>
           </Form>
-          <Table rowKey="id" columns={columns} dataSource={data} loading={loading} pagination={pagination} />
+          <Table
+              rowKey="id"
+              columns={columns}
+              dataSource={data}
+              loading={loading}
+              pagination={pagination}
+              onChange={handleTableChange}
+              rowSelection={rowSelection}
+          />
         </Card>
 
         <Modal

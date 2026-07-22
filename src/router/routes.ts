@@ -13,8 +13,6 @@ import {
     UserOutlined,
     WarningOutlined
 } from '@ant-design/icons';
-import Dashboard from '../pages/Dashboard';
-import Settings from '../pages/sys/Settings';
 import React, {lazy} from "react";
 import config from '../config';
 
@@ -37,7 +35,7 @@ export const appRouter = [
     {
         path: '/dashboard',
         key: 'dashboard',
-        component: Dashboard,
+        component: lazy(() => import('../pages/Dashboard')),
         meta: {title: '主页', icon: DashboardOutlined}
     },
     {
@@ -61,7 +59,7 @@ export const appRouter = [
                 path: '/product/:id',
                 key: 'product-list-detail',
                 component: lazy(() => import('../pages/app/ProductDetail')),
-                meta: {title: '商品详情', icon: AppstoreOutlined,hideInMenu: true},
+                meta: {title: '商品详情', icon: AppstoreOutlined, hideInMenu: true},
             },
         ],
     },
@@ -80,7 +78,7 @@ export const appRouter = [
             {
                 path: '/settings',
                 key: 'settings',
-                component: Settings,
+                component: lazy(() => import('../pages/sys/Settings')),
                 meta: {title: '系统设置', icon: ControlOutlined, requireRoles: ['admin', 'user']},
             },
             {
