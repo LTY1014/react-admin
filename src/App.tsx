@@ -12,8 +12,26 @@ import Forbidden from './pages/error/Forbidden';
 import AppRoutes from './router';
 import zhCN from 'antd/es/locale/zh_CN';
 
-const AppContent = () => {
+// 全局权限守卫总开关
+const authProviderEnabled = true;
+
+function App() {
     const {primaryColor, isDarkMode} = useSelector((state: RootState) => state.theme);
+    const appRoutes = (
+        <Routes>
+            {/* 空白布局路由 */}
+            <Route element={<BlankLayout/>}>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/403" element={<Forbidden/>}/>
+                <Route path="/404" element={<NotFound/>}/>
+            </Route>
+
+            {/* 主布局路由 */}
+            <Route element={<MainLayout/>}>
+                <Route path="/*" element={<AppRoutes/>}/>
+            </Route>
+        </Routes>
+    );
 
     return (
         <ConfigProvider
@@ -26,29 +44,13 @@ const AppContent = () => {
             locale={zhCN}
         >
             <BrowserRouter>
-                <AuthProvider>
-                    <Routes>
-                        {/* 空白布局路由 */}
-                        <Route element={<BlankLayout/>}>
-                            <Route path="/login" element={<Login/>}/>
-                            <Route path="/403" element={<Forbidden/>}/>
-                            <Route path="/404" element={<NotFound/>}/>
-                        </Route>
-
-                        {/* 主布局路由 */}
-                        <Route element={<MainLayout/>}>
-                            <Route path="/*" element={<AppRoutes/>}/>
-                        </Route>
-                    </Routes>
-                </AuthProvider>
+                {authProviderEnabled ? (
+                    <AuthProvider>{appRoutes}</AuthProvider>
+                ) : (
+                    appRoutes
+                )}
             </BrowserRouter>
         </ConfigProvider>
-    );
-};
-
-function App() {
-    return (
-        <AppContent/>
     );
 }
 

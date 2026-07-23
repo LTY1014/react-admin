@@ -112,7 +112,7 @@ export const appRouter = [
 export const routes = [
     {
         path: '/',
-        key: 'app',
+        key: 'root',
         redirect: config.homePath,
         children: appRouter
     },

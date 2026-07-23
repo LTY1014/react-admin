@@ -95,15 +95,12 @@ react-admin
 
 ### 登录放行处理
 
-1. App.tsx 注释组件<AuthProvider>
-2. 组件AuthGuard免判断
+在app.tsx里控制<AuthProvider>是否声明
 
-```
-  // TODO 直接先登录
-  // if (!user?.userRole) {
-  //   return <Navigate to="/login" replace />;
-  // }
-```
+在router/index.tsx 里控制<AuthGuard>是否声明
+
+1. 先开 `authProviderEnabled = true`（确保用户已登录）
+2. 再开 `authGuardEnabled = true`（在已登录基础上做角色细粒度校验）
 
 
 

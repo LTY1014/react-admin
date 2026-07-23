@@ -55,58 +55,6 @@ const BookList: React.FC = () => {
     }
   };
 
-  const getColumnSearchProps = (dataIndex: any) => ({
-    filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters, close}) => (
-        <div style={{padding: 8}} onKeyDown={(e) => e.stopPropagation()}>
-          <Input
-              ref={searchInput}
-              placeholder={`输入内容并按Enter键即可`}
-              value={selectedKeys[0]}
-              onChange={(e) => {
-                const value = e.target.value;
-                setSelectedKeys(value ? [value] : []);
-                // 更新搜索表单对应的字段
-                searchForm.setFieldsValue({
-                  [dataIndex]: value,
-                });
-              }}
-              onPressEnter={() => handleSearch()}
-              style={{marginBottom: 8, display: 'block'}}
-          />
-          <Space>
-            <Button
-                type="primary"
-                onClick={() => handleSearch()}
-                icon={<SearchOutlined/>}
-                size="small"
-                style={{width: 90}}
-            >
-              搜索
-            </Button>
-            <Button
-                onClick={() => clearFilters && handleReset(clearFilters)}
-                size="small"
-                style={{width: 90}}
-            >
-              重置
-            </Button>
-          </Space>
-        </div>
-    ),
-    onFilter: (value, record) =>
-        record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes((value as string).toLowerCase()),
-    filterDropdownProps: {
-      onOpenChange(open) {
-        if (open) {
-          setTimeout(() => searchInput.current?.select(), 100);
-        }
-      },
-    },
-  });
-
   useEffect(() => {
     fetchData({
       current: 1,
@@ -114,12 +62,11 @@ const BookList: React.FC = () => {
     });
   }, []);
 
-  const columns = [
+  const columns: any[] = [
     {
       title: '书名',
       dataIndex: 'bookName',
       key: 'bookName',
-      ...getColumnSearchProps('bookName'),
     },
     {
       title: '类型',
