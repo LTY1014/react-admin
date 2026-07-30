@@ -6,10 +6,13 @@ interface ThemeState {
   menuMode: string
 }
 
+const keyIsDarkMode = 'react:isDarkMode';
+const keyMenuMode = 'react:menuMode';
+
 const initialState: ThemeState = {
   primaryColor: '#1890ff',
-  isDarkMode: localStorage.getItem('isDarkMode') === 'true',
-  menuMode: localStorage.getItem('menuMode') as 'sider' || 'sider' // 可以改成 'top'
+  isDarkMode: localStorage.getItem(keyIsDarkMode) === 'true',
+  menuMode: localStorage.getItem(keyMenuMode) as 'sider' || 'sider' // 可以改成 'top'
 };
 
 const themeSlice = createSlice({
@@ -21,11 +24,11 @@ const themeSlice = createSlice({
     },
     toggleDarkMode: (state) => {
       state.isDarkMode = !state.isDarkMode;
-      localStorage.setItem('isDarkMode', String(state.isDarkMode));
+      localStorage.setItem(keyIsDarkMode, String(state.isDarkMode));
     },
     setMenuMode: (state, action: PayloadAction<'sider' | 'top'>) => {
       state.menuMode = action.payload;
-      localStorage.setItem('menuMode', action.payload); // 保存到 localStorage
+      localStorage.setItem(keyMenuMode, action.payload); // 保存到 localStorage
     },
   }
 });
