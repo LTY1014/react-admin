@@ -179,7 +179,7 @@ const Dashboard: React.FC = () => {
                 <Card>
                     <Statistic
                         title="接口"
-                        value={968}
+                        value={68}
                         prefix={<ApiOutlined/>}
                     />
                 </Card>
