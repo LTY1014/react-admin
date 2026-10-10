@@ -20,7 +20,6 @@ const BookList: React.FC = () => {
 
   // 添加搜索表单
   const [searchForm] = Form.useForm();
-  const searchInput = React.useRef(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -29,7 +28,7 @@ const BookList: React.FC = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  
+
   // 获取列表数据
   const fetchData = async (params: { current: number; pageSize: number; bookName?: string; author?: string }) => {
     setLoading(true);
@@ -96,16 +95,16 @@ const BookList: React.FC = () => {
       fixed: 'right',
       render: (_: any, record: BookVO) => (
         <Space size="middle">
-          <Button 
-            type="link" 
+          <Button
+            type="link"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           >
             编辑
           </Button>
-          <Button 
-            type="link" 
-            danger 
+          <Button
+            type="link"
+            danger
             icon={<DeleteOutlined />}
             onClick={() => handleDelete(record.id)}
           >
@@ -308,12 +307,11 @@ const BookList: React.FC = () => {
             label="类型"
             rules={[{ required: true, message: '请选择类型' }]}
           >
-            <Select placeholder="请选择书籍类型">
-              {BookType.map((book, index) => (
-                  <Select.Option key={index} value={book.value}>
-                    {book.label}
-                  </Select.Option>
-              ))}
+            <Select placeholder="请选择"
+                    allowClear
+                    showSearch // 开启搜索框
+                    options={BookType.map((book, index) =>
+                        ({key: book.value, value: book.value, label: book.label}))}>
             </Select>
           </Form.Item>
           <Form.Item

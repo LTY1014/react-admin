@@ -48,19 +48,7 @@ export const appRouter = [
                 key: 'bookList',
                 component: lazy(() => import('../pages/app/BookList')),
                 meta: {title: '模拟列表', icon: BookOutlined},
-            },
-            {
-                path: '/product-list',
-                key: 'product-list',
-                component: lazy(() => import('../pages/app/ProductList')),
-                meta: {title: '商品列表', icon: ShoppingOutlined}
-            },
-            {
-                path: '/product/:id',
-                key: 'product-list-detail',
-                component: lazy(() => import('../pages/app/ProductDetail')),
-                meta: {title: '商品详情', icon: AppstoreOutlined, hideInMenu: true},
-            },
+            }
         ],
     },
     {
@@ -80,13 +68,7 @@ export const appRouter = [
                 key: 'settings',
                 component: lazy(() => import('../pages/sys/Settings')),
                 meta: {title: '系统设置', icon: ControlOutlined, requireRoles: ['admin', 'user']},
-            },
-            {
-                path: '/log',
-                key: 'log',
-                component: lazy(() => import('../pages/sys/LogList')),
-                meta: {title: '系统日志', icon: LoginOutlined, requireRoles: ['admin']},
-            },
+            }
         ],
     },
     {
