@@ -120,7 +120,7 @@ const parseBlobErrorResponse = async (response: AxiosResponse) => {
     const isTextResponse = /json|text\//i.test(contentType);
     if (!isTextResponse) {
         const contentPreview = await responseData.slice(0, 100).text();
-        if (!/^\s*[\[{]/.test(contentPreview)) {
+        if (!/^\s*\{/.test(contentPreview)) {
             return null;
         }
     }
@@ -131,11 +131,14 @@ const parseBlobErrorResponse = async (response: AxiosResponse) => {
     }
 
     try {
-        return JSON.parse(responseText);
+        const parsed = JSON.parse(responseText);
+        if (parsed && typeof parsed === 'object' && 'code' in parsed) {
+            return parsed;
+        }
+        return null;
     } catch (error) {
-        console.error('Blob 错误响应解析失败:', error);
-        return {code: -1, message: responseText};
+        return null;
     }
 };
 
-export default instance; 
+export default instance;
