@@ -7,7 +7,6 @@ export interface QueryParams {
   current: number;
   pageSize: number;
   bookName?: string;
-  author?: string;
 }
 
 export interface BookResponse {
@@ -19,7 +18,8 @@ export interface BookResponse {
 export interface BookVO {
   id: number;
   bookName: string;
-  author: string;
+  type: string;
+  price: number;
   createTime: Date,
   updateTime: Date,
 }

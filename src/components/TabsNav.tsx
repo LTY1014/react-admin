@@ -12,7 +12,7 @@ import config from '../config';
 const NavContainer = styled.div<{ $bgColor: string }>`
   padding: 2px 16px;
   background: ${props => props.$bgColor};
-  border-radius: 8px;
+  //border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;

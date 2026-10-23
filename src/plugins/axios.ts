@@ -87,6 +87,30 @@ export interface ApiResponse<T> {
     message: string;
 }
 
+export function downloadFile(response) {
+    let fileName = getDownloadFileName(response);
+    downloadBlobFile(response.data, fileName);
+}
+
+const getDownloadFileName = (response) => {
+    const contentDisposition = response.headers['content-disposition'];
+    if (contentDisposition) {
+        const utf8Match = contentDisposition.match(/filename\*=UTF-8''([^;]+)/i);
+        const normalMatch = contentDisposition.match(/filename="?([^";]+)"?/i);
+        const responseName = utf8Match?.[1] || normalMatch?.[1];
+
+        if (responseName) {
+            try {
+                return decodeURIComponent(responseName);
+            } catch (error) {
+                console.warn('响应文件名解码失败:', error);
+                return responseName;
+            }
+        }
+    }
+    return null;
+};
+
 /**
  * Blob 文件下载通用方法
  * @param {BlobPart[]} blobData 二进制数据，一般 res.data
