@@ -31,7 +31,7 @@ const BookList: React.FC = () => {
     };
 
     // 获取列表数据
-    const fetchData = async (params: { current: number; pageSize: number; bookName?: string }) => {
+    const fetchData = async (params: { current: number; pageSize: number; bookName?: string; type?: string }) => {
         setLoading(true);
         try {
             const response = await getListBookByPage(params);
@@ -136,17 +136,15 @@ const BookList: React.FC = () => {
                 try {
                     await deleteBook({ids: Array.of(id)});
                     message.success('删除成功');
-                    if (data.length === 1 && pagination.current > 1) {
-                        await fetchData({
-                            current: pagination.current - 1,
-                            pageSize: pagination.pageSize
-                        });
-                    } else {
-                        await fetchData({
-                            current: pagination.current,
-                            pageSize: pagination.pageSize
-                        });
-                    }
+                    const searchValues = searchForm.getFieldsValue();
+                    const nextCurrent = data.length === 1 && pagination.current > 1
+                        ? pagination.current - 1
+                        : pagination.current;
+                    await fetchData({
+                        ...searchValues,
+                        current: nextCurrent,
+                        pageSize: pagination.pageSize
+                    });
                 } catch (error) {
                     message.error('删除失败');
                 }
@@ -157,6 +155,7 @@ const BookList: React.FC = () => {
     const handleModalOk = async () => {
         try {
             const values = await form.validateFields();
+            const searchValues = searchForm.getFieldsValue();
             if (editingKey) {
                 const response = await updateBook({
                     ...values,
@@ -165,7 +164,11 @@ const BookList: React.FC = () => {
                 if (response.code === 0) {
                     message.success('更新成功');
                     setIsModalVisible(false);
-                    await handleSearch();
+                    await fetchData({
+                        ...searchValues,
+                        current: pagination.current,
+                        pageSize: pagination.pageSize
+                    });
                 } else {
                     message.error(response.message || '更新失败');
                 }
@@ -175,6 +178,7 @@ const BookList: React.FC = () => {
                     message.success('添加成功');
                     setIsModalVisible(false);
                     await fetchData({
+                        ...searchValues,
                         current: 1,
                         pageSize: pagination.pageSize
                     });
@@ -192,7 +196,7 @@ const BookList: React.FC = () => {
         const values = await searchForm.validateFields();
         await fetchData({
             ...values,
-            current: pagination.current,
+            current: 1,
             pageSize: pagination.pageSize
         });
     };
