@@ -6,11 +6,12 @@ interface ThemeState {
   menuMode: string
 }
 
+const keyPrimaryColor = 'react:primaryColor';
 const keyIsDarkMode = 'react:isDarkMode';
 const keyMenuMode = 'react:menuMode';
 
 const initialState: ThemeState = {
-  primaryColor: '#1890ff',
+  primaryColor: localStorage.getItem(keyPrimaryColor) || '#1890ff',
   isDarkMode: localStorage.getItem(keyIsDarkMode) === 'true',
   menuMode: localStorage.getItem(keyMenuMode) as 'sider' || 'sider' // 可以改成 'top'
 };
@@ -19,8 +20,9 @@ const themeSlice = createSlice({
   name: 'theme',
   initialState,
   reducers: {
-    setPrimaryColor: (state, action: PayloadAction<string>) => {
-      state.primaryColor = action.payload;
+    setPrimaryColor: (state, action: PayloadAction<string | null>) => {
+      state.primaryColor = action.payload || '#1890ff';
+      localStorage.setItem(keyPrimaryColor, state.primaryColor);
     },
     toggleDarkMode: (state) => {
       state.isDarkMode = !state.isDarkMode;
