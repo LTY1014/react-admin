@@ -30,7 +30,7 @@ import {useNavigate} from "react-router-dom";
 
 const {Title, Paragraph, Text} = Typography;
 
-const Dashboard: React.FC = () => {
+const About: React.FC = () => {
 
     const quickAccess = [
         {
@@ -498,4 +498,4 @@ const Dashboard: React.FC = () => {
     );
 };
 
-export default Dashboard; 
+export default About;

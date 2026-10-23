@@ -24,7 +24,7 @@ export const PageLoading: React.FC<{ fullScreen?: boolean }> = ({fullScreen = fa
                     width: '100%',
                 }}
             >
-                <Spin size="large" tip="页面加载中..." />
+                <Spin size="large" />
             </div>
         );
     }
