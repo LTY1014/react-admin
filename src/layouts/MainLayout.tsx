@@ -39,6 +39,8 @@ import {toggleDarkMode} from "@/store/slices/themeSlice";
 
 const {Header, Sider, Content} = Layout;
 
+const renderHeader = true // 控制是否展示信息头
+
 const MainLayout: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -47,7 +49,7 @@ const MainLayout: React.FC = () => {
     const {isDarkMode,menuMode} = useSelector((state: RootState) => state.theme);
     const [notices, setNotices] = useState<number>(2);
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);  // 侧边菜单栏展开
 
     const {
         token: {colorBgContainer, borderRadiusLG, colorPrimary: primaryColor},
@@ -214,7 +216,7 @@ const MainLayout: React.FC = () => {
     }
 
     function renderSiderMenu() {
-        return <Sider trigger={null}>
+        return <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
             <div style={{
                 height: 64,
                 display: 'flex',
@@ -228,10 +230,10 @@ const MainLayout: React.FC = () => {
                     transition: 'all 0.3s',
                     fontWeight: 600,
                 }}>
-                    {config.appTitle}
+                    {collapsed ? config.appLogo : config.appTitle}
                 </h1>
             </div>
-            <div style={{display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px)'}}>
+            <div style={{display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px - 48px)'}}>
                 <Menu
                     theme="dark"
                     mode="inline"
@@ -277,7 +279,7 @@ const MainLayout: React.FC = () => {
 
     // 渲染菜单
     const renderMenu = () => {
-        if (menuMode === 'sider' && !collapsed) {
+        if (menuMode === 'sider') {
             return renderSiderMenu();
         }
         return null;
@@ -286,16 +288,17 @@ const MainLayout: React.FC = () => {
     // 渲染头部左侧内容
     const renderHeaderLeft = () => {
         if (menuMode === 'sider') {
-            return (
-                <div>
-                    <Button
-                        type="text"
-                        icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
-                        onClick={() => setCollapsed(!collapsed)}
-                        style={{width: 'auto'}}
-                    />
-                </div>
-            );
+            return <div></div>
+            // return (
+            //     <div>
+            //         <Button
+            //             type="text"
+            //             icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+            //             onClick={() => setCollapsed(!collapsed)}
+            //             style={{width: 'auto'}}
+            //         />
+            //     </div>
+            // );
         }
         return renderTopMenu();
     };
@@ -304,28 +307,32 @@ const MainLayout: React.FC = () => {
         <Layout style={{minHeight: '100vh'}}>
             {renderMenu()}
             <Layout>
-                <Header style={{
-                    padding: '24px 16px',
-                    background: colorBgContainer,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    boxShadow: '0 1px 4px rgba(0,21,41,.08)',
-                    maxHeight: 48,
-                }}>
-                    {renderHeaderLeft()}
-                    {renderRightContent()}
-                </Header>
-                {/* Tab 组件：使用 CSS sticky 吸顶 */}
-                <div
-                    style={{
-                        position: 'sticky',
-                        top: 0,
-                        zIndex: 10,
-                    }}
-                >
-                    <TabsNav/>
-                </div>
+                {renderHeader &&
+                    <>
+                        <Header style={{
+                            padding: '24px 16px',
+                            background: colorBgContainer,
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            boxShadow: '0 1px 4px rgba(0,21,41,.08)',
+                            maxHeight: 48,
+                        }}>
+                            {renderHeaderLeft()}
+                            {renderRightContent()}
+                        </Header>
+                        {/* Tab 组件：使用 CSS sticky 吸顶 */}
+                        <div
+                            style={{
+                                position: 'sticky',
+                                top: 0,
+                                zIndex: 10,
+                            }}
+                        >
+                            <TabsNav/>
+                        </div>
+                    </>
+                }
                 <Content
                     style={{
                         margin: '0 16px 24px',
@@ -342,13 +349,13 @@ const MainLayout: React.FC = () => {
                 </Content>
             </Layout>
 
-            <a
-                href={config.apiUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <FloatButton icon={<ApiOutlined/>}/>
-            </a>
+            {/*<a*/}
+            {/*    href={config.apiUrl}*/}
+            {/*    target="_blank"*/}
+            {/*    rel="noopener noreferrer"*/}
+            {/*>*/}
+            {/*    <FloatButton icon={<ApiOutlined/>}/>*/}
+            {/*</a>*/}
         </Layout>
     );
 };
