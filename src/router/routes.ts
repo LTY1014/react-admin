@@ -26,12 +26,14 @@ export interface RouteMeta {
 export interface RouteConfig {
     path: string; // 路由路径
     key: string; // 路由唯一标识
+    name?: string; // 路由名称
+    redirect?: string; // 重定向路径
     component?: React.ComponentType<any>; // 路由组件
     meta?: RouteMeta;
     children?: RouteConfig[]; // 子路由
 }
 
-export const appRouter = [
+export const appRouter: RouteConfig[] = [
     {
         path: '/dashboard',
         key: 'dashboard',
@@ -91,35 +93,39 @@ export const appRouter = [
     },
 ];
 
-export const routes = [
+export const blankRouter: RouteConfig[] = [
+    {
+        path: '/login',
+        key: 'login',
+        component: lazy(() => import('../pages/Login')),
+        meta: {title: '登录', icon: LoginOutlined, hideInMenu: true},
+    },
+    {
+        path: '/403',
+        key: '403',
+        component: lazy(() => import('../pages/error/Forbidden')),
+        meta: {title: '无权限', icon: StopOutlined, hideInMenu: true},
+    },
+    {
+        path: '/404',
+        key: '404',
+        component: lazy(() => import('../pages/error/NotFound')),
+        meta: {title: '未找到', icon: WarningOutlined, hideInMenu: true},
+    },
+];
+
+export const routes: RouteConfig[] = [
     {
         path: '/',
         key: 'root',
         redirect: config.homePath,
         children: appRouter
     },
-    {
-        path: '/login',
-        key: 'login',
-        component: lazy(() => import('../pages/Login')),
-        meta: {title: '登录', icon: LoginOutlined, hideInMenu: true,},
-    },
-    {
-        path: '/403',
-        key: '403',
-        component: lazy(() => import('../pages/error/Forbidden')),
-        meta: {title: '无权限', icon: StopOutlined, hideInMenu: true,},
-    },
-    {
-        path: '/404',
-        key: '404',
-        component: lazy(() => import('../pages/error/NotFound')),
-        meta: {title: '未找到', icon: WarningOutlined, hideInMenu: true,},
-    },
+    ...blankRouter,
 ];
 
 // 获取所有需要注册的路由（扁平化处理）
-export const getRouteList = (routes) => {
+export const getRouteList = (routes: RouteConfig[]) => {
     const result: RouteConfig[] = [];
     routes.forEach(route => {
         if (route.children && route.children.length > 0) {

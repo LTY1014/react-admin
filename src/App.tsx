@@ -1,14 +1,9 @@
 import React from 'react';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import {ConfigProvider, theme} from 'antd';
-import MainLayout from './layouts/MainLayout';
-import BlankLayout from './layouts/BlankLayout';
 import {useSelector} from 'react-redux';
 import {RootState} from './store';
 import AuthProvider from './components/AuthProvider';
-import Login from './pages/Login';
-import NotFound from './pages/error/NotFound';
-import Forbidden from './pages/error/Forbidden';
 import AppRoutes from './router';
 import zhCN from 'antd/es/locale/zh_CN';
 
@@ -17,21 +12,7 @@ const authProviderEnabled = true;
 
 function App() {
     const {primaryColor, isDarkMode} = useSelector((state: RootState) => state.theme);
-    const appRoutes = (
-        <Routes>
-            {/* 空白布局路由 */}
-            <Route element={<BlankLayout/>}>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/403" element={<Forbidden/>}/>
-                <Route path="/404" element={<NotFound/>}/>
-            </Route>
-
-            {/* 主布局路由 */}
-            <Route element={<MainLayout/>}>
-                <Route path="/*" element={<AppRoutes/>}/>
-            </Route>
-        </Routes>
-    );
+    const appRoutes = <AppRoutes/>;
 
     return (
         <ConfigProvider
