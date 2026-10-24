@@ -160,3 +160,25 @@ export const filterRoutesByRole = (routes: RouteConfig[], userRole?: string): Ro
         })
         .filter(Boolean) as RouteConfig[];
 };
+
+/** 将路由配置转换为菜单项 */
+export const convertRoutesToMenuItems = (routes: RouteConfig[]): any[] => {
+    return routes
+        .filter(route => !route.meta?.hideInMenu)
+        .map(route => {
+            const menuItem: any = {
+                key: route.key,
+                icon: route.meta?.icon ? React.createElement(route.meta.icon) : null,
+                label: route.meta?.title || route.key,
+            };
+
+            if (route.children) {
+                const children = convertRoutesToMenuItems(route.children);
+                if (children.length > 0) {
+                    menuItem.children = children;
+                }
+            }
+
+            return menuItem;
+        });
+};

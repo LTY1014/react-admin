@@ -2,12 +2,12 @@ import React from 'react';
 import { Tabs, Breadcrumb, Space, theme } from 'antd';
 import type { TabsProps } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RouteConfig, appRouter } from '../router/routes';
+import { RouteConfig, appRouter } from '../../router/routes';
 import { HomeOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import config from '../config';
+import { RootState } from '../../store';
+import config from '../../config';
 
 const NavContainer = styled.div<{ $bgColor: string }>`
   padding: 2px 16px;
