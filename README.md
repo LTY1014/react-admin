@@ -150,6 +150,16 @@ npm run build
 
 
 
+### 常用配置
+
+- `src/layouts/MainLayout.tsx`：`const renderHeader = true` 控制是否展示顶部信息头（及标签导航栏）
+- `src/config/index.ts`：`homePath: '/dashboard'` 全局默认首页路径，`appTitle` / `appLogo` 系统标题与简称
+- `src/components/AuthProvider.tsx`：`const WHITE_LIST = [...]` 免登录白名单路由
+- `src/App.tsx`：`const authProviderEnabled = true` 全局登录认证总开关
+- `src/router/index.tsx`：`const authGuardEnabled = false` 路由级角色权限守卫开关
+
+
+
 ### 菜单样式
 
 themeSlice.ts 通过设置menuMode设置菜单栏

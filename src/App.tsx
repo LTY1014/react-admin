@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from './store';
 import AuthProvider from './components/AuthProvider';
 import AppRoutes from './router';
-import {AntdGlobal} from './utils/antdGlobal';
+import {AntdGlobal} from './utils/AntdGlobal';
 import zhCN from 'antd/es/locale/zh_CN';
 
 // 全局权限守卫总开关
