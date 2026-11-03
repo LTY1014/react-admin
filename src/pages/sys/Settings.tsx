@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Card, ColorPicker, Form, Input, message, Select, Space, Switch} from 'antd';
+import {Button, Card, ColorPicker, Form, Input, message, Modal, Select, Space, Switch} from 'antd';
 import {setMenuMode, setPrimaryColor, toggleDarkMode} from "@/store/slices/themeSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store";
@@ -86,6 +86,22 @@ const Settings: React.FC = () => {
                                     dispatch(setPrimaryColor(null))
                                 }}>
                                     设置默认颜色
+                                </Button>
+                                <Button
+                                    danger
+                                    onClick={() => {
+                                        Modal.confirm({
+                                            title: '清空缓存数据？',
+                                            content: '清空缓存数据将删除所有缓存数据。',
+                                            okText: '确定',
+                                            cancelText: '取消',
+                                            onOk: () => {
+                                                localStorage.clear();
+                                                message.success('清空缓存数据成功');
+                                            },
+                                        });
+                                    }}>
+                                    清空缓存
                                 </Button>
                             </Space>
                         </Form.Item>

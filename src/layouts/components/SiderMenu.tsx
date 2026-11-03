@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { appRouter, convertRoutesToMenuItems, filterRoutesByRole } from '../../router/routes';
 import config from '../../config';
+import UserMenu from './UserMenu';
 
 const { Sider } = Layout;
 
@@ -32,10 +33,22 @@ const SiderMenu: React.FC<SiderMenuProps> = ({ collapsed, onCollapse }) => {
         navigate(`/${key}`);
     };
 
+    function renderUserMenu() {
+        // 侧边栏用户菜单显示控制
+        const flag = true
+        if (flag) {
+            return <div className="app-sider-user">
+                <UserMenu sidebar collapsed={collapsed}/>
+            </div>;
+        }
+    }
+
     return (
-        <Sider collapsible collapsed={collapsed} onCollapse={(value) => onCollapse(value)}>
+        <Sider className="app-sider" collapsible={false} collapsed={collapsed}
+               onCollapse={(value) => onCollapse(value)}>
             <div style={{
                 height: 64,
+                flexShrink: 0,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -50,16 +63,17 @@ const SiderMenu: React.FC<SiderMenuProps> = ({ collapsed, onCollapse }) => {
                     {collapsed ? config.appLogo : config.appTitle}
                 </h1>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 64px - 48px)' }}>
+            <div style={{flex: 1, minHeight: 0, overflowY: 'auto', overflowX: 'hidden'}}>
                 <Menu
                     theme="dark"
                     mode="inline"
                     selectedKeys={[location.pathname.split('/')[1] || config.homePath.replace(/^\//, '')]}
                     items={menuItems}
                     onClick={handleMenuClick}
-                    style={{ flex: 1 }}
+                    style={{flex: 1}}
                 />
             </div>
+            {renderUserMenu()}
         </Sider>
     );
 };

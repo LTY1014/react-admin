@@ -122,3 +122,29 @@ body {
   display: flex;
   align-items: center;
 }
+
+// 侧边栏布局样式
+.app-sider.ant-layout-sider {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+
+  .ant-layout-sider-children {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    // Flex 布局没有外边距折叠，无需 Ant Design 默认的负边距补偿。
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .app-sider-user {
+    flex-shrink: 0;
+    box-sizing: border-box;
+    height: 64px;
+    color: rgba(255, 255, 255, 0.85);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}

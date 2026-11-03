@@ -10,7 +10,7 @@ import TopMenu from './components/TopMenu';
 
 const {Header, Content} = Layout;
 
-const renderHeader = true // 控制是否展示信息头
+const renderHeader = false // 控制是否展示信息头
 
 const MainLayout: React.FC = () => {
     const {menuMode} = useSelector((state: RootState) => state.theme);

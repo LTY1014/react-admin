@@ -168,6 +168,13 @@ global.less设置背景色
 
 
 
+```
+  // 声明antd样式
+  const { token }: { token: any } = theme.useToken();
+```
+
+
+
 ### 路由
 
 懒加载

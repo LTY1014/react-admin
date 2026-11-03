@@ -1,3 +1,5 @@
+declare module '*.less';
+
 /**
  * 分页信息
  */

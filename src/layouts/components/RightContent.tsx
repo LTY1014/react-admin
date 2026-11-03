@@ -3,53 +3,24 @@ import {
     BellOutlined,
     ClearOutlined,
     FullscreenOutlined,
-    LogoutOutlined,
     MoonOutlined,
-    SettingOutlined,
     SunOutlined,
-    UserOutlined,
 } from '@ant-design/icons';
-import {Avatar, Badge, Button, Dropdown, message, Modal, Space} from 'antd';
-import {useNavigate} from 'react-router-dom';
+import {Badge, Button, Dropdown, message, Modal, Space} from 'antd';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../store';
-import {logoutAction} from '../../store/slices/authSlice';
-import {logout} from '../../api/user';
 import {toggleDarkMode} from '@/store/slices/themeSlice';
+import UserMenu from './UserMenu';
 
 /**
  * 右上用户信息栏
  * @constructor
  */
 const RightContent: React.FC = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {user} = useSelector((state: RootState) => state.auth);
     const {isDarkMode} = useSelector((state: RootState) => state.theme);
     const [notices, setNotices] = useState<number>(2);
     const [isFullscreen, setIsFullscreen] = useState(false);
-
-    const userMenuItems: any = [
-        {
-            key: 'profile',
-            icon: <UserOutlined/>,
-            label: '个人信息',
-        },
-        {
-            key: 'settings',
-            icon: <SettingOutlined/>,
-            label: '系统设置',
-        },
-        {
-            type: 'divider' as const,
-        },
-        {
-            key: 'logout',
-            icon: <LogoutOutlined/>,
-            label: '退出登录',
-            danger: true,
-        },
-    ];
 
     const notificationItems: any = [
         {
@@ -73,24 +44,6 @@ const RightContent: React.FC = () => {
             },
         },
     ];
-
-    const handleLogout = async () => {
-        try {
-            await logout();
-            dispatch(logoutAction());
-            navigate('/login');
-        } catch (error) {
-            console.error('Logout failed:', error);
-        }
-    };
-
-    const handleUserMenuClick = async ({key}: { key: string }) => {
-        if (key === 'logout') {
-            await handleLogout();
-        } else {
-            navigate(`/${key}`);
-        }
-    };
 
     // 添加全屏切换函数
     const toggleFullscreen = () => {
@@ -151,17 +104,7 @@ const RightContent: React.FC = () => {
                     />
                 </Badge>
             </Dropdown>
-            <Dropdown menu={{items: userMenuItems, onClick: handleUserMenuClick}} placement="bottomRight">
-                <Space style={{cursor: 'pointer', height: '100%', display: 'flex', alignItems: 'center'}}>
-                    <Avatar
-                        src={user?.avatarUrl}
-                        icon={!user?.avatarUrl && !user?.userName && <UserOutlined/>}
-                    >
-                        {!user?.avatarUrl && user?.userName?.charAt(0)}
-                    </Avatar>
-                    <span>{user?.userName}</span>
-                </Space>
-            </Dropdown>
+            <UserMenu/>
         </Space>
     );
 };
