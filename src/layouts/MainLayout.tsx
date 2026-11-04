@@ -47,9 +47,10 @@ const MainLayout: React.FC = () => {
     };
 
     return (
-        <Layout style={{minHeight: '100vh'}}>
+        // SiderMenu 是封装组件，显式声明侧栏，避免挂载后才从纵向切换成横向布局。
+        <Layout hasSider={menuMode === 'sider'} style={{minHeight: '100vh'}}>
             {renderMenu()}
-            <Layout>
+            <Layout style={{minWidth: 0}}>
                 {renderHeader &&
                     <>
                         <Header style={{
