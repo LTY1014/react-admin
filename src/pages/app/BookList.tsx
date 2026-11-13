@@ -286,6 +286,7 @@ const BookList: React.FC = () => {
                     loading={loading}
                     onChange={handleTableChange}
                     rowSelection={rowSelection}
+                    scroll={{x: 'max-content', y: 'calc(100vh - 305px)'}}
                 />
             </Card>
 

@@ -69,7 +69,7 @@ export const appRouter: RouteConfig[] = [
                 path: '/settings',
                 key: 'settings',
                 component: lazy(() => import('../pages/sys/Settings')),
-                meta: {title: '系统设置', icon: ControlOutlined, requireRoles: ['admin', 'user']},
+                meta: {title: '系统设置', icon: ControlOutlined},
             }
         ],
     },
@@ -77,13 +77,13 @@ export const appRouter: RouteConfig[] = [
         path: '/profile',
         key: 'profile',
         component: lazy(() => import('../pages/sys/Profile')),
-        meta: {title: '个人信息', icon: IdcardOutlined, hideInMenu: true, requireRoles: ['admin', 'user']},
+        meta: {title: '个人信息', icon: IdcardOutlined, hideInMenu: true},
     },
     {
         path: '/test',
         key: 'test',
         component: lazy(() => import('../pages/Test')),
-        meta: {title: '测试页', icon: BugOutlined, requireRoles: ['admin', 'user']},
+        meta: {title: '测试页', icon: BugOutlined, requireRoles: ['admin']},
     },
     {
         path: '/about',
@@ -124,14 +124,30 @@ export const routes: RouteConfig[] = [
     ...blankRouter,
 ];
 
-// 获取所有需要注册的路由（扁平化处理）
-export const getRouteList = (routes: RouteConfig[]) => {
+// 获取所有需要注册的路由（扁平化处理，并继承父路由角色权限约束）
+export const getRouteList = (routes: RouteConfig[], parentRoles?: string[]) => {
     const result: RouteConfig[] = [];
     routes.forEach(route => {
-        if (route.children && route.children.length > 0) {
-            result.push(...getRouteList(route.children));
-        } else if (route.component || route.redirect) {
-            result.push(route);
+        const currentRoles = route.meta?.requireRoles?.length
+            ? (parentRoles?.length
+                ? route.meta.requireRoles.filter(role => parentRoles.includes(role))
+                : route.meta.requireRoles)
+            : parentRoles;
+        const normalizedRoute: RouteConfig = currentRoles?.length
+            ? {
+                ...route,
+                meta: {
+                    title: route.meta?.title || route.key,
+                    ...route.meta,
+                    requireRoles: currentRoles,
+                },
+            }
+            : route;
+
+        if (normalizedRoute.children && normalizedRoute.children.length > 0) {
+            result.push(...getRouteList(normalizedRoute.children, currentRoles));
+        } else if (normalizedRoute.component || normalizedRoute.redirect) {
+            result.push(normalizedRoute);
         }
     });
     return result;

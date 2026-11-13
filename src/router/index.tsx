@@ -7,7 +7,7 @@ import config from '../config';
 import MainLayout from '../layouts/MainLayout';
 import BlankLayout from '../layouts/BlankLayout';
 
-const authGuardEnabled = false;  // 是否启用AuthGuard
+const authGuardEnabled = true;  // 是否启用AuthGuard
 
 /**
  * 页面级居中加载骨架屏组件

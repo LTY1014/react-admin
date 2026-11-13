@@ -4,13 +4,6 @@ import {PlusOutlined, ReloadOutlined, SearchOutlined} from "@ant-design/icons";
 import {addUser, deleteUser, getListUserByPage, resetUserPassword, updateUser, UserResponse} from "../../api/user";
 import dayjs from "dayjs";
 
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-}
-
 const UserList: React.FC = () => {
   const [form] = Form.useForm();
   const [data, setData] = useState<UserResponse[]>([]);
@@ -199,11 +192,11 @@ const UserList: React.FC = () => {
       render: (gender) => {
         switch (gender) {
           case 0:
-            return <span color="green">男</span>;
+            return <span color="default">未知</span>;
           case 1:
-            return <span color="default">女</span>;
+            return <span color="green">男</span>;
           default:
-            return <span color="red">未知</span>;
+            return <span color="red">女</span>;
         }
       }
     },
@@ -353,19 +346,21 @@ const UserList: React.FC = () => {
                 label="角色"
                 rules={[{ required: true, message: '请选择' }]}
             >
-              <Select>
-                <Select.Option key="admin" value="admin">管理员</Select.Option>
-                <Select.Option key="user" value="user">普通用户</Select.Option>
+              <Select options={[
+                { key: 'admin', value: 'admin', label: '管理员' },
+                { key: 'user', value: 'user', label: '普通用户' }
+              ]}>
               </Select>
             </Form.Item>
             <Form.Item
                 name="gender"
                 label="性别"
             >
-              <Select>
-                <Select.Option key="male" value={0}>男</Select.Option>
-                <Select.Option key="female" value={1}>女</Select.Option>
-                <Select.Option key="unknown" value={2}>未知</Select.Option>
+              <Select options={[
+                { key: 'male', value: 0, label: '未知' },
+                { key: 'female', value: 1, label: '男' },
+                { key: 'unknown', value: 2, label: '女' }
+              ]}>
               </Select>
             </Form.Item>
             <Form.Item
