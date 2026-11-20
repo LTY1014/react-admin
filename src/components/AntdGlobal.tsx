@@ -4,7 +4,9 @@ import type { MessageInstance } from 'antd/es/message/interface';
 import type { ModalStaticFunctions } from 'antd/es/modal/confirm';
 import type { NotificationInstance } from 'antd/es/notification/interface';
 
+// @ts-ignore
 let message: MessageInstance = antdMessage;
+// @ts-ignore
 let notification: NotificationInstance = antdNotification;
 let modal: Omit<ModalStaticFunctions, 'warn'> = antdModal;
 

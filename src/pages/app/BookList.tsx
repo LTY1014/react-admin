@@ -3,6 +3,7 @@ import {Button, Card, Col, Form, Input, InputNumber, message, Modal, Row, Select
 import {DeleteOutlined, EditOutlined, PlusOutlined, ReloadOutlined, SearchOutlined} from '@ant-design/icons';
 import {addBook, BookVO, deleteBook, getListBookByPage, updateBook} from "../../api/book";
 import {BookType} from "../../model/enum";
+import {formatDateTime} from "@/utils/common";
 
 const BookList: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -82,13 +83,13 @@ const BookList: React.FC = () => {
             title: '创建时间',
             dataIndex: 'createTime',
             key: 'createTime',
-            render: (text: string) => new Date(text).toLocaleString(),
+            render: (text: string) => formatDateTime(text),
         },
         {
             title: '更新时间',
             dataIndex: 'updateTime',
             key: 'updateTime',
-            render: (text: string) => new Date(text).toLocaleString(),
+            render: (text: string) => formatDateTime(text),
         },
         {
             title: '操作',

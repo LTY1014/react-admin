@@ -119,8 +119,7 @@ react-admin
 
 - src/components/AuthProvider.tsx
 - src/components/AuthGuard.tsx
-- src/components/Authority.tsx
-- src/utils/checkAccess.ts
+- [src/components/Authority.tsx](src/components/Authority.tsx)：组件权限校验及 `ACCESS_ENUM` 定义
 
 
 
@@ -160,6 +159,30 @@ npm run build
 
 
 
+### 接口对接规范
+
+对接接口统一使用 `try / catch` 处理成功与异常提示，支持封装后的 API 方法（如 `xxxApi(...)`）或直接调用 `axios`（如 `axios.post('xxx', ...)`）两种形式：
+
+```ts
+// 方式一：封装的 API 函数
+try {
+  const response = await xxxApi(userId);
+  message.success('重置密码成功');
+} catch (error) {
+  message.error('操作失败');
+}
+
+// 方式二：直接使用 axios
+try {
+  const response = await axios.post('/xxx', params);
+  message.success('操作成功');
+} catch (error) {
+  message.error('操作失败');
+}
+```
+
+
+
 ### 菜单样式
 
 themeSlice.ts 通过设置menuMode设置菜单栏
@@ -186,6 +209,34 @@ component: lazy(() => import('../pages/Login')),
 
 
 ### Table
+
+**条件栏与搜索操作栏布局规范**
+
+表格查询条件栏与搜索/重置/新增等操作栏一律使用 Ant Design 的 `Row` / `Col` 栅格布局设计，保证对齐与响应式一致：
+
+```tsx
+<Form form={searchForm} layout="inline" style={{ marginBottom: 16 }}>
+  <Row gutter={16} style={{ width: '100%' }}>
+    <Col span={6}>
+      <Form.Item name="keyword" label="关键词">
+        <Input placeholder="请输入" allowClear />
+      </Form.Item>
+    </Col>
+    <Col span={18} style={{ textAlign: 'right' }}>
+      <Space>
+        <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
+          搜索
+        </Button>
+        <Button icon={<ReloadOutlined />} onClick={handleReset}>
+          重置
+        </Button>
+      </Space>
+    </Col>
+  </Row>
+</Form>
+```
+
+---
 
 **table排序**
 

@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
 import {Button, Card, Divider, Form, Input, message, Select} from "antd";
 import excel from "../plugins/excel";
-import Authority from "../components/Authority";
-import {ACCESS_ENUM} from "../utils/checkAccess";
+import Authority, {ACCESS_ENUM} from "../components/Authority";
 import {useNavigate} from "react-router-dom";
 
 const Test: React.FC = () => {
